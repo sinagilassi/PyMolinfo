@@ -3,7 +3,7 @@
 **MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
 **Features**
-* `File Format Support`: Load molecular data from multiple file formats, including SDF.
+* `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON.
 * `Graph Conversion`: Transform molecular structures into graph representations for detailed analysis.
 * `Functional Group Identification`: Detect and analyze functional groups within the molecular graph.
 * `Distance Measurement`: Compute distances between atoms and bonds in the molecular graph.
