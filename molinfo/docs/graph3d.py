@@ -5,6 +5,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import plotly as py
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.io
 import math
 # internal
 from .observer import Observer
@@ -22,7 +26,7 @@ class graph3d():
     _structure_type = ''
     plotScale = []
 
-    def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits):
+    def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits, atom_bonds_1d):
         self.atomElements = atomElements
         # bond block (info)
         self.atomBonds = atomBonds
@@ -32,6 +36,7 @@ class graph3d():
         self.tetaNo = tetaNo
         self.phiNo = phiNo
         self.limits = limits
+        self.atomBonds_1d = atom_bonds_1d
 
         # set structure type
         structureType, perpendicularAxis, perpendicularVector, XYZ0 = self.StructureAnalyzer()
@@ -653,8 +658,7 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
-    def view3d(self, elev=None, azim=None, figSize='default', obsOption=[False, 0],
-               dpi=100, pixel_width=800, pixel_height=600, bg_color='#090A0B', display_legend=True):
+    def view3d(self, figSize=[], bg_color='#ffffff', display_legend=True, theme='light', display_atom_id=True, display_bond_length=True):
         '''
         Draw a compound in the cartesian coordinate
         atomElements atom symbol
@@ -665,20 +669,8 @@ class graph3d():
 
         Parameters
         ----------
-        elev: int
-            elevation of the view angle (default: 30)
-        azim: int
-            azimuthal angle of the view angle (default: 30)
         figSize: tuple
             figure size
-        obsOption: list
-            display center point [False,0]
-        dpi: int
-            dots per inch
-        pixel_width: int
-            width of the figure in pixels
-        pixel_height: int
-            height of the figure in pixels
         bg_color: str
             background color
         display_legend: bool
@@ -691,28 +683,9 @@ class graph3d():
         '''
         # plot summary
         plot_summary = []
-        # 3d plot
-        if figSize == 'default':
-            fig = plt.figure(figsize=(6, 6), facecolor=f'{bg_color}')
-        else:
-            fig_size_inches = (pixel_width / dpi, pixel_height / dpi)
-            fig = plt.figure(figsize=fig_size_inches,
-                             dpi=dpi, facecolor=f'{bg_color}')
 
-        # remove paddings
-        fig.tight_layout(pad=0)
-
-        # projection
-        ax = plt.axes(projection='3d')
-
-        # Adjust the layout to fill the entire figure
-        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-
-        # axis display
-        plt.axis('off')
-        # color
-        ax_color = f'{bg_color}'
-        ax.set_facecolor(ax_color)
+        # Create the figure
+        fig = go.Figure()
 
         # legend
         legend_list = []
@@ -723,7 +696,7 @@ class graph3d():
         # atom no
         atomNo = len(self.xyzList)
         # bond no
-        bondNo = len(self.atomBonds)
+        bondNo = len(self.atomBonds_1d)
 
         # create 3d frame
         xyzLenMax, xyzLenMin, xyzR, xLen, yLen, zLen = self.create_3dframe()
@@ -761,174 +734,171 @@ class graph3d():
             # atom label
             marker_labels.append(atomMark)
 
-            # marker edgecolor
-            marker_edgecolor = str('#5C5C5C')
-
-            # legend list
-            if _atomSymbol not in legend_list:
-                legend_list.append(_atomSymbol)
-
-                # draw atom 1
-                ax.scatter3D(_atom1X, _atom1Y, _atom1Z,
-                             label=_atomSymbol, s=_atomSize, color=_atomColor, edgecolors=marker_edgecolor)
+            if display_atom_id:  # Replace with your condition
+                text_to_display = [atomMark]
             else:
-                # draw atom 1
-                ax.scatter3D(_atom1X, _atom1Y, _atom1Z,
-                             s=_atomSize, color=_atomColor, edgecolors=marker_edgecolor)
+                text_to_display = ['']  # Empty string to hide text
 
-        # *** atom label display
-        # for i, label in enumerate(marker_labels):
-        #     # xyz
-        #     _atom1X = self.xyzList[i, 0]
-        #     _atom1Y = self.xyzList[i, 1]
-        #     _atom1Z = self.xyzList[i, 2]
-        #     # set
-        #     ax.text(_atom1X, _atom1Y, _atom1Z, label, ha='left',
-        #             va='center', color='red', fontsize=12)
-
-        # reset
-        i = 0
+            # scatter
+            fig.add_trace(go.Scatter3d(x=[_atom1X],
+                                       y=[_atom1Y],
+                                       z=[_atom1Z],
+                                       mode='markers+text',
+                                       marker=dict(
+                                           color=_atomColor, size=10, sizemode='area', sizeref=1, line=dict(width=2, color='black')),
+                                       hoverinfo='all',  # Display all available information
+                                       hoverlabel=dict(bgcolor='white'),
+                                       # Set custom hover text
+                                       hovertext=[f'Element: {atomMark}'],
+                                       text=text_to_display, textfont=dict(
+                                           weight='bold')))
 
         # *** bond visualization
         # *** using bond block
         for i in range(bondNo):
-            # atom id
-            _atom1Id = int(self.atomBonds[i]['id']) - 1
-            # atom symbol
-            _atom1Symbol = self.atomBonds[i]['symbol']
-            # atom color
+            # id 1
+            _atom1Id = int(self.atomBonds_1d[i]['id1']) - 1
+            # id 2
+            _atom2Id = int(self.atomBonds_1d[i]['id2']) - 1
+            # symbol 1
+            _atom1Symbol = self.atomBonds_1d[i]['symbol1']
+            # symbol 2
+            _atom2Symbol = self.atomBonds_1d[i]['symbol2']
+            # color 1
             _atom1Color = self.set_color(_atom1Symbol)
-            # atom bond list
-            _atom1BondList = self.atomBonds[i]['bonds']
-            atom1BondSize = len(_atom1BondList)
+            # color 2
+            _atom2Color = self.set_color(_atom2Symbol)
 
+            # bond symbol
+            _bondSymbol = self.atomBonds_1d[i]['bond_symbol']
+            # bond type
+            _bondType = self.atomBonds_1d[i]['bond_type']
+
+            # xyz atom 1
             _atom1X = self.xyzList[_atom1Id, 0]
             _atom1Y = self.xyzList[_atom1Id, 1]
             _atom1Z = self.xyzList[_atom1Id, 2]
             _atom1XYZ = [_atom1X, _atom1Y, _atom1Z]
 
-            # draw bond
-            if atom1BondSize > 0:
-                for j in range(atom1BondSize):
-                    # atom [2] id
-                    _atom2Id = int(_atom1BondList[j][0]) - 1
-                    # atom [2] symbol
-                    _atom2Symbol = _atom1BondList[j][1]
-                    # atom color
-                    _atom2Color = self.set_color(_atom2Symbol)
-                    # atom [1] - atom [2] bond type
-                    _bondType = int(_atom1BondList[j][3])
+            # xyz atom 2
+            _atom2X = self.xyzList[_atom2Id, 0]
+            _atom2Y = self.xyzList[_atom2Id, 1]
+            _atom2Z = self.xyzList[_atom2Id, 2]
+            _atom2XYZ = [_atom2X, _atom2Y, _atom2Z]
 
-                    # set color
-                    lineColor = ['w', 'w', 'w']
-                    lineWidth = [4, 3, 2]
-                    lineColorAtoms = [_atom1Color, _atom2Color]
+            # distance
+            _distance = self.calculate_distance(_atom1XYZ, _atom2XYZ)
 
-                    # xyz
-                    _atom2X = self.xyzList[_atom2Id, 0]
-                    _atom2Y = self.xyzList[_atom2Id, 1]
-                    _atom2Z = self.xyzList[_atom2Id, 2]
-                    _atom2XYZ = [_atom2X, _atom2Y, _atom2Z]
+            # plot summary
+            plot_summary.append(
+                {
+                    'atom1Id': _atom1Id+1,
+                    'atom2Id': _atom2Id+1,
+                    'atom1Symbol': str(_atom1Symbol) + str(_atom1Id+1),
+                    'atom2Symbol': str(_atom2Symbol) + str(_atom2Id+1),
+                    'distance': _distance
+                }
+            )
 
-                    # distance
-                    _distance = self.calculate_distance(_atom1XYZ, _atom2XYZ)
+            # Calculate midpoint coordinates
+            midX = [(_atom1X + _atom2X) / 2]
+            midY = [(_atom1Y + _atom2Y) / 2]
+            midZ = [(_atom1Z + _atom2Z) / 2]
 
-                    # plot summary
-                    plot_summary.append(
-                        {
-                            'atom1Id': _atom1Id+1,
-                            'atom2Id': _atom2Id+1,
-                            'atom1Symbol': str(_atom1Symbol) + str(_atom1Id+1),
-                            'atom2Symbol': str(_atom2Symbol) + str(_atom2Id+1),
-                            'distance': _distance
-                        }
-                    )
+            # add line
+            fig.add_trace(go.Scatter3d(x=[_atom1X, _atom2X],
+                                       y=[_atom1Y, _atom2Y],
+                                       z=[_atom1Z, _atom2Z],
+                                       mode='lines',
+                                       line=dict(color='gray', width=3), hoverinfo='none', name=_bondSymbol, showlegend=True))
 
-                    # line property
-                    xyzMean, xyzPlane, isPlane, xyzL, perpendicularAxis = self.line_property(
-                        _atom1XYZ, _atom2XYZ)
+            if display_bond_length:  # Condition to show text
+                text_to_display = [f'{_distance:.3f}']
+            else:
+                text_to_display = ['']  # Empty string to hide text
 
-                    # ** create bond line
-                    create_bond_line_version = 1
-                    if create_bond_line_version == 1:
-                        # bond connection (points)
-                        _bondConnection, _bondTypeLog, _ = self.create_bond_line(
-                            _atom1XYZ, _atom2XYZ, _bondType)
+            # Add text at midpoint
+            fig.add_trace(go.Scatter3d(x=midX,
+                                       y=midY,
+                                       z=midZ,
+                                       mode='text',
+                                       # Replace with your desired text
+                                       text=text_to_display,
+                                       hoverinfo='text',  # Display all available information
+                                       hoverlabel=dict(bgcolor='white'),
+                                       # Set custom hover text
+                                       hovertext=[f'Bond length: {_distance:.3f}']))
 
-                        # size
-                        _bondConnectionSize = len(_bondConnection)
+        # Set the limits of the axes
+        fig.update_layout(scene=dict(
+            xaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            yaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            zaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax])
+        ))
 
-                        # check
-                        if _bondConnectionSize == 1:
-                            _vector = _bondConnection[0]
-                            ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                      linewidth=lineWidth[_bondType-1], c=lineColor[_bondType-1])
-                        else:
-                            # line color: black
-                            for b in range(_bondConnectionSize):
-                                _vector = _bondConnection[b]
-                                ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                          linewidth=lineWidth[_bondType-1], c=lineColor[_bondType-1])
+        # Set figure size to a square
+        if len(figSize) != 0:
+            fig.update_layout(width=figSize[0], height=figSize[1])
+        else:
+            fig.update_layout(
+                autosize=True
+            )
 
-                    else:
-                        # bond connection (points)
-                        _bondConnection, _bondTypeLog = self.create_bond_line_V2(
-                            _atom1XYZ, _atom2XYZ, _bondType)
+        # Show legend
+        # Update layout to display legend
+        fig.update_layout(legend=dict(
+            orientation="h",  # Horizontal legend
+            yanchor="bottom",  # Anchor at bottom
+            y=1.02,  # Move legend up slightly
+            xanchor="right",  # Anchor at right
+            x=1  # Move legend to right
+        ))
 
-                        # size
-                        _bondConnectionSize = len(_bondConnection)
+        if theme == 'black':
+            font_color = 'lightgray'
+        else:
+            font_color = 'black'
 
-                        # color index
-                        color_index = 0
-                        # line color: black
-                        for b in range(_bondConnectionSize):
-                            _vector = _bondConnection[b]
-                            ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                      linewidth=lineWidth[_bondType-1], c=lineColorAtoms[color_index])
-                            # check
-                            if color_index == 1:
-                                color_index = 0
-                            else:
-                                # set color index
-                                color_index += 1
+        # Update text font color
+        fig.update_traces(textfont=dict(color=font_color))
 
-            # obs show
-            if obsOption[0]:
-                ax.scatter3D(obsOption[1], 0, 0, s=40)
+        # Set background color to dark
+        fig.update_layout(
+            paper_bgcolor=bg_color,
+            plot_bgcolor=bg_color,
+            scene=dict(
+                xaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color),
+                yaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color),
+                zaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color)
+            )
+        )
 
-        # check
-        if display_legend:
-            # ax legends
-            ax.legend(legend_list)
-            # legend position end right
-            plt.legend(loc="upper right", markerscale=0.25,
-                       scatterpoints=1, fontsize=10)
+        # Remove axes and other elements
+        fig.update_layout(
+            scene=dict(
+                xaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                yaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                zaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                aspectmode='manual',
+                aspectratio=dict(x=1, y=1, z=1),
+            ),
+            showlegend=False,
+            margin=dict(l=0, r=0, b=0, t=0)
+        )
 
-        # axis setting
-        ax.set_xlabel("$X$")
-        ax.set_ylabel("$Y$")
-        ax.set_zlabel("$Z$")
-
-        ax.autoscale(True)
-        # ax.set_aspect('auto')
-        ax.set_aspect('equal')
-
-        # set limits
-        set_lim_offset = 1
-        _maxVal = np.max(self.xyzList)
-        ax.set_xlim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-        ax.set_ylim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-        ax.set_zlim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-
-        ax.set_xscale('linear')
-        ax.set_yscale('linear')
-
-        # set angles/elevations
-        ax.view_init(elev=elev, azim=azim)
-        plt.show()
+        # Show the plot with zoom disabled
+        fig.show(config={
+            'scrollZoom': True,  # Disable zoom with scroll
+            'displayModeBar': True,
+            'displaylogo': True,
+            'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d', 'pan2d']
+        })
 
         # res
         return plot_summary

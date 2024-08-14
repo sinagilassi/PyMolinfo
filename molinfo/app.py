@@ -9,7 +9,6 @@ from .config import __version__
 from .config import __description__
 from .docs import MolParser
 from .docs import Compound
-from .docs import Network
 
 
 def main():
@@ -18,7 +17,7 @@ def main():
     print(_des)
 
 
-def g3d(file, display_legend=True):
+def g3d(file, fig_size=[], display_legend=True, display_atom_id=True, display_bond_length=True):
     '''
     3d graph of a compound
 
@@ -42,7 +41,12 @@ def g3d(file, display_legend=True):
         # compound
         compound = Compound(compound_info)
         # display 3d
-        compound.view3d(display_legend=display_legend)
+        if len(fig_size) == 0:
+            compound.view3d(display_legend=display_legend,
+                            display_atom_id=display_atom_id, display_bond_length=display_bond_length)
+        else:
+            compound.view3d(fig_size=fig_size, display_legend=display_legend,
+                            display_atom_id=display_atom_id, display_bond_length=display_bond_length)
     else:
         raise Exception("file path is not valid.")
 

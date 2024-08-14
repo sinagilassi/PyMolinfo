@@ -1,10 +1,9 @@
 # import packages/modules
 import os
 import molinfo as mi
-import pprint
 
 # check version
-print(mi.__version__)
+# print(mi.__version__)
 
 # sdf file
 # Methanol
@@ -29,20 +28,19 @@ print(mi.__version__)
 # Conformer3D_COMPOUND_CID_54670067
 # Malathion
 # Conformer3D_COMPOUND_CID_4004
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_4004.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_8134.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # visualize compound by sdf file
-# mi.g3d(sdf_file)
+mi.g3d(sdf_file, display_bond_length=False, display_atom_id=False)
 
 # visualize compound by inchi
 # mi.g3d_by_inchi(
 #     'InChI=1S/C14H22O6/c1-11(2)13(15)19-9-7-17-5-6-18-8-10-20-14(16)12(3)4/h1,3,5-10H2,2,4H3', display_legend=False)
 
 # network
-# mv3d.check_functional_group(
-#     'test\Conformer3D_COMPOUND_CID_7979.sdf', functional_groups=['ether'])
+# res = mi.check_functional_group(sdf_file, functional_groups=['ether'])
+# print(res)
 
-
-res = mi.check_functional_group(sdf_file, res_format='dataframe')
-print(res)
+# res = mi.check_functional_group(sdf_file, res_format='dataframe')
+# print(res)

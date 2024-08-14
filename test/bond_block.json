@@ -108,3 +108,5 @@
         ]
     }
 ]
+
+b = {'id1': 1, 'symbol1': 'S', 'id2': 3, 'symbol2': 'P', 'bond_type': 1, 'bond_symbol': 'SP'}

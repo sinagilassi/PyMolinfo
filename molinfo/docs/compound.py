@@ -53,7 +53,7 @@ class Compound(graph3d, Network):
         # ! init parent classes
         # *** raw info (just for visualizing a structure)
         graph3d.__init__(self, __atom_elements, __atom_bonds,
-                         __atom_xyz, __atom_xyz_center, self.robs, self.tetaNo, self.phiNo, __limits)
+                         __atom_xyz, __atom_xyz_center, self.robs, self.tetaNo, self.phiNo, __limits, __atom_bonds_1d)
 
         # *** network
         Network.__init__(self, __atom_elements, __atom_bonds,
