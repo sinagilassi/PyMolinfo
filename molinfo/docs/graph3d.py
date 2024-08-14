@@ -10,7 +10,7 @@ import math
 from .observer import Observer
 
 
-class Vizr3D():
+class graph3d():
     '''
     3D Visualizer of a compound
 
