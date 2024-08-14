@@ -6,12 +6,12 @@ import numpy as np
 from matplotlib.pyplot import xlabel
 from ..config import OBSERVER_PROPERTY
 from .utility import Utility
-from .vizr3d import Vizr3D
+from .graph3d import graph3d
 from .netwrok import Network
 from .compute import Compute, CalculateMolecularMass
 
 
-class Compound(Vizr3D, Network):
+class Compound(graph3d, Network):
     '''
     material along with properties
     '''
@@ -52,8 +52,8 @@ class Compound(Vizr3D, Network):
 
         # ! init parent classes
         # *** raw info (just for visualizing a structure)
-        Vizr3D.__init__(self, __atom_elements, __atom_bonds,
-                        __atom_xyz, __atom_xyz_center, self.robs, self.tetaNo, self.phiNo, __limits)
+        graph3d.__init__(self, __atom_elements, __atom_bonds,
+                         __atom_xyz, __atom_xyz_center, self.robs, self.tetaNo, self.phiNo, __limits)
 
         # *** network
         Network.__init__(self, __atom_elements, __atom_bonds,

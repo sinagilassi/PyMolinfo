@@ -18,9 +18,9 @@ def main():
     print(_des)
 
 
-def td(file, display_legend=True):
+def g3d(file, display_legend=True):
     '''
-    3d visualizer of a compound
+    3d graph of a compound
 
     Parameters
     ----------
@@ -32,7 +32,7 @@ def td(file, display_legend=True):
     Returns
     -------
     None
-        display 3d 
+        display 3d graph
     '''
     # check file exists
     if os.path.exists(file):
@@ -47,9 +47,9 @@ def td(file, display_legend=True):
         raise Exception("file path is not valid.")
 
 
-def td_by_inchi(inchi, display_legend=True):
+def g3d_by_inchi(inchi, display_legend=True):
     '''
-    3d visualizer of a compound using its InChI identifier
+    3d graph of a compound using its InChI identifier
 
     Parameters
     ----------
@@ -61,7 +61,7 @@ def td_by_inchi(inchi, display_legend=True):
     Returns
     -------
     None
-        display 3d
+        display 3d graph
     '''
     # check inchi
     if inchi is not None:
