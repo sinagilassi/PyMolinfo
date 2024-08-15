@@ -21,7 +21,7 @@ To use Molinfo, simply install the package and import it into your Python script
 
 You can use the following code to run `Molinfo` in Google Colab:
 
-
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
 ## Installation
 
