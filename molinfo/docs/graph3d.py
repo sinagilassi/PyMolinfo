@@ -759,8 +759,9 @@ class graph3d():
                                        hoverlabel=dict(bgcolor=bg_color),
                                        # Set custom hover text
                                        hovertext=[f'Element: {atomMark}'],
-                                       text=text_to_display, textfont=dict(
-                                           weight='normal')))
+                                       text=text_to_display))
+
+            # textfont = dict(weight='normal')
 
         # *** bond visualization
         # *** using bond block
