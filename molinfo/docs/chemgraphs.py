@@ -649,6 +649,34 @@ class ChemGraphs():
         # res
         return ROH
 
+    def graph_primary_alcohol_double_bond(self):
+        '''
+        Create a graph for primary alcohol
+        '''
+        # R-OH graph (simplified)
+        ROH = nx.Graph()
+        # C
+        ROH.add_node(1, symbol='C')
+        # H
+        ROH.add_node(2, symbol='H')
+        # H
+        ROH.add_node(3, symbol='C')
+        # O
+        ROH.add_node(4, symbol='O')
+        # H
+        ROH.add_node(5, symbol='H')
+        # bond
+        ROH.add_edge(1, 2, symbol='CH', type=1)
+        # bond
+        ROH.add_edge(1, 3, symbol='CC', type=2)
+        # bond
+        ROH.add_edge(1, 4, symbol='CO', type=1)
+        # bond
+        ROH.add_edge(4, 5, symbol='OH', type=1)
+
+        # res
+        return ROH
+
     def graph_secondary_alcohol(self):
         '''
         Create a graph for secondary alcohol
@@ -677,6 +705,34 @@ class ChemGraphs():
         ROH.add_edge(1, 5, symbol='CO', type=1)
         # bond
         ROH.add_edge(5, 6, symbol='OH', type=1)
+
+        # res
+        return ROH
+
+    def graph_secondary_alcohol_double_bond(self):
+        '''
+        Create a graph for secondary alcohol
+        '''
+        # R-OH graph (simplified)
+        ROH = nx.Graph()
+        # C
+        ROH.add_node(1, symbol='C')
+        # C
+        ROH.add_node(2, symbol='C')
+        # C
+        ROH.add_node(3, symbol='C')
+        # O
+        ROH.add_node(4, symbol='O')
+        # H
+        ROH.add_node(5, symbol='H')
+        # bond
+        ROH.add_edge(1, 2, symbol='CC', type=1)
+        # bond
+        ROH.add_edge(1, 3, symbol='CC', type=2)
+        # bond
+        ROH.add_edge(1, 4, symbol='CO', type=1)
+        # bond
+        ROH.add_edge(4, 5, symbol='OH', type=1)
 
         # res
         return ROH
@@ -712,3 +768,99 @@ class ChemGraphs():
 
         # res
         return ROH
+
+    def graph_alkane_CH_bond(self):
+        '''
+        Create a graph for alkane CH bond
+        '''
+        # C-C graph
+        CC = nx.Graph()
+        # C
+        CC.add_node(1, symbol='C')
+        # C
+        CC.add_node(2, symbol='C')
+        # H
+        CC.add_node(3, symbol='H')
+        # H
+        CC.add_node(4, symbol='H')
+        # H
+        CC.add_node(5, symbol='H')
+        # bond
+        CC.add_edge(1, 2, symbol='CC', type=1)
+        # bond
+        CC.add_edge(1, 3, symbol='CH', type=1)
+        # bond
+        CC.add_edge(1, 4, symbol='CH', type=1)
+        # bond
+        CC.add_edge(1, 5, symbol='CH', type=1)
+
+        # res
+        return CC
+
+    def graph_alkene_CH_bond(self):
+        '''
+        Create a graph for alkene
+        '''
+        # C=C graph
+        CC = nx.Graph()
+        # C
+        CC.add_node(1, symbol='C')
+        # C
+        CC.add_node(2, symbol='C')
+        # H
+        CC.add_node(3, symbol='H')
+        # H
+        CC.add_node(4, symbol='H')
+        # bond
+        CC.add_edge(1, 2, symbol='CC', type=2)
+        # bond
+        CC.add_edge(1, 3, symbol='CH', type=1)
+        # bond
+        CC.add_edge(1, 4, symbol='CH', type=1)
+
+        # res
+        return CC
+
+    def graph_aromatic_CH_bond(self):
+        '''
+        Create a graph for alkene
+        '''
+        # C=C graph
+        CC = nx.Graph()
+        # C
+        CC.add_node(1, symbol='C')
+        # C
+        CC.add_node(2, symbol='C')
+        # C
+        CC.add_node(3, symbol='C')
+        # H
+        CC.add_node(4, symbol='H')
+        # bond
+        CC.add_edge(1, 2, symbol='CC', type=2)
+        # bond
+        CC.add_edge(1, 3, symbol='CC', type=1)
+        # bond
+        CC.add_edge(1, 4, symbol='CH', type=1)
+
+        # res
+        return CC
+
+    def graph_alkyne_CH_bond(self):
+        '''
+        Create a graph for alkyne
+        '''
+        # C≡C graph
+        CC = nx.Graph()
+        # C
+        CC.add_node(1, symbol='C')
+        # C
+        CC.add_node(2, symbol='C')
+        # H
+        CC.add_node(3, symbol='H')
+        # bond
+        CC.add_edge(1, 2, symbol='CC', type=3)
+        # bond
+        CC.add_edge(1, 3, symbol='CH', type=1)
+
+        # res
+        return CC

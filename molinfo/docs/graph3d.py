@@ -658,7 +658,7 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
-    def view3d(self, figSize=[], bg_color='#ffffff', display_legend=True, theme='light', display_atom_id=True, display_bond_length=True):
+    def view3d(self, **kwargs):
         '''
         Draw a compound in the cartesian coordinate
         atomElements atom symbol
@@ -681,6 +681,15 @@ class graph3d():
         fig: figure
             figure
         '''
+        figSize = kwargs.get('figSize', [])
+        bg_color = kwargs.get('bg_color', '#ffffff')
+        display_legend = kwargs.get('display_legend', True)
+        theme = kwargs.get('theme', 'light')
+        display_atom_id = kwargs.get('display_atom_id', True)
+        display_bond_length = kwargs.get('display_bond_length', False)
+        bond_type_color = kwargs.get(
+            'bond_type_color', ['#1B263B', '#EF476F', '#4361EE'])
+
         # plot summary
         plot_summary = []
 
@@ -747,11 +756,11 @@ class graph3d():
                                        marker=dict(
                                            color=_atomColor, size=10, sizemode='area', sizeref=1, line=dict(width=2, color='black')),
                                        hoverinfo='all',  # Display all available information
-                                       hoverlabel=dict(bgcolor='white'),
+                                       hoverlabel=dict(bgcolor=bg_color),
                                        # Set custom hover text
                                        hovertext=[f'Element: {atomMark}'],
                                        text=text_to_display, textfont=dict(
-                                           weight='bold')))
+                                           weight='normal')))
 
         # *** bond visualization
         # *** using bond block
@@ -772,7 +781,15 @@ class graph3d():
             # bond symbol
             _bondSymbol = self.atomBonds_1d[i]['bond_symbol']
             # bond type
-            _bondType = self.atomBonds_1d[i]['bond_type']
+            _bondType = int(self.atomBonds_1d[i]['bond_type']-1)
+            # set bond type
+            _bondTypeLabel = ''
+            if _bondType == 1:
+                _bondTypeLabel = 'single bond'
+            elif _bondType == 2:
+                _bondTypeLabel = 'double bond'
+            else:
+                _bondTypeLabel = 'triple bond'
 
             # xyz atom 1
             _atom1X = self.xyzList[_atom1Id, 0]
@@ -810,9 +827,9 @@ class graph3d():
                                        y=[_atom1Y, _atom2Y],
                                        z=[_atom1Z, _atom2Z],
                                        mode='lines',
-                                       line=dict(color='gray', width=3), hoverinfo='none', name=_bondSymbol, showlegend=True))
+                                       line=dict(color=bond_type_color[_bondType], width=3), hoverinfo='none', name=_bondSymbol, showlegend=True))
 
-            if display_bond_length:  # Condition to show text
+            if display_bond_length is True:  # Condition to show text
                 text_to_display = [f'{_distance:.3f}']
             else:
                 text_to_display = ['']  # Empty string to hide text
@@ -825,11 +842,14 @@ class graph3d():
                                        # Replace with your desired text
                                        text=text_to_display,
                                        hoverinfo='text',  # Display all available information
-                                       hoverlabel=dict(bgcolor='white'),
+                                       hoverlabel=dict(
+                                           bgcolor=bg_color, namelength=-1),
                                        # Set custom hover text
-                                       hovertext=[f'Bond length: {_distance:.3f}']))
+                                       hovertext=[f'A {_bondTypeLabel} with a length of {_distance:.3f}']))
 
         # Set the limits of the axes
+        # set max and offset
+        xyzLenMax = xyzLenMax + 1.5
         fig.update_layout(scene=dict(
             xaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
             yaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),

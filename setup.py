@@ -25,7 +25,8 @@ setup(
     license='MIT',
     install_requires=['pandas', 'pillow', 'requests',
                       'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly'],
-    keywords=['python', 'chemistry', 'chemistry-visualization', 'Molinfo'],
+    keywords=['python', 'chemistry', 'chemistry-visualization',
+              'Molinfo', 'molecular-graph'],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Education",

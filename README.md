@@ -4,7 +4,7 @@
 
 **Features**
 
-* `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON.
+* `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON (soon).
 * `Graph Conversion`: Transform molecular structures into graph representations for detailed analysis.
 * `Functional Group Identification`: Detect and analyze functional groups within the molecular graph.
 * `Distance Measurement`: Compute distances between atoms and bonds in the molecular graph.
@@ -34,6 +34,23 @@ print(mi.__version__)
 
 ## Examples
 
+Display a graph:
+
+```python
+# sdf file
+sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_261.sdf'
+sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
+ visualize compound by sdf file
+mi.g3d(sdf_file)
+```
+
+Check the availability of functional groups:
+
+```python
+# check functional groups
+res = mi.check_functional_group(sdf_file, res_format='dataframe')
+print(res)
+```
 
 ## FAQ
 

@@ -17,7 +17,7 @@ def main():
     print(_des)
 
 
-def g3d(file, fig_size=[], display_legend=True, display_atom_id=True, display_bond_length=True):
+def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
     '''
     3d graph of a compound
 
@@ -27,6 +27,10 @@ def g3d(file, fig_size=[], display_legend=True, display_atom_id=True, display_bo
         molecule file format (sdf)
     display_legend : bool
         display legend (default True)
+    display_atom_id : bool
+        display atom id (default True)
+    display_bond_length : bool
+        display bond length (default True)
 
     Returns
     -------
@@ -41,17 +45,13 @@ def g3d(file, fig_size=[], display_legend=True, display_atom_id=True, display_bo
         # compound
         compound = Compound(compound_info)
         # display 3d
-        if len(fig_size) == 0:
-            compound.view3d(display_legend=display_legend,
-                            display_atom_id=display_atom_id, display_bond_length=display_bond_length)
-        else:
-            compound.view3d(fig_size=fig_size, display_legend=display_legend,
-                            display_atom_id=display_atom_id, display_bond_length=display_bond_length)
+        compound.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
+                        display_atom_id=display_atom_id, display_bond_length=display_bond_length)
     else:
         raise Exception("file path is not valid.")
 
 
-def g3d_by_inchi(inchi, display_legend=True):
+def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
     '''
     3d graph of a compound using its InChI identifier
 
@@ -88,7 +88,8 @@ def g3d_by_inchi(inchi, display_legend=True):
                 # compound
                 compound = Compound(compound_info)
                 # display 3d
-                compound.view3d(display_legend=display_legend)
+                compound.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
+                                display_atom_id=display_atom_id, display_bond_length=display_bond_length)
             else:
                 raise Exception("sdf is not found!")
         else:
