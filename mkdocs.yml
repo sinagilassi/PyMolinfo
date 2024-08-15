@@ -15,21 +15,23 @@ theme:
   palette:
     - scheme: default
       toggle:
-        icon: material/toggle-switch-off-outline 
+        icon: material/toggle-switch-off-outline
         name: Switch to dark mode
       primary: blue
-      accent: orange 
-    - scheme: slate 
+      accent: orange
+    - scheme: slate
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode    
       primary: blue
       accent: yellow
 
+
 plugins:
   # - social
   - search
   - mkdocstrings
+
 
 # extra:
 #   social:
@@ -37,6 +39,7 @@ plugins:
 #       link: https://github.com/sinagilassi
 #     - icon: fontawesome/brands/linkedin
 #       link: https://www.linkedin.com/in/sina-gilassi
+
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -54,6 +57,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+
 
 copyright: |
   &copy; 2024 <a href="https://github.com/sinagilassi"  target="_blank" rel="noopener">Sina Gilassi</a>

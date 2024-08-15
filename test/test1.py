@@ -35,6 +35,11 @@ import molinfo as mi
 sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_261.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
+# create graph
+res = mi.create_graph(sdf_file)
+print(type(res))
+print(res)
+
 # visualize compound by sdf file
 # mi.g3d(sdf_file, display_bond_length=True)
 
@@ -49,5 +54,5 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # res = mi.check_functional_group(sdf_file, res_format='dataframe')
 # print(res)
 
-res = mi.check_functional_group(sdf_file)
-print(res)
+# res = mi.check_functional_group(sdf_file)
+# print(res)
