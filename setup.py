@@ -8,7 +8,11 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 APP_NAME = 'Molinfo'
+<<<<<<< HEAD
 VERSION = '1.0.0'
+=======
+VERSION = '1.2.0'
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 DESCRIPTION = 'Molinfo provides comprehensive molecular information and analysis.'
 LONG_DESCRIPTION = 'Molinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
 
@@ -24,8 +28,14 @@ setup(
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
     license='MIT',
     install_requires=['pandas', 'pillow', 'requests',
+<<<<<<< HEAD
                       'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly'],
     keywords=['python', 'chemistry', 'chemistry-visualization', 'Molinfo'],
+=======
+                      'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly', 'networkx[default]'],
+    keywords=['python', 'chemistry', 'chemistry-visualization',
+              'Molinfo', 'molecular-graph'],
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Education",

@@ -15,22 +15,38 @@ theme:
   palette:
     - scheme: default
       toggle:
+<<<<<<< HEAD
         icon: material/toggle-switch-off-outline 
         name: Switch to dark mode
       primary: blue
       accent: orange 
     - scheme: slate 
+=======
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: blue
+      accent: orange
+    - scheme: slate
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode    
       primary: blue
       accent: yellow
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 plugins:
   # - social
   - search
   - mkdocstrings
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 # extra:
 #   social:
 #     - icon: fontawesome/brands/github-alt
@@ -38,6 +54,10 @@ plugins:
 #     - icon: fontawesome/brands/linkedin
 #       link: https://www.linkedin.com/in/sina-gilassi
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -55,5 +75,11 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
+<<<<<<< HEAD
 copyright: |
   &copy; 2024 <a href="https://github.com/sinagilassi"  target="_blank" rel="noopener">Sina Gilassi</a>
+=======
+
+copyright: |
+  &copy; 2024 <a href="https://github.com/sinagilassi"  target="_blank" rel="noopener">Sina Gilassi</a>
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984

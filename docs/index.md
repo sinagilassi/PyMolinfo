@@ -1,19 +1,12 @@
-# Molinfo
+# Welcome to Molinfo
 
-<<<<<<< HEAD
-=======
 ![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo)
 
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 **MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
 **Features**
 
-<<<<<<< HEAD
-* `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON.
-=======
 * `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON (soon).
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 * `Graph Conversion`: Transform molecular structures into graph representations for detailed analysis.
 * `Functional Group Identification`: Detect and analyze functional groups within the molecular graph.
 * `Distance Measurement`: Compute distances between atoms and bonds in the molecular graph.
@@ -23,16 +16,13 @@
 
 To use Molinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
 
-<<<<<<< HEAD
-=======
 
 ## Google Colab
 
 You can use the following code to run `Molinfo` in Google Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
+
 ## Installation
 
 Install molinfo with pip
@@ -53,8 +43,6 @@ print(mi.__version__)
 
 ## Examples
 
-<<<<<<< HEAD
-=======
 * Create a graph
 
 ```python
@@ -81,7 +69,6 @@ mi.g3d(sdf_file)
 res = mi.check_functional_group(sdf_file, res_format='dataframe')
 print(res)
 ```
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
 ## FAQ
 

@@ -5,6 +5,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+<<<<<<< HEAD
+=======
+import plotly as py
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.io
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 import math
 # internal
 from .observer import Observer
@@ -22,7 +29,11 @@ class graph3d():
     _structure_type = ''
     plotScale = []
 
+<<<<<<< HEAD
     def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits):
+=======
+    def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits, atom_bonds_1d):
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         self.atomElements = atomElements
         # bond block (info)
         self.atomBonds = atomBonds
@@ -32,6 +43,10 @@ class graph3d():
         self.tetaNo = tetaNo
         self.phiNo = phiNo
         self.limits = limits
+<<<<<<< HEAD
+=======
+        self.atomBonds_1d = atom_bonds_1d
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # set structure type
         structureType, perpendicularAxis, perpendicularVector, XYZ0 = self.StructureAnalyzer()
@@ -653,8 +668,12 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
+<<<<<<< HEAD
     def view3d(self, elev=None, azim=None, figSize='default', obsOption=[False, 0],
                dpi=100, pixel_width=800, pixel_height=600, bg_color='#090A0B', display_legend=True):
+=======
+    def view3d(self, **kwargs):
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         '''
         Draw a compound in the cartesian coordinate
         atomElements atom symbol
@@ -665,6 +684,7 @@ class graph3d():
 
         Parameters
         ----------
+<<<<<<< HEAD
         elev: int
             elevation of the view angle (default: 30)
         azim: int
@@ -679,6 +699,10 @@ class graph3d():
             width of the figure in pixels
         pixel_height: int
             height of the figure in pixels
+=======
+        figSize: tuple
+            figure size
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         bg_color: str
             background color
         display_legend: bool
@@ -689,6 +713,7 @@ class graph3d():
         fig: figure
             figure
         '''
+<<<<<<< HEAD
         # plot summary
         plot_summary = []
         # 3d plot
@@ -713,6 +738,22 @@ class graph3d():
         # color
         ax_color = f'{bg_color}'
         ax.set_facecolor(ax_color)
+=======
+        figSize = kwargs.get('figSize', [])
+        bg_color = kwargs.get('bg_color', '#ffffff')
+        display_legend = kwargs.get('display_legend', True)
+        theme = kwargs.get('theme', 'light')
+        display_atom_id = kwargs.get('display_atom_id', True)
+        display_bond_length = kwargs.get('display_bond_length', False)
+        bond_type_color = kwargs.get(
+            'bond_type_color', ['#1B263B', '#EF476F', '#4361EE'])
+
+        # plot summary
+        plot_summary = []
+
+        # Create the figure
+        fig = go.Figure()
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # legend
         legend_list = []
@@ -723,7 +764,11 @@ class graph3d():
         # atom no
         atomNo = len(self.xyzList)
         # bond no
+<<<<<<< HEAD
         bondNo = len(self.atomBonds)
+=======
+        bondNo = len(self.atomBonds_1d)
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # create 3d frame
         xyzLenMax, xyzLenMin, xyzR, xLen, yLen, zLen = self.create_3dframe()
@@ -761,6 +806,7 @@ class graph3d():
             # atom label
             marker_labels.append(atomMark)
 
+<<<<<<< HEAD
             # marker edgecolor
             marker_edgecolor = str('#5C5C5C')
 
@@ -788,10 +834,32 @@ class graph3d():
 
         # reset
         i = 0
+=======
+            if display_atom_id:  # Replace with your condition
+                text_to_display = [atomMark]
+            else:
+                text_to_display = ['']  # Empty string to hide text
+
+            # scatter
+            fig.add_trace(go.Scatter3d(x=[_atom1X],
+                                       y=[_atom1Y],
+                                       z=[_atom1Z],
+                                       mode='markers+text',
+                                       marker=dict(
+                                           color=_atomColor, size=10, sizemode='area', sizeref=1, line=dict(width=2, color='black')),
+                                       hoverinfo='all',  # Display all available information
+                                       hoverlabel=dict(bgcolor=bg_color),
+                                       # Set custom hover text
+                                       hovertext=[f'Element: {atomMark}'],
+                                       text=text_to_display))
+
+            # textfont = dict(weight='normal')
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # *** bond visualization
         # *** using bond block
         for i in range(bondNo):
+<<<<<<< HEAD
             # atom id
             _atom1Id = int(self.atomBonds[i]['id']) - 1
             # atom symbol
@@ -802,11 +870,41 @@ class graph3d():
             _atom1BondList = self.atomBonds[i]['bonds']
             atom1BondSize = len(_atom1BondList)
 
+=======
+            # id 1
+            _atom1Id = int(self.atomBonds_1d[i]['id1']) - 1
+            # id 2
+            _atom2Id = int(self.atomBonds_1d[i]['id2']) - 1
+            # symbol 1
+            _atom1Symbol = self.atomBonds_1d[i]['symbol1']
+            # symbol 2
+            _atom2Symbol = self.atomBonds_1d[i]['symbol2']
+            # color 1
+            _atom1Color = self.set_color(_atom1Symbol)
+            # color 2
+            _atom2Color = self.set_color(_atom2Symbol)
+
+            # bond symbol
+            _bondSymbol = self.atomBonds_1d[i]['bond_symbol']
+            # bond type
+            _bondType = int(self.atomBonds_1d[i]['bond_type']-1)
+            # set bond type
+            _bondTypeLabel = ''
+            if _bondType == 1:
+                _bondTypeLabel = 'single bond'
+            elif _bondType == 2:
+                _bondTypeLabel = 'double bond'
+            else:
+                _bondTypeLabel = 'triple bond'
+
+            # xyz atom 1
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
             _atom1X = self.xyzList[_atom1Id, 0]
             _atom1Y = self.xyzList[_atom1Id, 1]
             _atom1Z = self.xyzList[_atom1Id, 2]
             _atom1XYZ = [_atom1X, _atom1Y, _atom1Z]
 
+<<<<<<< HEAD
             # draw bond
             if atom1BondSize > 0:
                 for j in range(atom1BondSize):
@@ -929,6 +1027,130 @@ class graph3d():
         # set angles/elevations
         ax.view_init(elev=elev, azim=azim)
         plt.show()
+=======
+            # xyz atom 2
+            _atom2X = self.xyzList[_atom2Id, 0]
+            _atom2Y = self.xyzList[_atom2Id, 1]
+            _atom2Z = self.xyzList[_atom2Id, 2]
+            _atom2XYZ = [_atom2X, _atom2Y, _atom2Z]
+
+            # distance
+            _distance = self.calculate_distance(_atom1XYZ, _atom2XYZ)
+
+            # plot summary
+            plot_summary.append(
+                {
+                    'atom1Id': _atom1Id+1,
+                    'atom2Id': _atom2Id+1,
+                    'atom1Symbol': str(_atom1Symbol) + str(_atom1Id+1),
+                    'atom2Symbol': str(_atom2Symbol) + str(_atom2Id+1),
+                    'distance': _distance
+                }
+            )
+
+            # Calculate midpoint coordinates
+            midX = [(_atom1X + _atom2X) / 2]
+            midY = [(_atom1Y + _atom2Y) / 2]
+            midZ = [(_atom1Z + _atom2Z) / 2]
+
+            # add line
+            fig.add_trace(go.Scatter3d(x=[_atom1X, _atom2X],
+                                       y=[_atom1Y, _atom2Y],
+                                       z=[_atom1Z, _atom2Z],
+                                       mode='lines',
+                                       line=dict(color=bond_type_color[_bondType], width=3), hoverinfo='none', name=_bondSymbol, showlegend=True))
+
+            if display_bond_length is True:  # Condition to show text
+                text_to_display = [f'{_distance:.3f}']
+            else:
+                text_to_display = ['']  # Empty string to hide text
+
+            # Add text at midpoint
+            fig.add_trace(go.Scatter3d(x=midX,
+                                       y=midY,
+                                       z=midZ,
+                                       mode='text',
+                                       # Replace with your desired text
+                                       text=text_to_display,
+                                       hoverinfo='text',  # Display all available information
+                                       hoverlabel=dict(
+                                           bgcolor=bg_color, namelength=-1),
+                                       # Set custom hover text
+                                       hovertext=[f'A {_bondTypeLabel} with a length of {_distance:.3f}']))
+
+        # Set the limits of the axes
+        # set max and offset
+        xyzLenMax = xyzLenMax + 1.5
+        fig.update_layout(scene=dict(
+            xaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            yaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            zaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax])
+        ))
+
+        # Set figure size to a square
+        if len(figSize) != 0:
+            fig.update_layout(width=figSize[0], height=figSize[1])
+        else:
+            fig.update_layout(
+                autosize=True
+            )
+
+        # Show legend
+        # Update layout to display legend
+        fig.update_layout(legend=dict(
+            orientation="h",  # Horizontal legend
+            yanchor="bottom",  # Anchor at bottom
+            y=1.02,  # Move legend up slightly
+            xanchor="right",  # Anchor at right
+            x=1  # Move legend to right
+        ))
+
+        if theme == 'black':
+            font_color = 'lightgray'
+        else:
+            font_color = 'black'
+
+        # Update text font color
+        fig.update_traces(textfont=dict(color=font_color))
+
+        # Set background color to dark
+        fig.update_layout(
+            paper_bgcolor=bg_color,
+            plot_bgcolor=bg_color,
+            scene=dict(
+                xaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color),
+                yaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color),
+                zaxis=dict(showbackground=True,
+                           backgroundcolor=bg_color)
+            )
+        )
+
+        # Remove axes and other elements
+        fig.update_layout(
+            scene=dict(
+                xaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                yaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                zaxis=dict(showticklabels=False, showgrid=False,
+                           zeroline=False, showspikes=False, title=''),
+                aspectmode='manual',
+                aspectratio=dict(x=1, y=1, z=1),
+            ),
+            showlegend=False,
+            margin=dict(l=0, r=0, b=0, t=0)
+        )
+
+        # Show the plot with zoom disabled
+        fig.show(config={
+            'scrollZoom': True,  # Disable zoom with scroll
+            'displayModeBar': True,
+            'displaylogo': True,
+            'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d', 'pan2d']
+        })
+>>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # res
         return plot_summary
