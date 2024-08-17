@@ -1,6 +1,7 @@
 # import packages/modules
 import os
 import molinfo as mi
+from pprint import pprint as pp
 
 # check version
 # print(mi.__version__)
@@ -35,10 +36,19 @@ import molinfo as mi
 sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_261.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
-# create graph
-res = mi.create_graph(sdf_file)
-print(type(res))
-print(res)
+# compound
+comp1 = mi.compound(sdf_file)
+print(comp1)
+# pp(comp1.atom_bond_block)
+# print("-"*100)
+# pp(comp1.atom_bond_block_1d)
+# print("-"*100)
+# pp(comp1.atom_xyz)
+
+# # create graph
+# res = mi.create_graph(sdf_file)
+# print(type(res))
+# print(res)
 
 # visualize compound by sdf file
 # mi.g3d(sdf_file, display_bond_length=True)

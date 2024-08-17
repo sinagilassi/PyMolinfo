@@ -23,6 +23,7 @@ class Compound(graph3d, Network):
     _atom_xyz = []
     _atom_xyz_center = []
     _atom_bond_block = []
+    _atom_bond_block_1d = []
     _atom_bond_numbers = 0
 
     # *** obs fixed ***
@@ -49,6 +50,10 @@ class Compound(graph3d, Network):
 
         # TODO: convert atom_bonds to 1d vector
         __atom_bonds_1d = self.convert_atom_bonds(__atom_bonds)
+        # self._atom_bond_block_1d = []
+        # self._atom_bond_block_1d = [*__atom_bonds_1d]
+        # update parse_prop
+        self.parse_prop['bond_block_1d'] = __atom_bonds_1d
 
         # ! init parent classes
         # *** raw info (just for visualizing a structure)
@@ -145,6 +150,14 @@ class Compound(graph3d, Network):
         self._atom_bond_block = value
 
     @property
+    def atom_bond_block_1d(self):
+        return self.parse_prop['bond_block_1d']
+
+    @atom_bond_block_1d.setter
+    def atom_bond_block_1d(self, value):
+        self._atom_bond_block_1d = value
+
+    @property
     def atom_bond_numbers(self):
         return self.parse_prop['bond_numbers']
 
@@ -224,7 +237,8 @@ class Compound(graph3d, Network):
             'atom_block': 1,
             'bond_block': self.__update_atom_bond_block,
             'xyz_list': self.__update_atom_xyz,
-            'xyz_center_list': self.__update_atom_xyz_center
+            'xyz_center_list': self.__update_atom_xyz_center,
+            'bond_block_1d': self.__update_atom_bond_block_1d
         }
         # select prop
         propSelection = switchProp.get(prop_name)
@@ -256,6 +270,9 @@ class Compound(graph3d, Network):
 
     def __update_atom_bond_numbers(self, prop_val):
         self.atom_bond_numbers = prop_val
+
+    def __update_atom_bond_block_1d(self, prop_val):
+        self.atom_bond_block_1d = prop_val
 
     def convert_atom_bonds(self, atom_bonds):
         '''

@@ -17,6 +17,35 @@ def main():
     print(_des)
 
 
+def compound(file):
+    '''
+    Create a compound by parsing sdf file
+
+    Parameters
+    ----------
+    file : str
+        molecule file format (sdf)
+
+    Returns
+    -------
+    compound : object
+        compound object
+    '''
+    try:
+        if os.path.exists(file):
+            # parse file
+            MolParserC = MolParser(file)
+            compound_info = MolParserC.read_file()
+            # compound
+            compound = Compound(compound_info)
+            # res
+            return compound
+        else:
+            raise Exception("file path is not valid.")
+    except Exception as e:
+        print(e)
+
+
 def create_graph(file):
     '''
     Convert a sdf compound file to a graph 
