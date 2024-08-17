@@ -5,13 +5,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
-<<<<<<< HEAD
-=======
 import plotly as py
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 import math
 # internal
 from .observer import Observer
@@ -29,11 +26,7 @@ class graph3d():
     _structure_type = ''
     plotScale = []
 
-<<<<<<< HEAD
-    def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits):
-=======
     def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, robs, tetaNo, phiNo, limits, atom_bonds_1d):
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         self.atomElements = atomElements
         # bond block (info)
         self.atomBonds = atomBonds
@@ -43,10 +36,7 @@ class graph3d():
         self.tetaNo = tetaNo
         self.phiNo = phiNo
         self.limits = limits
-<<<<<<< HEAD
-=======
         self.atomBonds_1d = atom_bonds_1d
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # set structure type
         structureType, perpendicularAxis, perpendicularVector, XYZ0 = self.StructureAnalyzer()
@@ -668,12 +658,7 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
-<<<<<<< HEAD
-    def view3d(self, elev=None, azim=None, figSize='default', obsOption=[False, 0],
-               dpi=100, pixel_width=800, pixel_height=600, bg_color='#090A0B', display_legend=True):
-=======
     def view3d(self, **kwargs):
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         '''
         Draw a compound in the cartesian coordinate
         atomElements atom symbol
@@ -684,25 +669,8 @@ class graph3d():
 
         Parameters
         ----------
-<<<<<<< HEAD
-        elev: int
-            elevation of the view angle (default: 30)
-        azim: int
-            azimuthal angle of the view angle (default: 30)
         figSize: tuple
             figure size
-        obsOption: list
-            display center point [False,0]
-        dpi: int
-            dots per inch
-        pixel_width: int
-            width of the figure in pixels
-        pixel_height: int
-            height of the figure in pixels
-=======
-        figSize: tuple
-            figure size
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
         bg_color: str
             background color
         display_legend: bool
@@ -713,32 +681,6 @@ class graph3d():
         fig: figure
             figure
         '''
-<<<<<<< HEAD
-        # plot summary
-        plot_summary = []
-        # 3d plot
-        if figSize == 'default':
-            fig = plt.figure(figsize=(6, 6), facecolor=f'{bg_color}')
-        else:
-            fig_size_inches = (pixel_width / dpi, pixel_height / dpi)
-            fig = plt.figure(figsize=fig_size_inches,
-                             dpi=dpi, facecolor=f'{bg_color}')
-
-        # remove paddings
-        fig.tight_layout(pad=0)
-
-        # projection
-        ax = plt.axes(projection='3d')
-
-        # Adjust the layout to fill the entire figure
-        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-
-        # axis display
-        plt.axis('off')
-        # color
-        ax_color = f'{bg_color}'
-        ax.set_facecolor(ax_color)
-=======
         figSize = kwargs.get('figSize', [])
         bg_color = kwargs.get('bg_color', '#ffffff')
         display_legend = kwargs.get('display_legend', True)
@@ -753,7 +695,6 @@ class graph3d():
 
         # Create the figure
         fig = go.Figure()
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # legend
         legend_list = []
@@ -764,11 +705,7 @@ class graph3d():
         # atom no
         atomNo = len(self.xyzList)
         # bond no
-<<<<<<< HEAD
-        bondNo = len(self.atomBonds)
-=======
         bondNo = len(self.atomBonds_1d)
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # create 3d frame
         xyzLenMax, xyzLenMin, xyzR, xLen, yLen, zLen = self.create_3dframe()
@@ -806,35 +743,6 @@ class graph3d():
             # atom label
             marker_labels.append(atomMark)
 
-<<<<<<< HEAD
-            # marker edgecolor
-            marker_edgecolor = str('#5C5C5C')
-
-            # legend list
-            if _atomSymbol not in legend_list:
-                legend_list.append(_atomSymbol)
-
-                # draw atom 1
-                ax.scatter3D(_atom1X, _atom1Y, _atom1Z,
-                             label=_atomSymbol, s=_atomSize, color=_atomColor, edgecolors=marker_edgecolor)
-            else:
-                # draw atom 1
-                ax.scatter3D(_atom1X, _atom1Y, _atom1Z,
-                             s=_atomSize, color=_atomColor, edgecolors=marker_edgecolor)
-
-        # *** atom label display
-        # for i, label in enumerate(marker_labels):
-        #     # xyz
-        #     _atom1X = self.xyzList[i, 0]
-        #     _atom1Y = self.xyzList[i, 1]
-        #     _atom1Z = self.xyzList[i, 2]
-        #     # set
-        #     ax.text(_atom1X, _atom1Y, _atom1Z, label, ha='left',
-        #             va='center', color='red', fontsize=12)
-
-        # reset
-        i = 0
-=======
             if display_atom_id:  # Replace with your condition
                 text_to_display = [atomMark]
             else:
@@ -854,23 +762,10 @@ class graph3d():
                                        text=text_to_display))
 
             # textfont = dict(weight='normal')
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # *** bond visualization
         # *** using bond block
         for i in range(bondNo):
-<<<<<<< HEAD
-            # atom id
-            _atom1Id = int(self.atomBonds[i]['id']) - 1
-            # atom symbol
-            _atom1Symbol = self.atomBonds[i]['symbol']
-            # atom color
-            _atom1Color = self.set_color(_atom1Symbol)
-            # atom bond list
-            _atom1BondList = self.atomBonds[i]['bonds']
-            atom1BondSize = len(_atom1BondList)
-
-=======
             # id 1
             _atom1Id = int(self.atomBonds_1d[i]['id1']) - 1
             # id 2
@@ -898,136 +793,11 @@ class graph3d():
                 _bondTypeLabel = 'triple bond'
 
             # xyz atom 1
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
             _atom1X = self.xyzList[_atom1Id, 0]
             _atom1Y = self.xyzList[_atom1Id, 1]
             _atom1Z = self.xyzList[_atom1Id, 2]
             _atom1XYZ = [_atom1X, _atom1Y, _atom1Z]
 
-<<<<<<< HEAD
-            # draw bond
-            if atom1BondSize > 0:
-                for j in range(atom1BondSize):
-                    # atom [2] id
-                    _atom2Id = int(_atom1BondList[j][0]) - 1
-                    # atom [2] symbol
-                    _atom2Symbol = _atom1BondList[j][1]
-                    # atom color
-                    _atom2Color = self.set_color(_atom2Symbol)
-                    # atom [1] - atom [2] bond type
-                    _bondType = int(_atom1BondList[j][3])
-
-                    # set color
-                    lineColor = ['w', 'w', 'w']
-                    lineWidth = [4, 3, 2]
-                    lineColorAtoms = [_atom1Color, _atom2Color]
-
-                    # xyz
-                    _atom2X = self.xyzList[_atom2Id, 0]
-                    _atom2Y = self.xyzList[_atom2Id, 1]
-                    _atom2Z = self.xyzList[_atom2Id, 2]
-                    _atom2XYZ = [_atom2X, _atom2Y, _atom2Z]
-
-                    # distance
-                    _distance = self.calculate_distance(_atom1XYZ, _atom2XYZ)
-
-                    # plot summary
-                    plot_summary.append(
-                        {
-                            'atom1Id': _atom1Id+1,
-                            'atom2Id': _atom2Id+1,
-                            'atom1Symbol': str(_atom1Symbol) + str(_atom1Id+1),
-                            'atom2Symbol': str(_atom2Symbol) + str(_atom2Id+1),
-                            'distance': _distance
-                        }
-                    )
-
-                    # line property
-                    xyzMean, xyzPlane, isPlane, xyzL, perpendicularAxis = self.line_property(
-                        _atom1XYZ, _atom2XYZ)
-
-                    # ** create bond line
-                    create_bond_line_version = 1
-                    if create_bond_line_version == 1:
-                        # bond connection (points)
-                        _bondConnection, _bondTypeLog, _ = self.create_bond_line(
-                            _atom1XYZ, _atom2XYZ, _bondType)
-
-                        # size
-                        _bondConnectionSize = len(_bondConnection)
-
-                        # check
-                        if _bondConnectionSize == 1:
-                            _vector = _bondConnection[0]
-                            ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                      linewidth=lineWidth[_bondType-1], c=lineColor[_bondType-1])
-                        else:
-                            # line color: black
-                            for b in range(_bondConnectionSize):
-                                _vector = _bondConnection[b]
-                                ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                          linewidth=lineWidth[_bondType-1], c=lineColor[_bondType-1])
-
-                    else:
-                        # bond connection (points)
-                        _bondConnection, _bondTypeLog = self.create_bond_line_V2(
-                            _atom1XYZ, _atom2XYZ, _bondType)
-
-                        # size
-                        _bondConnectionSize = len(_bondConnection)
-
-                        # color index
-                        color_index = 0
-                        # line color: black
-                        for b in range(_bondConnectionSize):
-                            _vector = _bondConnection[b]
-                            ax.plot3D(_vector[0], _vector[1], _vector[2],
-                                      linewidth=lineWidth[_bondType-1], c=lineColorAtoms[color_index])
-                            # check
-                            if color_index == 1:
-                                color_index = 0
-                            else:
-                                # set color index
-                                color_index += 1
-
-            # obs show
-            if obsOption[0]:
-                ax.scatter3D(obsOption[1], 0, 0, s=40)
-
-        # check
-        if display_legend:
-            # ax legends
-            ax.legend(legend_list)
-            # legend position end right
-            plt.legend(loc="upper right", markerscale=0.25,
-                       scatterpoints=1, fontsize=10)
-
-        # axis setting
-        ax.set_xlabel("$X$")
-        ax.set_ylabel("$Y$")
-        ax.set_zlabel("$Z$")
-
-        ax.autoscale(True)
-        # ax.set_aspect('auto')
-        ax.set_aspect('equal')
-
-        # set limits
-        set_lim_offset = 1
-        _maxVal = np.max(self.xyzList)
-        ax.set_xlim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-        ax.set_ylim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-        ax.set_zlim(int(-_maxVal) + -set_lim_offset,
-                    int(_maxVal) + set_lim_offset)
-
-        ax.set_xscale('linear')
-        ax.set_yscale('linear')
-
-        # set angles/elevations
-        ax.view_init(elev=elev, azim=azim)
-        plt.show()
-=======
             # xyz atom 2
             _atom2X = self.xyzList[_atom2Id, 0]
             _atom2Y = self.xyzList[_atom2Id, 1]
@@ -1150,7 +920,6 @@ class graph3d():
             'displaylogo': True,
             'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d', 'pan2d']
         })
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
         # res
         return plot_summary

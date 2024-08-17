@@ -649,8 +649,6 @@ class ChemGraphs():
         # res
         return ROH
 
-<<<<<<< HEAD
-=======
     def graph_primary_alcohol_double_bond(self):
         '''
         Create a graph for primary alcohol
@@ -679,7 +677,6 @@ class ChemGraphs():
         # res
         return ROH
 
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     def graph_secondary_alcohol(self):
         '''
         Create a graph for secondary alcohol
@@ -712,8 +709,6 @@ class ChemGraphs():
         # res
         return ROH
 
-<<<<<<< HEAD
-=======
     def graph_secondary_alcohol_double_bond(self):
         '''
         Create a graph for secondary alcohol
@@ -742,7 +737,6 @@ class ChemGraphs():
         # res
         return ROH
 
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     def graph_tertiary_alcohol(self):
         '''
         Create a graph for tertiary alcohol
@@ -774,8 +768,6 @@ class ChemGraphs():
 
         # res
         return ROH
-<<<<<<< HEAD
-=======
 
     def graph_alkane_CH_bond(self):
         '''
@@ -872,4 +864,3 @@ class ChemGraphs():
 
         # res
         return CC
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
