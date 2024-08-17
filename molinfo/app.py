@@ -9,10 +9,6 @@ from .config import __version__
 from .config import __description__
 from .docs import MolParser
 from .docs import Compound
-<<<<<<< HEAD
-from .docs import Network
-=======
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
 
 def main():
@@ -21,9 +17,6 @@ def main():
     print(_des)
 
 
-<<<<<<< HEAD
-def g3d(file, display_legend=True):
-=======
 def compound(file):
     '''
     Create a compound by parsing sdf file
@@ -85,7 +78,6 @@ def create_graph(file):
 
 
 def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     '''
     3d graph of a compound
 
@@ -95,13 +87,10 @@ def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom
         molecule file format (sdf)
     display_legend : bool
         display legend (default True)
-<<<<<<< HEAD
-=======
     display_atom_id : bool
         display atom id (default True)
     display_bond_length : bool
         display bond length (default True)
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
 
     Returns
     -------
@@ -116,21 +105,13 @@ def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom
         # compound
         compound = Compound(compound_info)
         # display 3d
-<<<<<<< HEAD
-        compound.view3d(display_legend=display_legend)
-=======
         compound.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
                         display_atom_id=display_atom_id, display_bond_length=display_bond_length)
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     else:
         raise Exception("file path is not valid.")
 
 
-<<<<<<< HEAD
-def g3d_by_inchi(inchi, display_legend=True):
-=======
 def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
     '''
     3d graph of a compound using its InChI identifier
 
@@ -167,12 +148,8 @@ def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, di
                 # compound
                 compound = Compound(compound_info)
                 # display 3d
-<<<<<<< HEAD
-                compound.view3d(display_legend=display_legend)
-=======
                 compound.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
                                 display_atom_id=display_atom_id, display_bond_length=display_bond_length)
->>>>>>> c4f5d6f634eb8bb37285ee86c97872be334d0984
             else:
                 raise Exception("sdf is not found!")
         else:
