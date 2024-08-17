@@ -24,7 +24,7 @@ setup(
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
     license='MIT',
     install_requires=['pandas', 'pillow', 'requests',
-                      'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly'],
+                      'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly', 'networkx[default]'],
     keywords=['python', 'chemistry', 'chemistry-visualization',
               'Molinfo', 'molecular-graph'],
     classifiers=[
