@@ -9,6 +9,7 @@ from .config import __version__
 from .config import __description__
 from .docs import MolParser
 from .docs import Compound
+from .docs import CustomChemGraph
 
 
 def main():
@@ -264,6 +265,43 @@ def check_functional_group(file, functional_groups=[], res_format='dict'):
             return pd.DataFrame(res)
     else:
         raise Exception("file path is not valid.")
+
+
+def crate_custom_functional_groups(functional_groups):
+    '''
+    create custom functional groups based on the following format:
+    # CH2-O
+    custom_functional_group = [
+    {'fg1': ["C1-H1","C1-H2","C1-O1"]},
+    {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
+    ]
+
+    Parameters
+    ----------
+    functional_groups : list[dict] or dict
+        functional group
+
+    Returns
+    -------
+    custom_functional_groups : list[dict]
+        a list of all custom functional group
+    '''
+    try:
+        # check format
+        if isinstance(functional_groups, dict):
+            # set a list
+            custom_functional_groups = [functional_groups]
+        elif isinstance(functional_groups, list):
+            custom_functional_groups = functional_groups
+        else:
+            raise Exception("functional_groups is not valid.")
+
+        # custom chem graph
+        CustomChemGraphC = CustomChemGraph(custom_functional_groups)
+        # res
+        return CustomChemGraphC
+    except Exception as e:
+        raise Exception(e)
 
 
 if __name__ == "__main__":

@@ -65,7 +65,7 @@ class Network(ChemGraphs):
                              self.graph_primary_alkyl_halide('Br'), self.graph_primary_alkyl_halide('I')]
         }
 
-    def check_functional_groups(self, functional_groups=[]):
+    def check_functional_groups(self, functional_groups=[], std_format=False):
         '''
         Check functional groups in a compound
 
@@ -79,6 +79,10 @@ class Network(ChemGraphs):
         res : dict
             a list of all count
         '''
+        # check
+        if std_format:
+            # REVIEW
+            pass
         # check functional group
         if len(functional_groups) == 0:
             functional_groups = list(self.function_group_list.keys())
@@ -125,7 +129,8 @@ class Network(ChemGraphs):
             # ! check functional exists in the list
             if item in self.function_group_list:
                 # get a list of graphs
-                function_group_graphs = self.function_group_list.get(item)
+                # REVIEW
+                function_group_graphs = self.function_group_list[item]
 
                 # flag to track if functional group is found
                 fg_found_any = False
