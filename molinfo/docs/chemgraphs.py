@@ -864,3 +864,37 @@ class ChemGraphs():
 
         # res
         return CC
+
+    def create_custom_graph(self, custom_functional_group):
+        '''
+        create custom graph
+        bond type: - single, = double, # triple
+
+        Parameters
+        ----------
+        custom_functional_group : list
+            list of bonds
+
+        Returns
+        -------
+        G : nx.Graph
+            graph
+
+        Examples
+        --------
+        >>> CH3-CH2-CH2-O
+        >>> "C1-H1","C1-H2","C1-H3","C1-C2","C2-H4","C2-H5","C2-C3","C3-H6","C3-H7","C3-O"
+        '''
+        G = nx.Graph()
+        for bond in custom_functional_group:
+            atoms = bond.split('-')
+            if len(atoms) == 2:
+                G.add_node(atoms[0], symbol=atoms[0])
+                G.add_node(atoms[1], symbol=atoms[1])
+            if '=' in bond:
+                G.add_edge(atoms[0], atoms[1], symbol='=', type=2)
+            elif '#' in bond:
+                G.add_edge(atoms[0], atoms[1], symbol='#', type=3)
+            else:
+                G.add_edge(atoms[0], atoms[1], symbol='-', type=1)
+        return G
