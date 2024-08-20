@@ -17,14 +17,14 @@ def main():
     print(_des)
 
 
-def compound(file):
+def compound(f):
     '''
     Create a compound by parsing sdf file
 
     Parameters
     ----------
-    file : str
-        molecule file format (sdf)
+    f : str
+        molecule file format (sdf) or string (sdf)
 
     Returns
     -------
@@ -32,16 +32,87 @@ def compound(file):
         compound object
     '''
     try:
-        if os.path.exists(file):
+        if os.path.exists(f):
             # parse file
-            MolParserC = MolParser(file)
+            MolParserC = MolParser(f)
             compound_info = MolParserC.read_file()
             # compound
             compound = Compound(compound_info)
             # res
             return compound
         else:
-            raise Exception("file path is not valid.")
+            # check string
+            if isinstance(f, str):
+                # parse string
+                MolParserC = MolParser(None)
+                compound_info = MolParserC.read_file(
+                    sourceContent={
+                        'content': f.strip(),
+                        'format': 'sdf'
+                    })
+                # compound
+                compound = Compound(compound_info)
+                # res
+                return compound
+            else:
+                raise ValueError("Invalid input file or string")
+    except Exception as e:
+        print(e)
+
+
+def compound_by_cid(cid):
+    '''
+    Create a compound by cid
+
+    Parameters
+    ----------
+    cid : str
+        compound id
+
+    Returns
+    -------
+    compound : object
+        compound object
+    '''
+    try:
+        # get sdf by cid
+        sdf = pcq.get_structure_by_cid(cid)
+        # check
+        if sdf is None or len(sdf) == 0:
+            print("sdf file not found!")
+            return None
+        # compound
+        return compound(sdf)
+    except Exception as e:
+        print(e)
+
+
+def compound_by_inchi(inchi):
+    '''
+    Create a compound by inchi
+
+    Parameters
+    ----------
+    inchi : str
+        compound inchi
+
+    Returns
+    -------
+    compound : object
+        compound object
+    '''
+    try:
+        # get cid by inchi
+        cid = pcq.get_cid_by_inchi(inchi)
+        # check
+        if cid:
+            # get sdf by cid
+            sdf = pcq.get_structure_by_cid(cid)
+            # compound
+            return compound(sdf)
+        else:
+            print('the inchi not found!')
+            return None
     except Exception as e:
         print(e)
 
