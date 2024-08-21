@@ -73,7 +73,6 @@ print(res)
 * Create custom functional groups:
 
 [`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
-bond-type: - for single bond, = for double bond, # triple bond
 
 |  Bond Types | Format  | 
 |:----------|:----------|
