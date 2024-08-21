@@ -34,7 +34,7 @@ import molinfo as mi
 # Structure2D_COMPOUND_CID_2333
 # Butyraldehyde
 # Structure2D_COMPOUND_CID_261
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_241.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_22044.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # sdf string
@@ -211,12 +211,17 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # ===============================
 # custom
 custom_functional_group = [
-    {'fg1': ["C1-H1", "C1-H2", "C1-O1"]},
-    {'fg2': ["C1-H1", "C1-H2", "C1-C2", "C2-H3", "C2-O2"]}
+    {'cyanide': ["C1-C2", "C2#N3"]},
+    {'N#C': ["N1#C2"]},
+    {'fg1': ["N1-C2", "C2-H3"]},
+    {'NC=O': ["N1-C2", "C2=O3"]},
 ]
 
 # create custom graph
-custom_g = mi.crate_custom_functional_groups(custom_functional_group)
-custom_g.d("fg2")
+custom_g = mi.create_custom_functional_groups(custom_functional_group)
+# custom_g.d("cyanide")
 
 # find custom functional groups in a compound
+res = mi.check_functional_group(
+    sdf_file, functional_groups=[custom_g])
+print(res)

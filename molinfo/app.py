@@ -238,8 +238,8 @@ def check_functional_group(file, functional_groups=[], res_format='dict'):
     ----------
     file : str
         molecule file format (sdf)
-    functional_groups : list[str]
-        functional group (default ['hydroxyl'])
+    functional_groups : list[str] or CustomChemGraph object
+        functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
         result format (default 'dict')
 
@@ -267,7 +267,7 @@ def check_functional_group(file, functional_groups=[], res_format='dict'):
         raise Exception("file path is not valid.")
 
 
-def crate_custom_functional_groups(functional_groups):
+def create_custom_functional_groups(functional_groups):
     '''
     create custom functional groups based on the following format:
     # CH2-O

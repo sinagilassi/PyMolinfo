@@ -83,20 +83,50 @@ class CustomChemGraph():
         >>>    ]
         '''
         G_list = []
+        # loop for each custom functional group
         for fg in custom_functional_group:
+            # custom fg -> values
+            # key: fg name
+            # value: list of bonds
+            # define graph
+            G = nx.Graph()
             for key, bonds in fg.items():
-                G = nx.Graph()
                 for bond in bonds:
-                    atoms = bond.split('-')
+                    # check bond type
+                    if '-' in bond:
+                        atoms = bond.split('-')
+                    elif '=' in bond:
+                        atoms = bond.split('=')
+                    elif '#' in bond:
+                        atoms = bond.split('#')
+                    else:
+                        raise Exception('bond type error')
+                    # get letters
+                    atoms_result = [{"letters": ''.join([c for c in s if c.isalpha(
+                    )]), "numbers": ''.join([c for c in s if c.isdigit()])} for s in atoms]
+                    # update atoms
+                    atoms_name = [str(i['letters']) for i in atoms_result]
+                    # atom id
+                    atoms = [str(i['numbers']) for i in atoms_result]
+
+                    # check
                     if len(atoms) == 2:
-                        G.add_node(atoms[0], symbol=atoms[0])
-                        G.add_node(atoms[1], symbol=atoms[1])
+                        G.add_node(atoms[0], symbol=atoms_name[0])
+                        G.add_node(atoms[1], symbol=atoms_name[1])
+                        # define symbol
+                        bond_id = str(atoms_name[0]).strip(
+                        )+str(atoms_name[1]).strip()
+                        # check bond type
                         if '=' in bond:
-                            G.add_edge(atoms[0], atoms[1], symbol='=', type=2)
+                            G.add_edge(atoms[0], atoms[1],
+                                       symbol=bond_id, type=2)
                         elif '#' in bond:
-                            G.add_edge(atoms[0], atoms[1], symbol='#', type=3)
+                            G.add_edge(atoms[0], atoms[1],
+                                       symbol=bond_id, type=3)
                         else:
-                            G.add_edge(atoms[0], atoms[1], symbol='-', type=1)
+                            G.add_edge(atoms[0], atoms[1],
+                                       symbol=bond_id, type=1)
+                # save
                 G_list.append((key, G))
         return G_list
 

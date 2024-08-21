@@ -7,6 +7,7 @@ import networkx as nx
 from networkx.algorithms import isomorphism
 # local
 from .chemgraphs import ChemGraphs
+from .customchemgraph import CustomChemGraph
 
 
 class Network(ChemGraphs):
@@ -79,10 +80,6 @@ class Network(ChemGraphs):
         res : dict
             a list of all count
         '''
-        # check
-        if std_format:
-            # REVIEW
-            pass
         # check functional group
         if len(functional_groups) == 0:
             functional_groups = list(self.function_group_list.keys())
@@ -126,42 +123,67 @@ class Network(ChemGraphs):
 
         # for each functional group
         for item in function_groups:
-            # ! check functional exists in the list
-            if item in self.function_group_list:
-                # get a list of graphs
-                # REVIEW
-                function_group_graphs = self.function_group_list[item]
+            # * Check instance
+            if isinstance(item, str):
+                # ! check functional exists in the list
+                if item in self.function_group_list:
+                    # get a list of graphs
+                    # REVIEW
+                    function_group_graphs = self.function_group_list[item]
 
-                # flag to track if functional group is found
-                fg_found_any = False
+                    # flag to track if functional group is found
+                    fg_found_any = False
 
-                # graph function list
-                for _fn in function_group_graphs:
-                    # Create a GraphMatcher object for a functional group
-                    fg_matcher = isomorphism.GraphMatcher(
-                        G, _fn, node_match=node_match, edge_match=edge_match)
+                    # graph function list
+                    for _fn in function_group_graphs:
+                        # Create a GraphMatcher object for a functional group
+                        fg_matcher = isomorphism.GraphMatcher(
+                            G, _fn, node_match=node_match, edge_match=edge_match)
 
-                    # Check if a functional group is in the main graph
-                    fg_found = fg_matcher.subgraph_is_isomorphic()
+                        # Check if a functional group is in the main graph
+                        fg_found = fg_matcher.subgraph_is_isomorphic()
 
-                    if fg_found:
-                        # print(f"{item} found in the molecule!")
-                        fg_found_any = True
+                        if fg_found:
+                            # print(f"{item} found in the molecule!")
+                            fg_found_any = True
+                            # res
+                            res_match.append({
+                                'function_group': item,
+                                'result': fg_found
+                            })
+                            # break
+                            break
+                    # check
+                    if not fg_found_any:
+                        # print(f"{item} not found in the molecule.")
                         # res
                         res_match.append({
                             'function_group': item,
+                            'result': False
+                        })
+            elif isinstance(item, CustomChemGraph):
+                # get a list of graphs
+                for custom_functional_group in item.custom_functional_groups:
+                    # check dict
+                    if len(custom_functional_group) == 1:
+                        # get key (custom functional group name)
+                        key = list(custom_functional_group.keys())[0]
+                        # get value (graph)
+                        value = custom_functional_group[key]
+
+                        # Create a GraphMatcher object for a functional group
+                        fg_matcher = isomorphism.GraphMatcher(
+                            G, value, node_match=node_match, edge_match=edge_match)
+
+                        # Check if a functional group is in the main graph
+                        fg_found = fg_matcher.subgraph_is_isomorphic()
+                        # print(f"{key} found in the molecule!")
+
+                        # res
+                        res_match.append({
+                            'function_group': key,
                             'result': fg_found
                         })
-                        # break
-                        break
-                # check
-                if not fg_found_any:
-                    # print(f"{item} not found in the molecule.")
-                    # res
-                    res_match.append({
-                        'function_group': item,
-                        'result': False
-                    })
 
         # res
         return res_match
