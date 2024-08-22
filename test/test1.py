@@ -193,8 +193,8 @@ comp1 = mi.compound(sdf_file)
 # pp(comp1.atom_xyz)
 
 # distance
-res_distance = comp1.distance_matrix(dataframe=True)
-pp(res_distance)
+# res_distance = comp1.distance_matrix(dataframe=True)
+# pp(res_distance)
 
 # _distance = comp1.distance_atoms(['O1', 'C2'])
 # print(_distance)
@@ -211,9 +211,8 @@ pp(res_distance)
 
 
 # angle
-res_angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
-print(res_angle)
-
+# res_angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
+# print(res_angle)
 
 # res_angle = comp1.angle_atoms(['O1', 'C2', 'H4'])
 # print(res_angle)

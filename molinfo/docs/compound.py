@@ -26,6 +26,7 @@ class Compound(graph3d, Network):
     _atom_bond_block = []
     _atom_bond_block_1d = []
     _atom_bond_numbers = 0
+    _atom_block = []
     # distance
     _distance = []
 
@@ -54,8 +55,6 @@ class Compound(graph3d, Network):
 
         # TODO: convert atom_bonds to 1d vector
         __atom_bonds_1d = self.convert_atom_bonds(__atom_bonds)
-        # self._atom_bond_block_1d = []
-        # self._atom_bond_block_1d = [*__atom_bonds_1d]
         # update parse_prop
         self.parse_prop['bond_block_1d'] = __atom_bonds_1d
 
@@ -78,6 +77,7 @@ class Compound(graph3d, Network):
         self.__update_atom_prop('bond_block')
         self.__update_atom_prop('xyz_list')
         self.__update_atom_prop('xyz_center_list')
+        self.__update_atom_prop('atom_block')
 
     def __str__(self):
         '''
@@ -169,6 +169,14 @@ class Compound(graph3d, Network):
     def atom_bond_numbers(self, value):
         self._atom_bond_numbers = value
 
+    @property
+    def atom_block(self):
+        return self.parse_prop['atom_block']
+
+    @atom_block.setter
+    def atom_block(self, value):
+        self._atom_block = value
+
     # *** observer prop
     @property
     def limits(self):
@@ -247,7 +255,7 @@ class Compound(graph3d, Network):
             'atom_numbers': self.__update_atom_numbers,
             'atom_elements': self.__update_atom_elements,
             'bond_numbers': self.__update_atom_bond_numbers,
-            'atom_block': 1,
+            'atom_block': self.__update_atom_block,
             'bond_block': self.__update_atom_bond_block,
             'xyz_list': self.__update_atom_xyz,
             'xyz_center_list': self.__update_atom_xyz_center,
@@ -255,7 +263,9 @@ class Compound(graph3d, Network):
         }
         # select prop
         propSelection = switchProp.get(prop_name)
-        propSelection(self.parse_prop[prop_name])
+        # check
+        if propSelection is not None:
+            propSelection(self.parse_prop[prop_name])
 
     def __update_mat_cid(self, prop_val):
         self.mat_cid = prop_val
@@ -283,6 +293,9 @@ class Compound(graph3d, Network):
 
     def __update_atom_bond_numbers(self, prop_val):
         self.atom_bond_numbers = prop_val
+
+    def __update_atom_block(self, prop_val):
+        self.atom_block = prop_val
 
     def __update_atom_bond_block_1d(self, prop_val):
         self.atom_bond_block_1d = prop_val
