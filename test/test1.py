@@ -7,6 +7,9 @@ import molinfo as mi
 # check version
 # print(mi.__version__)
 
+# ==========================
+# SDF FILES
+# ==========================
 # sdf file
 # Methanol
 # Conformer3D_COMPOUND_CID_887
@@ -34,10 +37,12 @@ import molinfo as mi
 # Structure2D_COMPOUND_CID_2333
 # Butyraldehyde
 # Structure2D_COMPOUND_CID_261
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_22044.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_887.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
+# =============
 # sdf string
+# =============
 # sdf_string = """
 # 241
 #   -OEChem-08032421353D
@@ -168,8 +173,11 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # $$$$
 # """
 
+# ===============================
+# CREATE COMPOUND
+# ===============================
 # compound
-# comp1 = mi.compound(sdf_file)
+comp1 = mi.compound(sdf_file)
 # sdf string
 # comp1 = mi.compound(sdf_string)
 # compound by cid
@@ -184,6 +192,27 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # print("-"*100)
 # pp(comp1.atom_xyz)
 
+# distance
+res_distance = comp1.distance_matrix(dataframe=True)
+pp(res_distance)
+
+# _distance = comp1.distance_atoms(['O1', 'C2'])
+# print(_distance)
+# _distance = comp1.distance_atoms(['O1', 'H3'])
+# print(_distance)
+# _distance = comp1.distance_atoms(['O1', 'H4'])
+# print(_distance)
+# _distance = comp1.distance_atoms(['O1', 'H5'])
+# print(_distance)
+# _distance = comp1.distance_atoms(['O1', 'H6'])
+# print(_distance)
+# _distance = comp1.distance_atoms(['C2', 'H3'])
+# print(_distance)
+
+
+# ================================
+# GRAPH
+# ================================
 # # create graph
 # res = mi.create_graph(sdf_file)
 # print(type(res))
@@ -196,6 +225,9 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # mi.g3d_by_inchi(
 #     'InChI=1S/C14H22O6/c1-11(2)13(15)19-9-7-17-5-6-18-8-10-20-14(16)12(3)4/h1,3,5-10H2,2,4H3')
 
+# ================================
+# CHECK FUNCTIONAL GROUP
+# ================================
 # network
 # res = mi.check_functional_group(sdf_file, functional_groups=['ether'])
 # print(res)
@@ -209,19 +241,19 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP
 # ===============================
-# custom
-custom_functional_group = [
-    {'cyanide': ["C1-C2", "C2#N3"]},
-    {'N#C': ["N1#C2"]},
-    {'fg1': ["N1-C2", "C2-H3"]},
-    {'NC=O': ["N1-C2", "C2=O3"]},
-]
+# # custom
+# custom_functional_group = [
+#     {'cyanide': ["C1-C2", "C2#N3"]},
+#     {'N#C': ["N1#C2"]},
+#     {'fg1': ["N1-C2", "C2-H3"]},
+#     {'NC=O': ["N1-C2", "C2=O3"]},
+# ]
 
-# create custom graph
-custom_g = mi.create_custom_functional_groups(custom_functional_group)
-# custom_g.d("cyanide")
+# # create custom graph
+# custom_g = mi.create_custom_functional_groups(custom_functional_group)
+# # custom_g.d("cyanide")
 
-# find custom functional groups in a compound
-res = mi.check_functional_group(
-    sdf_file, functional_groups=[custom_g])
-print(res)
+# # find custom functional groups in a compound
+# res = mi.check_functional_group(
+#     sdf_file, functional_groups=[custom_g])
+# print(res)

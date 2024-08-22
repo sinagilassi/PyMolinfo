@@ -30,6 +30,8 @@ class Compute():
             xyzList: xyz list of atoms
             atomName: atom name list such as ['C','H','H','H','H']
         '''
+        # dict for atom index
+        distance_res = []
         # atom no
         atomNo = len(atomName)
         atomLength = np.zeros((atomNo, atomNo))
@@ -46,17 +48,38 @@ class Compute():
                 # save
                 atomLength[i, j] = _length
 
+                # res
+                distance_res.append(
+                    {
+                        'atom1': atomName[i]+str(i+1),
+                        'atom2': atomName[j]+str(j+1),
+                        'distance': _length
+                    }
+                )
+
         # res
-        return atomLength
+        return atomLength, distance_res
 
     @staticmethod
     def atoms_distance(xyzList, atomName, atom_symbols, atom_index):
         '''
-        build a matrix containing a matrix of distance between two different atoms
+        calculate distance between two different atoms
 
-        args:
-            xyzList: xyz list of atoms
-            atomName: atom name list such as ['C','H','H','H','H']
+        Parameters
+        ----------
+        xyzList : list
+            xyz list of atoms
+        atomName : list
+            atom name list such as ['C','H','H','H','H']
+        atom_symbols : list
+            selected atom symbol list such as ['C','H']
+        atom_index : list
+            selected atom index list such as [0,1]
+
+        Returns
+        -------
+        _length : float
+            distance between two atoms
         '''
         try:
             # size
@@ -78,8 +101,8 @@ class Compute():
                 _length = Compute.cal_atoms_distance(atom1XYZ, atom2XYZ)
             elif atom_index_size == 2:
                 # set
-                atom1XYZ = xyzList[atom_index[0]]
-                atom2XYZ = xyzList[atom_index[1]]
+                atom1XYZ = xyzList[int(atom_index[0])]
+                atom2XYZ = xyzList[int(atom_index[1])]
                 _length = Compute.cal_atoms_distance(atom1XYZ, atom2XYZ)
             elif atom_index_size > 2:
                 raise Exception(
@@ -88,7 +111,7 @@ class Compute():
             # res
             return _length
         except Exception as e:
-            raise
+            Exception(e)
 
 
 # UTILITY FUNCTION

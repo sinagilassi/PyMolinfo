@@ -3,6 +3,7 @@
 
 # import libs
 import numpy as np
+import pandas as pd
 from matplotlib.pyplot import xlabel
 from ..config import OBSERVER_PROPERTY
 from .utility import Utility
@@ -25,6 +26,8 @@ class Compound(graph3d, Network):
     _atom_bond_block = []
     _atom_bond_block_1d = []
     _atom_bond_numbers = 0
+    # distance
+    _distance = []
 
     # *** obs fixed ***
     _limits = {
@@ -42,6 +45,7 @@ class Compound(graph3d, Network):
         self.parse_prop = parse_prop
         # super class
         __atom_elements = parse_prop['atom_elements']
+        __atom_block = parse_prop['atom_block']
         __atom_bonds = parse_prop['bond_block']
         __atom_xyz = parse_prop['xyz_list']
         __atom_xyz_center = parse_prop['xyz_center_list']
@@ -216,6 +220,15 @@ class Compound(graph3d, Network):
         self._obsCoordinate = []
         self._obsCoordinate = value
 
+    @property
+    def distance(self):
+        return self._distance
+
+    @distance.setter
+    def distance(self, value):
+        self._distance = []
+        self._distance = value
+
     def __update_atom_prop(self, prop_name):
         '''
         Update atom prop
@@ -291,26 +304,48 @@ class Compound(graph3d, Network):
                 })
         return atom_bonds_1d
 
-    def distance_matrix(self):
+    def distance_matrix(self, dataframe=False):
         '''
         Build a matrix of atom-atom distance
-        '''
-        return Compute.atoms_distance_matrix(self.xyzList, self.atom_elements)
 
-    def distance_atoms(self, atom_symbols, atom_index=[]):
+        Parameters
+        ----------
+        dataframe: bool
+            return a dataframe
+
+
+        '''
+        # res
+        matrix, _dict = Compute.atoms_distance_matrix(
+            self.xyzList, self.atom_elements)
+
+        if dataframe:
+            return pd.DataFrame(matrix, columns=self.atom_elements,
+                                index=self.atom_elements)
+        else:
+            return matrix
+
+    def distance_atoms(self, atoms):
         '''
         Calculate distance between two different atoms
 
         Parameters
         ----------
-        atom_symbols: list
-            atom symbol list such as ['C','H']
-        atom_index: list
-            atom index such as [0,1]
+        atoms : list
+            atom ids such as ['C1','H2']
 
         Returns
         -------
         distance: float
             distance between two atoms
         '''
-        return Compute.atoms_distance(self.xyzList, self.atom_elements, atom_symbols, atom_index)
+        # get letters
+        atoms_result = [{"letters": ''.join([c for c in s if c.isalpha(
+        )]), "numbers": ''.join([c for c in s if c.isdigit()])} for s in atoms]
+        # update atoms
+        atom_symbols = [str(i['letters']) for i in atoms_result]
+        # atom id
+        atom_index = [str(int(i['numbers'])-1) for i in atoms_result]
+        # res
+        return Compute.atoms_distance(self.xyzList, self.atom_elements,
+                                      atom_symbols, atom_index)
