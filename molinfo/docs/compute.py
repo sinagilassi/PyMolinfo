@@ -4,6 +4,7 @@
 
 # import libs
 import numpy as np
+from scipy.spatial import distance
 
 
 class Compute():
@@ -112,6 +113,52 @@ class Compute():
             return _length
         except Exception as e:
             Exception(e)
+
+    @staticmethod
+    def calculate_angle(xyzList, atomName, atom_symbols, atom_index):
+        '''
+        Calculate angle between points p1,p2, and p3
+
+        Parameters
+        ----------
+        xyzList : list
+            xyz list of atoms
+        atomName : list
+            atom name list such as ['C','H','H','H','H']
+        atom_symbols : list
+            selected atom symbol list such as ['C','H']
+        atom_index : list
+            selected atom index list such as [0,1]
+
+        Returns
+        -------
+        angle_degrees : float
+            angle in degrees
+        '''
+        # check
+        atom_index_size = len(atom_index)
+
+        if atom_index_size > 3 or atom_index_size == 0:
+            raise Exception(
+                'atom symbol/index list must have three elements.'
+            )
+
+        p1 = xyzList[int(atom_index[0])]
+        p2 = xyzList[int(atom_index[1])]
+        p3 = xyzList[int(atom_index[2])]
+
+        # Calculate vectors
+        v1 = np.array(p2) - np.array(p1)
+        v2 = np.array(p2) - np.array(p3)
+
+        # Calculate angle using cosine formula
+        angle = np.arccos(
+            np.dot(v1, v2) / (distance.euclidean(p1, p2) * distance.euclidean(p2, p3)))
+
+        # Convert to degrees
+        angle_degrees = np.degrees(angle)
+
+        return angle_degrees
 
 
 # UTILITY FUNCTION

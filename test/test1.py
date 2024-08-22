@@ -210,6 +210,20 @@ pp(res_distance)
 # print(_distance)
 
 
+# angle
+res_angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
+print(res_angle)
+
+
+# res_angle = comp1.angle_atoms(['O1', 'C2', 'H4'])
+# print(res_angle)
+# res_angle = comp1.angle_atoms(['O1', 'C2', 'H5'])
+# print(res_angle)
+# res_angle = comp1.angle_atoms(['O1', 'C2', 'H6'])
+# print(res_angle)
+# res_angle = comp1.angle_atoms(['C2', 'H5', 'H3'])
+# print(res_angle)
+
 # ================================
 # GRAPH
 # ================================
