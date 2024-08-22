@@ -21,6 +21,7 @@ To use Molinfo, simply install the package and import it into your Python script
 
 You can use the following code to run `Molinfo` in Google Colab:
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
 
 ## Installation
@@ -67,6 +68,70 @@ mi.g3d(sdf_file)
 ```python
 # check functional groups
 res = mi.check_functional_group(sdf_file, res_format='dataframe')
+print(res)
+```
+
+* Calculate angle/distance between atoms
+
+```python
+# distance matrix
+res_distance = comp1.distance_matrix(dataframe=True)
+print(res_distance)
+
+# distance between two atoms
+distance = comp1.distance_atoms(['O1', 'C2'])
+print(distance)
+
+# angle between atoms
+angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
+print(angle)
+```
+
+* Create custom functional groups:
+
+[`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
+
+|  Bond Types | Format  | 
+|:----------|:----------|
+| single bond CC   | C1-C2   | 
+| double bond CC   | C1=C2   | 
+| triple bond CC   | C1#C2   | 
+
+**How to create a custom functional group?**
+
+|  Name |  Symbol | Format |
+|:-----------|:------------:|-------------:|
+|  cyanide-1     |     CCN   | ["N1#C2"]      |
+| custom_fg      | NCH       | ["N1-C2", "C2-H3"]       |
+| NC=O | NC=O | ["N1-C2", "C2=O3"] |
+
+And coded as:
+
+```python
+# C1-C2#N3
+custom_functional_group = [
+    {'cyanide': ["C1-C2", "C2#N3"]},
+]
+
+# define different custom functional groups as:
+# N#C
+# NCH
+# NCO
+custom_functional_group = [
+    {'N#C': ["N1#C2"]},
+    {'custom_fg': ["N1-C2", "C2-H3"]},
+    {'NC=O': ["N1-C2", "C2=O3"]},
+]
+
+# create custom graph
+custom_g = mi.create_custom_functional_groups(custom_functional_group)
+
+# visualize custom graph
+# custom_g.d("cyanide")
+
+# find custom functional groups in a compound
+res = mi.check_functional_group(
+    sdf_file, functional_groups=[custom_g])
 print(res)
 ```
 

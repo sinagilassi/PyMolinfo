@@ -70,6 +70,22 @@ res = mi.check_functional_group(sdf_file, res_format='dataframe')
 print(res)
 ```
 
+* Calculate angle/distance between atoms
+
+```python
+# distance matrix
+res_distance = comp1.distance_matrix(dataframe=True)
+print(res_distance)
+
+# distance between two atoms
+distance = comp1.distance_atoms(['O1', 'C2'])
+print(distance)
+
+# angle between atoms
+angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
+print(angle)
+```
+
 * Create custom functional groups:
 
 [`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
