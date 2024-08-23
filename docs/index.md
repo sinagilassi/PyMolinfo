@@ -67,7 +67,7 @@ mi.g3d(sdf_file)
 
 ```python
 # check functional groups
-res = mi.check_functional_group(sdf_file, res_format='dataframe')
+res, comp1 = mi.check_functional_group(sdf_file, res_format='dataframe')
 print(res)
 ```
 
