@@ -84,6 +84,10 @@ print(distance)
 # angle between atoms
 angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
 print(angle)
+
+# dihedral angle
+dihedral = comp1.d_angle_atoms(['H6', 'O1', 'C2', 'H3'])
+print(dihedral)
 ```
 
 * Create custom functional groups:

@@ -85,25 +85,29 @@ print(distance)
 # angle between atoms
 angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
 print(angle)
+
+# dihedral angle
+dihedral = comp1.d_angle_atoms(['H6', 'O1', 'C2', 'H3'])
+print(dihedral)
 ```
 
 * Create custom functional groups:
 
 [`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
 
-|  Bond Types | Format  | 
-|:----------|:----------|
-| single bond CC   | C1-C2   | 
-| double bond CC   | C1=C2   | 
-| triple bond CC   | C1#C2   | 
+Bond Types Format:
+
+* single bond CC -> `C1-C2`   
+* double bond CC -> `C1=C2`   
+* triple bond CC -> `C1#C2` 
 
 **How to create a custom functional group?**
 
-|  Name |  Symbol | Format |
-|:-----------|:------------:|-------------:|
-|  cyanide-1     |     CCN   | ["N1#C2"]      |
-| custom_fg      | NCH       | ["N1-C2", "C2-H3"]       |
-| NC=O | NC=O | ["N1-C2", "C2=O3"] |
+Name ->  Symbol -> Format 
+
+    cyanide-1: CCN -> ["N1#C2"]
+    custom_fg: NCH ->  ["N1-C2", "C2-H3"]     
+    NC=O: NC=O -> ["N1-C2", "C2=O3"]
 
 And coded as:
 
