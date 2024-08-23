@@ -297,6 +297,8 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
         compound_info = MolParserC.read_file()
         # compound
         compound = Compound(compound_info)
+        # create graph
+        compound.create_graph()
         # check functional group
         res = compound.check_functional_groups(
             functional_groups, count_functional_group=True)

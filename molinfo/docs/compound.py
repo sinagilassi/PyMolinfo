@@ -420,3 +420,19 @@ class Compound(graph3d, Network):
 
         return Compute.calculate_angle(self.xyzList, self.atom_elements,
                                        atom_symbols, atom_index)
+
+    def g3d_functional_group(self, functional_group):
+        '''
+        Visualize a compound graph with a desired functional group
+
+        Parameters
+        ----------
+        functional_group : str
+            functional group
+
+        Returns
+        -------
+        None
+        '''
+        # search within graph
+        _res = self.search_within_main_graph(functional_group)

@@ -14,6 +14,8 @@ class Network(ChemGraphs):
 
     # functional groups
     _functional_groups = []
+    # graph
+    _compound_graph = None
 
     def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, atomBonds1d):
         self.atomElements = atomElements
@@ -79,6 +81,14 @@ class Network(ChemGraphs):
     def functional_groups(self, value):
         self._functional_groups = []
         self._functional_groups = [*value]
+
+    @property
+    def compound_graph(self):
+        return self._compound_graph
+
+    @compound_graph.setter
+    def compound_graph(self, value):
+        self._compound_graph = value
 
     def check_functional_groups(self, functional_groups=[],
                                 count_functional_group=False):
@@ -381,5 +391,89 @@ class Network(ChemGraphs):
             # add edge
             G.add_edge(_id1, _id2, symbol=_bondSymbol, type=_bondType)
 
+        # update
+        self.compound_graph = G
+
         # res
         return G
+
+    def search_within_main_graph(self, functional_group):
+        '''
+        Search a small graph within a larger graph
+
+        Parameters
+        ----------
+        functional_group : str
+            functional group
+        '''
+        def node_match(n1, n2):
+            '''
+            Define a custom node_match function to ensure element matching
+            '''
+            return n1['symbol'] == n2['symbol']
+
+        def edge_match(e1, e2):
+            '''
+            Define a custom edge_match function to ensure bond type matching
+            '''
+            return e1['type'] == e2['type']
+
+        # get the graph
+        G = self.compound_graph
+        # sub graph
+        sub_graphs = []
+        sub_graphs_name = []
+        # res
+        res_match = []
+        fg_count = 0
+
+        # search graph in functional_groups
+        for item in self.functional_groups:
+            if functional_group == item:
+                sub_graphs_name = [
+                    i for i in self.function_group_list.keys() if i == item]
+                if len(sub_graphs_name) == 1:
+                    sub_graphs = self.function_group_list[str(item)]
+                else:
+                    raise Exception('functional group not found!')
+
+        # check
+        if len(sub_graphs) == 0:
+            raise Exception('functional group not found!')
+
+        # Create a GraphMatcher object for a functional group
+        for _fn in sub_graphs:
+            fg_matcher = isomorphism.GraphMatcher(
+                G, _fn, node_match=node_match, edge_match=edge_match)
+
+            # Check if a functional group is in the main graph
+            for subgraph in fg_matcher.subgraph_isomorphisms_iter():
+                fg_count += 1
+
+                # Store the subgraph
+                subgraph_nodes = list(subgraph)
+                subgraph_edges = [(subgraph[u], subgraph[v])
+                                  for u, v in G.edges(subgraph_nodes)]
+
+                # Store the node IDs and symbols of the detected subgraph
+                node_ids = 0
+                node_symbols = 0
+
+                # Store the bond types and symbols of the detected subgraph
+                bond_types = 0
+                bond_symbols = 0
+
+                # Add the subgraph and node IDs to the result
+                res_match.append({
+                    'function_group': _fn,
+                    'result': True,
+                    'count': fg_count,
+                    'subgraph': (subgraph_nodes, subgraph_edges),
+                    'node_ids': node_ids,
+                    'node_symbols': node_symbols,
+                    'bond_types': bond_types,
+                    'bond_symbols': bond_symbols,
+                    'details': []
+                })
+
+        return res_match

@@ -37,7 +37,7 @@ import molinfo as mi
 # Structure2D_COMPOUND_CID_2333
 # Butyraldehyde
 # Structure2D_COMPOUND_CID_261
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_904.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_887.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -267,6 +267,7 @@ res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
 print(res)
 print(comp1.functional_groups)
+comp1.g3d_functional_group('hydroxyl')
 
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP
