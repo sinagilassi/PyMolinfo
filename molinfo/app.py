@@ -230,7 +230,7 @@ def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, di
         raise Exception("inchi is not valid.")
 
 
-def check_functional_group(file, functional_groups=[], res_format='dict'):
+def check_functional_group(file, functional_groups=[], res_format='raw'):
     '''
     Check a functional group exists in a compound
 
@@ -241,12 +241,14 @@ def check_functional_group(file, functional_groups=[], res_format='dict'):
     functional_groups : list[str] or CustomChemGraph object
         functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
-        result format (default 'dict')
+        result format (default 'raw')
 
     Returns
     -------
     res : dict
         a list of all count
+    compound : object
+        compound object (sdf file)
     '''
     # check file exists
     if os.path.exists(file):
@@ -258,11 +260,12 @@ def check_functional_group(file, functional_groups=[], res_format='dict'):
         # check functional group
         res = compound.check_functional_groups(functional_groups)
         # check
-        if res_format == 'dict':
-            return res
-        elif res_format == 'dataframe':
+        if res_format == 'dataframe':
             # dataframe
-            return pd.DataFrame(res)
+            return pd.DataFrame(res), compound
+        else:
+            # raw
+            return res, compound
     else:
         raise Exception("file path is not valid.")
 

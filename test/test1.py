@@ -177,7 +177,7 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # CREATE COMPOUND
 # ===============================
 # compound
-comp1 = mi.compound(sdf_file)
+# comp1 = mi.compound(sdf_file)
 # sdf string
 # comp1 = mi.compound(sdf_string)
 # compound by cid
@@ -223,10 +223,9 @@ comp1 = mi.compound(sdf_file)
 # res_angle = comp1.angle_atoms(['C2', 'H5', 'H3'])
 # print(res_angle)
 
-
 # dihedral angle
-res_dihedral = comp1.d_angle_atoms(['H18', 'C10', 'C7', 'H15'])
-print(res_dihedral)
+# res_dihedral = comp1.d_angle_atoms(['H18', 'C10', 'C7', 'H15'])
+# print(res_dihedral)
 
 # ================================
 # GRAPH
@@ -247,14 +246,17 @@ print(res_dihedral)
 # CHECK FUNCTIONAL GROUP
 # ================================
 # network
-# res = mi.check_functional_group(sdf_file, functional_groups=['ether'])
-# print(res)
+# res, comp1 = mi.check_functional_group(
+#     sdf_file, functional_groups=['ether'])
 
-# res = mi.check_functional_group(sdf_file, res_format='dataframe')
-# print(res)
+# dataframe format
+# res, comp1 = mi.check_functional_group(sdf_file, res_format='dataframe')
 
-# res = mi.check_functional_group(sdf_file)
-# print(res)
+# raw format
+res, comp1 = mi.check_functional_group(sdf_file)
+
+print(res)
+print(comp1.functional_groups)
 
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP

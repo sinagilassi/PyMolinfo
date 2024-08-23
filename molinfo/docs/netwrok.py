@@ -12,6 +12,9 @@ from .customchemgraph import CustomChemGraph
 
 class Network(ChemGraphs):
 
+    # functional groups
+    _functional_groups = []
+
     def __init__(self, atomElements, atomBonds, xyzList, xyzCenterList, atomBonds1d):
         self.atomElements = atomElements
         # bond block (info)
@@ -65,6 +68,17 @@ class Network(ChemGraphs):
                                  'F'), self.graph_primary_alkyl_halide('Cl'),
                              self.graph_primary_alkyl_halide('Br'), self.graph_primary_alkyl_halide('I')]
         }
+
+    # property
+    @property
+    def functional_groups(self):
+        return self._functional_groups
+
+    # setter
+    @functional_groups.setter
+    def functional_groups(self, value):
+        self._functional_groups = []
+        self._functional_groups = [*value]
 
     def check_functional_groups(self, functional_groups=[], std_format=False):
         '''
@@ -184,6 +198,10 @@ class Network(ChemGraphs):
                             'function_group': key,
                             'result': fg_found
                         })
+        # get a list of functional group names
+        function_group_names = [x['function_group'] for x in res_match]
+        # update list
+        self.functional_groups = function_group_names
 
         # res
         return res_match
