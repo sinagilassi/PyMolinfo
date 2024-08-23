@@ -391,3 +391,32 @@ class Compound(graph3d, Network):
 
         return Compute.calculate_angle(self.xyzList, self.atom_elements,
                                        atom_symbols, atom_index)
+
+    def d_angle_atoms(self, atoms):
+        '''
+        Calculate dihedral angle between points p1,p2,p3, and p4
+
+        Parameters
+        ----------
+        atoms : list
+            atom ids such as ['C1','H2','O3','H4']
+
+        Returns
+        -------
+        angle_degrees : float
+            angle in degrees
+        '''
+        # check atoms
+        if len(atoms) != 4:
+            raise Exception('4 atoms not provided!')
+
+        # get letters
+        atoms_result = [{"letters": ''.join([c for c in s if c.isalpha(
+        )]), "numbers": ''.join([c for c in s if c.isdigit()])} for s in atoms]
+        # update atoms
+        atom_symbols = [str(i['letters']) for i in atoms_result]
+        # atom id
+        atom_index = [str(int(i['numbers'])-1) for i in atoms_result]
+
+        return Compute.calculate_angle(self.xyzList, self.atom_elements,
+                                       atom_symbols, atom_index)

@@ -117,7 +117,7 @@ class Compute():
     @staticmethod
     def calculate_angle(xyzList, atomName, atom_symbols, atom_index):
         '''
-        Calculate angle between points p1,p2, and p3
+        Calculate angle/dihedral angle between points p1,p2, and p3 - p4
 
         Parameters
         ----------
@@ -138,26 +138,58 @@ class Compute():
         # check
         atom_index_size = len(atom_index)
 
-        if atom_index_size > 3 or atom_index_size == 0:
+        if atom_index_size == 3:
+            # angle between 3 points
+            p1 = xyzList[int(atom_index[0])]
+            p2 = xyzList[int(atom_index[1])]
+            p3 = xyzList[int(atom_index[2])]
+
+            # Calculate vectors
+            v1 = np.array(p2) - np.array(p1)
+            v2 = np.array(p2) - np.array(p3)
+
+            # Calculate angle using cosine formula
+            angle = np.arccos(
+                np.dot(v1, v2) / (distance.euclidean(p1, p2) * distance.euclidean(p2, p3)))
+
+            # Convert to degrees
+            angle_degrees = np.degrees(angle)
+
+        elif atom_index_size == 4:
+            # dihedral angle 4 points
+            p1 = xyzList[int(atom_index[0])]
+            p2 = xyzList[int(atom_index[1])]
+            p3 = xyzList[int(atom_index[2])]
+            p4 = xyzList[int(atom_index[3])]
+
+            # Calculate vectors
+            v1 = p2 - p1
+            v2 = p3 - p2
+            v3 = p4 - p3
+
+            # Calculate normal vectors
+            n1 = np.cross(v1, v2)
+            n2 = np.cross(v2, v3)
+
+            # Normalize normal vectors
+            n1 = n1 / np.linalg.norm(n1)
+            n2 = n2 / np.linalg.norm(n2)
+
+            # Calculate dihedral angle
+            dihedral_angle = np.arccos(np.dot(n1, n2))
+
+            # Calculate sign of dihedral angle
+            sign = np.sign(np.dot(n1, v3))
+
+            # Convert to degrees
+            angle_degrees = np.degrees(dihedral_angle) * sign
+
+        else:
             raise Exception(
                 'atom symbol/index list must have three elements.'
             )
 
-        p1 = xyzList[int(atom_index[0])]
-        p2 = xyzList[int(atom_index[1])]
-        p3 = xyzList[int(atom_index[2])]
-
-        # Calculate vectors
-        v1 = np.array(p2) - np.array(p1)
-        v2 = np.array(p2) - np.array(p3)
-
-        # Calculate angle using cosine formula
-        angle = np.arccos(
-            np.dot(v1, v2) / (distance.euclidean(p1, p2) * distance.euclidean(p2, p3)))
-
-        # Convert to degrees
-        angle_degrees = np.degrees(angle)
-
+        # res
         return angle_degrees
 
 

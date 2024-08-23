@@ -37,7 +37,7 @@ import molinfo as mi
 # Structure2D_COMPOUND_CID_2333
 # Butyraldehyde
 # Structure2D_COMPOUND_CID_261
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_887.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_904.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -222,6 +222,11 @@ comp1 = mi.compound(sdf_file)
 # print(res_angle)
 # res_angle = comp1.angle_atoms(['C2', 'H5', 'H3'])
 # print(res_angle)
+
+
+# dihedral angle
+res_dihedral = comp1.d_angle_atoms(['H18', 'C10', 'C7', 'H15'])
+print(res_dihedral)
 
 # ================================
 # GRAPH
