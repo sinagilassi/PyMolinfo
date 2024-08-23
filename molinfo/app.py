@@ -270,6 +270,47 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
         raise Exception("file path is not valid.")
 
 
+def count_functional_group(file, functional_groups=[], res_format='raw'):
+    '''
+    Count the occurrences of functional groups within the structure of a compound.
+
+    Parameters
+    ----------
+    file : str
+        molecule file format (sdf)
+    functional_groups : list[str] or CustomChemGraph object
+        functional group (default ['hydroxyl']) or CustomChemGraph object
+    res_format : str
+        result format (default 'raw')
+
+    Returns
+    -------
+    res : dict
+        a list of all count
+    compound : object
+        compound object (sdf file)
+    '''
+    # check file exists
+    if os.path.exists(file):
+        # parse file
+        MolParserC = MolParser(file)
+        compound_info = MolParserC.read_file()
+        # compound
+        compound = Compound(compound_info)
+        # check functional group
+        res = compound.check_functional_groups(
+            functional_groups, count_functional_group=True)
+        # check
+        if res_format == 'dataframe':
+            # dataframe
+            return pd.DataFrame(res), compound
+        else:
+            # raw
+            return res, compound
+    else:
+        raise Exception("file path is not valid.")
+
+
 def create_custom_functional_groups(functional_groups):
     '''
     create custom functional groups based on the following format:

@@ -253,7 +253,17 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # res, comp1 = mi.check_functional_group(sdf_file, res_format='dataframe')
 
 # raw format
-res, comp1 = mi.check_functional_group(sdf_file)
+# res, comp1 = mi.check_functional_group(sdf_file)
+
+# print(res)
+# print(comp1.functional_groups)
+
+# ================================
+# COUNT FUNCTIONAL GROUP
+# ================================
+
+# raw format
+res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
 print(res)
 print(comp1.functional_groups)
