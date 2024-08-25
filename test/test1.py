@@ -268,9 +268,9 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
 #                                        'tertiary-alcohol'], res_format='dataframe')
 
-res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
+# res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
-print(res)
+# print(res)
 # print(comp1.functional_groups)
 # comp1.g3d_functional_group('hydroxyl')
 
@@ -278,18 +278,28 @@ print(res)
 # CREATE CUSTOM FUNCTIONAL GROUP
 # ===============================
 # # custom
-# custom_functional_group = [
-#     {'cyanide': ["C1-C2", "C2#N3"]},
-#     {'N#C': ["N1#C2"]},
-#     {'fg1': ["N1-C2", "C2-H3"]},
-#     {'NC=O': ["N1-C2", "C2=O3"]},
-# ]
+custom_functional_group = [
+    {'cyanide': ["C1-C2", "C2#N3"]},
+    {'N#C': ["N1#C2"]},
+    {'fg1': ["N1-C2", "C2-H3"]},
+    {'NC=O': ["N1-C2", "C2=O3"]},
+    {'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]}
+]
 
 # # create custom graph
-# custom_g = mi.create_custom_functional_groups(custom_functional_group)
+custom_g = mi.create_custom_functional_groups(custom_functional_group)
 # # custom_g.d("cyanide")
 
 # # find custom functional groups in a compound
 # res = mi.check_functional_group(
 #     sdf_file, functional_groups=[custom_g])
 # print(res)
+
+# res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
+#                                        custom_g], res_format='dataframe')
+
+res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
+    custom_g], res_format='dataframe')
+
+print(res)
+# comp1.g3d_functional_group('HOC=C')

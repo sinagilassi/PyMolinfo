@@ -14,6 +14,8 @@ class Network(ChemGraphs):
 
     # functional groups
     _functional_groups = []
+    _custom_functional_groups = []
+    _custom_functional_group_list = {}
     # graph
     _compound_graph = None
 
@@ -81,6 +83,23 @@ class Network(ChemGraphs):
     def functional_groups(self, value):
         self._functional_groups = []
         self._functional_groups = [*value]
+
+    @property
+    def custom_functional_groups(self):
+        return self._custom_functional_groups
+
+    @custom_functional_groups.setter
+    def custom_functional_groups(self, value):
+        self._custom_functional_groups = []
+        self._custom_functional_groups = [*value]
+
+    @property
+    def custom_functional_group_list(self):
+        return self._custom_functional_group_list
+
+    @custom_functional_group_list.setter
+    def custom_functional_group_list(self, value):
+        self._custom_functional_group_list = value
 
     @property
     def compound_graph(self):
@@ -201,6 +220,15 @@ class Network(ChemGraphs):
                         # get value (graph)
                         value = custom_functional_group[key]
 
+                        # update custom functional group
+                        self.update_custom_functional_group(key, value)
+                        # check key exist
+                        # if key not in self.custom_functional_groups:
+                        #     # save
+                        #     self.custom_functional_groups.append(key)
+                        #     # dict (key: graph)
+                        #     self.custom_functional_group_list[key] = value
+
                         # Create a GraphMatcher object for a functional group
                         fg_matcher = isomorphism.GraphMatcher(
                             G, value, node_match=node_match, edge_match=edge_match)
@@ -316,30 +344,52 @@ class Network(ChemGraphs):
                         fg_found_any = False
                         # count of functional group
                         fg_count = 0
+                        seen_subgraphs = set()
 
                         # get key (custom functional group name)
                         key = list(custom_functional_group.keys())[0]
                         # get value (graph)
                         value = custom_functional_group[key]
 
+                        # update custom functional group
+                        self.update_custom_functional_group(key, value)
+
                         # Create a GraphMatcher object for a functional group
                         fg_matcher = isomorphism.GraphMatcher(
                             G, value, node_match=node_match, edge_match=edge_match)
 
                         # Check if a functional group is in the main graph
-                        fg_found = fg_matcher.subgraph_is_isomorphic()
+                        # fg_found = fg_matcher.subgraph_is_isomorphic()
                         # print(f"{key} found in the molecule!")
 
                         # ! Check if a functional group is in the main graph
                         for subgraph in fg_matcher.subgraph_isomorphisms_iter():
-                            fg_found_any = True
-                            fg_count += 1
+                            # Convert the subgraph to a canonical form
+                            canonical_subgraph = tuple(
+                                sorted(subgraph.keys()))
 
-                        # res
-                        res_match.append({
-                            'function_group': key,
-                            'result': fg_found
-                        })
+                            # Check if the subgraph has been seen before
+                            if canonical_subgraph not in seen_subgraphs:
+                                seen_subgraphs.add(canonical_subgraph)
+                                fg_found_any = True
+                                fg_count += 1
+
+                        # check
+                        if fg_found_any:
+                            # print(f"{item} found in the molecule!")
+                            res_match.append({
+                                'function_group': key,
+                                'result': True,
+                                'count': fg_count
+                            })
+                        else:
+                            # print(f"{item} not found in the molecule.")
+                            res_match.append({
+                                'function_group': key,
+                                'result': False,
+                                'count': 0
+                            })
+
         # get a list of functional group names
         function_group_names = [x['function_group'] for x in res_match]
         # update list
@@ -453,8 +503,13 @@ class Network(ChemGraphs):
                     i for i in self.function_group_list.keys() if i == item]
                 if len(sub_graphs_name) == 1:
                     sub_graphs = self.function_group_list[str(item)]
-                else:
-                    raise Exception('functional group not found!')
+        # search graph in custom functional_groups
+        for item in self.custom_functional_groups:
+            if functional_group == item:
+                sub_graphs_name = [
+                    i for i in self.custom_functional_group_list.keys() if i == item]
+                if len(sub_graphs_name) == 1:
+                    sub_graphs = self.custom_functional_group_list[str(item)]
 
         # check
         if len(sub_graphs) == 0:
@@ -484,3 +539,15 @@ class Network(ChemGraphs):
                 })
 
         return res_match
+
+    def update_custom_functional_group(self, key, value):
+        '''
+        Update custom functional group
+        '''
+        # update custom functional group
+        # check key exist
+        if key not in self.custom_functional_groups:
+            # save
+            self.custom_functional_groups.append(key)
+            # dict (key: graph)
+            self.custom_functional_group_list[key] = [value]
