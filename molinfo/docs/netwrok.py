@@ -222,12 +222,6 @@ class Network(ChemGraphs):
 
                         # update custom functional group
                         self.update_custom_functional_group(key, value)
-                        # check key exist
-                        # if key not in self.custom_functional_groups:
-                        #     # save
-                        #     self.custom_functional_groups.append(key)
-                        #     # dict (key: graph)
-                        #     self.custom_functional_group_list[key] = value
 
                         # Create a GraphMatcher object for a functional group
                         fg_matcher = isomorphism.GraphMatcher(
@@ -242,6 +236,8 @@ class Network(ChemGraphs):
                             'function_group': key,
                             'result': fg_found
                         })
+
+        # REVIEW
         # get a list of functional group names
         function_group_names = [x['function_group'] for x in res_match]
         # update list
