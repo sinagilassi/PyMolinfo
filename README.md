@@ -1,6 +1,6 @@
 # Molinfo
 
-![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo)
+![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo) 
 
 **MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
@@ -15,6 +15,15 @@
 **Getting Started:**
 
 To use Molinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
+
+## Binder
+
+Test this package by launching our example notebooks on Binder:
+
+| Description | Launch Binder | 
+| --- | --- |
+| Load a sdf file | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-1.ipynb)
+| Visualize a compound | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-2.ipynb)
 
 
 ## Google Colab
