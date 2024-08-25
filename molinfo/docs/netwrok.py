@@ -265,7 +265,6 @@ class Network(ChemGraphs):
 
                     # flag to track if functional group is found
                     fg_found_any = False
-
                     # count of functional group
                     fg_count = 0
 
@@ -304,6 +303,12 @@ class Network(ChemGraphs):
                 for custom_functional_group in item.custom_functional_groups:
                     # check dict
                     if len(custom_functional_group) == 1:
+
+                        # flag to track if functional group is found
+                        fg_found_any = False
+                        # count of functional group
+                        fg_count = 0
+
                         # get key (custom functional group name)
                         key = list(custom_functional_group.keys())[0]
                         # get value (graph)
@@ -316,6 +321,11 @@ class Network(ChemGraphs):
                         # Check if a functional group is in the main graph
                         fg_found = fg_matcher.subgraph_is_isomorphic()
                         # print(f"{key} found in the molecule!")
+
+                        # ! Check if a functional group is in the main graph
+                        for subgraph in fg_matcher.subgraph_isomorphisms_iter():
+                            fg_found_any = True
+                            fg_count += 1
 
                         # res
                         res_match.append({
@@ -397,6 +407,18 @@ class Network(ChemGraphs):
         # res
         return G
 
+    def node_match(self, n1, n2):
+        '''
+        Define a custom node_match function to ensure element matching
+        '''
+        return n1['symbol'] == n2['symbol']
+
+    def edge_match(self, e1, e2):
+        '''
+        Define a custom edge_match function to ensure bond type matching
+        '''
+        return e1['type'] == e2['type']
+
     def search_within_main_graph(self, functional_group):
         '''
         Search a small graph within a larger graph
@@ -406,17 +428,6 @@ class Network(ChemGraphs):
         functional_group : str
             functional group
         '''
-        def node_match(n1, n2):
-            '''
-            Define a custom node_match function to ensure element matching
-            '''
-            return n1['symbol'] == n2['symbol']
-
-        def edge_match(e1, e2):
-            '''
-            Define a custom edge_match function to ensure bond type matching
-            '''
-            return e1['type'] == e2['type']
 
         # get the graph
         G = self.compound_graph
@@ -444,16 +455,19 @@ class Network(ChemGraphs):
         # Create a GraphMatcher object for a functional group
         for _fn in sub_graphs:
             fg_matcher = isomorphism.GraphMatcher(
-                G, _fn, node_match=node_match, edge_match=edge_match)
+                G, _fn, node_match=self.node_match, edge_match=self.edge_match)
 
             # Check if a functional group is in the main graph
             for subgraph in fg_matcher.subgraph_isomorphisms_iter():
                 fg_count += 1
 
+                # get ids
+                _ids = [i for i in subgraph]
+
                 # Store the subgraph
-                subgraph_nodes = list(subgraph)
-                subgraph_edges = [(subgraph[u], subgraph[v])
-                                  for u, v in G.edges(subgraph_nodes)]
+                subgraph_nodes = list(subgraph())
+                subgraph_edges = [G.get_edge_data(
+                    u, v) for (u, v) in subgraph_nodes]
 
                 # Store the node IDs and symbols of the detected subgraph
                 node_ids = 0
