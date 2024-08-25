@@ -658,7 +658,7 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
-    def view3d(self, **kwargs):
+    def view3d(self, subgraphs=None, **kwargs):
         '''
         Draw a compound in the cartesian coordinate
         atomElements atom symbol
@@ -847,6 +847,62 @@ class graph3d():
                                            bgcolor=bg_color, namelength=-1),
                                        # Set custom hover text
                                        hovertext=[f'A {_bondTypeLabel} with a length of {_distance:.3f}']))
+
+        # *** visualize subgraph
+        if subgraphs is not None:
+            for subgraph in subgraphs:
+                # add subgraph
+                subgraph_pattern = subgraph['subgraph_pattern']
+                _node_list = list(subgraph_pattern.nodes())
+                for i in _node_list:
+                    # xyz
+                    _atom1X = self.xyzList[i-1, 0]
+                    _atom1Y = self.xyzList[i-1, 1]
+                    _atom1Z = self.xyzList[i-1, 2]
+                    _atom1XYZ = [_atom1X, _atom1Y, _atom1Z]
+
+                    # color
+                    # atom id
+                    _atomId = i
+                    # symbol
+                    _atomSymbol = str(self.atomElements[i-1]).strip()
+                    # color
+                    _atomColor = self.set_color(_atomSymbol)
+
+                    # scatter
+                    fig.add_trace(go.Scatter3d(x=[_atom1X],
+                                               y=[_atom1Y],
+                                               z=[_atom1Z],
+                                               mode='markers',
+                                               marker=dict(
+                                                    color=_atomColor, size=2*10, opacity=0.5,
+                                                    sizemode='area', sizeref=1,
+                                                    line=dict(width=2, color='black')),
+                                               ))
+
+                # edge list
+                _edge_list = list(subgraph_pattern.edges())
+                for i in _edge_list:
+                    # xyz
+                    _atom1X = self.xyzList[i[0]-1, 0]
+                    _atom1Y = self.xyzList[i[0]-1, 1]
+                    _atom1Z = self.xyzList[i[0]-1, 2]
+                    _atom1XYZ = [_atom1X, _atom1Y, _atom1Z]
+
+                    # xyz
+                    _atom2X = self.xyzList[i[1]-1, 0]
+                    _atom2Y = self.xyzList[i[1]-1, 1]
+                    _atom2Z = self.xyzList[i[1]-1, 2]
+                    _atom2XYZ = [_atom2X, _atom2Y, _atom2Z]
+
+                    # add line
+                    fig.add_trace(go.Scatter3d(x=[_atom1X, _atom2X],
+                                               y=[_atom1Y, _atom2Y],
+                                               z=[_atom1Z, _atom2Z],
+                                               mode='lines',
+                                               line=dict(
+                                                   color='blue', width=2*5, dash='dashdot'),
+                                               hoverinfo='none'))
 
         # Set the limits of the axes
         # set max and offset

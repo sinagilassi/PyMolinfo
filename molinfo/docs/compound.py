@@ -436,3 +436,5 @@ class Compound(graph3d, Network):
         '''
         # search within graph
         _res = self.search_within_main_graph(functional_group)
+        # visualize
+        self.view3d(subgraphs=_res)

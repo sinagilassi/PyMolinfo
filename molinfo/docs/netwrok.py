@@ -267,6 +267,7 @@ class Network(ChemGraphs):
                     fg_found_any = False
                     # count of functional group
                     fg_count = 0
+                    seen_subgraphs = set()
 
                     # graph function list
                     for _fn in function_group_graphs:
@@ -279,8 +280,15 @@ class Network(ChemGraphs):
 
                         # ! Check if a functional group is in the main graph
                         for subgraph in fg_matcher.subgraph_isomorphisms_iter():
-                            fg_found_any = True
-                            fg_count += 1
+                            # Convert the subgraph to a canonical form
+                            canonical_subgraph = tuple(
+                                sorted(subgraph.keys()))
+
+                            # Check if the subgraph has been seen before
+                            if canonical_subgraph not in seen_subgraphs:
+                                seen_subgraphs.add(canonical_subgraph)
+                                fg_found_any = True
+                                fg_count += 1
 
                     # check
                     if fg_found_any:
@@ -461,33 +469,18 @@ class Network(ChemGraphs):
             for subgraph in fg_matcher.subgraph_isomorphisms_iter():
                 fg_count += 1
 
-                # get ids
-                _ids = [i for i in subgraph]
-
                 # Store the subgraph
-                subgraph_nodes = list(subgraph())
-                subgraph_edges = [G.get_edge_data(
-                    u, v) for (u, v) in subgraph_nodes]
-
-                # Store the node IDs and symbols of the detected subgraph
-                node_ids = 0
-                node_symbols = 0
-
-                # Store the bond types and symbols of the detected subgraph
-                bond_types = 0
-                bond_symbols = 0
+                # subgraph_nodes = subgraph.items()
+                # pattern subgraph
+                subgraph_pattern = G.subgraph(subgraph.keys())
 
                 # Add the subgraph and node IDs to the result
                 res_match.append({
                     'function_group': _fn,
                     'result': True,
                     'count': fg_count,
-                    'subgraph': (subgraph_nodes, subgraph_edges),
-                    'node_ids': node_ids,
-                    'node_symbols': node_symbols,
-                    'bond_types': bond_types,
-                    'bond_symbols': bond_symbols,
-                    'details': []
+                    'subgraph': subgraph,
+                    'subgraph_pattern': subgraph_pattern
                 })
 
         return res_match
