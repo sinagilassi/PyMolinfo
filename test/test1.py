@@ -232,13 +232,13 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # ================================
 # GRAPH
 # ================================
-# # create graph
-# res = mi.create_graph(sdf_file)
-# print(type(res))
-# print(res)
+# create graph
+res = mi.create_graph(sdf_file)
+print(type(res))
+print(res)
 
 # visualize compound by sdf file
-# mi.g3d(sdf_file, display_bond_length=True)
+mi.g3d(sdf_file, display_bond_length=True)
 
 # visualize compound by inchi
 # mi.g3d_by_inchi(
@@ -277,17 +277,17 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP
 # ===============================
-# # custom
-custom_functional_group = [
-    {'cyanide': ["C1-C2", "C2#N3"]},
-    {'N#C': ["N1#C2"]},
-    {'fg1': ["N1-C2", "C2-H3"]},
-    {'NC=O': ["N1-C2", "C2=O3"]},
-    {'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]}
-]
+# # # custom
+# custom_functional_group = [
+#     {'cyanide': ["C1-C2", "C2#N3"]},
+#     {'N#C': ["N1#C2"]},
+#     {'fg1': ["N1-C2", "C2-H3"]},
+#     {'NC=O': ["N1-C2", "C2=O3"]},
+#     {'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]}
+# ]
 
 # # create custom graph
-custom_g = mi.create_custom_functional_groups(custom_functional_group)
+# custom_g = mi.create_custom_functional_groups(custom_functional_group)
 # # custom_g.d("cyanide")
 
 # # find custom functional groups in a compound
@@ -298,8 +298,8 @@ custom_g = mi.create_custom_functional_groups(custom_functional_group)
 # res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
 #                                        custom_g], res_format='dataframe')
 
-res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
-    custom_g], res_format='dataframe')
+# res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
+#     custom_g], res_format='dataframe')
 
-print(res)
+# print(res)
 # comp1.g3d_functional_group('HOC=C')
