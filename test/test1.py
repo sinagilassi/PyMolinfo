@@ -179,7 +179,7 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # CREATE COMPOUND
 # ===============================
 # compound
-# comp1 = mi.compound(sdf_file)
+comp1 = mi.compound(sdf_file)
 # sdf string
 # comp1 = mi.compound(sdf_string)
 # compound by cid
@@ -193,6 +193,9 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # pp(comp1.atom_bond_block_1d)
 # print("-"*100)
 # pp(comp1.atom_xyz)
+
+# functional groups
+# print(comp1.functional_groups)
 
 # distance
 # res_distance = comp1.distance_matrix(dataframe=True)
@@ -233,12 +236,12 @@ sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 # GRAPH
 # ================================
 # create graph
-res = mi.create_graph(sdf_file)
-print(type(res))
-print(res)
+# res = mi.create_graph(sdf_file)
+# print(type(res))
+# print(res)
 
 # visualize compound by sdf file
-mi.g3d(sdf_file, display_bond_length=True)
+# mi.g3d(sdf_file, display_bond_length=True)
 
 # visualize compound by inchi
 # mi.g3d_by_inchi(

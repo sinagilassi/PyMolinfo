@@ -73,6 +73,9 @@ class Network(ChemGraphs):
                              self.graph_primary_alkyl_halide('Br'), self.graph_primary_alkyl_halide('I')]
         }
 
+        # update functional groups
+        self.functional_groups = [i for i in self.function_group_list.keys()]
+
     # property
     @property
     def functional_groups(self):
