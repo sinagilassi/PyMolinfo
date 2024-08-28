@@ -4,6 +4,8 @@
 
 **MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
+[Watch the demo](https://molinfopy.streamlit.app/)
+
 **Features**
 
 * `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON (soon).
