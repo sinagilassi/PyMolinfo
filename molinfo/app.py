@@ -149,14 +149,14 @@ def create_graph(file):
         print(e)
 
 
-def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
+def g3d(f, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
     '''
     3d graph of a compound
 
     Parameters
     ----------
-    file : str
-        molecule file format (sdf)
+    f : str
+        molecule file format (sdf) or a sdf string variable
     display_legend : bool
         display legend (default True)
     display_atom_id : bool
@@ -169,18 +169,14 @@ def g3d(file, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom
     None
         display 3d graph
     '''
-    # check file exists
-    if os.path.exists(file):
-        # parse file
-        MolParserC = MolParser(file)
-        compound_info = MolParserC.read_file()
-        # compound
-        compound = Compound(compound_info)
+    try:
+        # create a compound
+        comp = compound(f)
         # display 3d
-        compound.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
-                        display_atom_id=display_atom_id, display_bond_length=display_bond_length)
-    else:
-        raise Exception("file path is not valid.")
+        comp.view3d(fig_size=fig_size, display_legend=display_legend, bg_color=bg_color,
+                    display_atom_id=display_atom_id, display_bond_length=display_bond_length)
+    except Exception as e:
+        raise Exception(f"file path/variable is not valid! {e}")
 
 
 def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
