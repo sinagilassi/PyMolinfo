@@ -1,12 +1,12 @@
 # import packages/modules
 import streamlit as st
-import molinfo as mi
+import pyMolinfo as mi
 # local
 from graph3dKit import Graph3dKit
 
-st.title("Molinfo")
+st.title("PyMolinfo")
 
-st.write("**MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures \
+st.write("**PyMolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures \
          into graph representations. This package enables researchers and chemists to load various molecular file formats,\
              transform them into graphs, and extract valuable information through graph-based methods.")
 

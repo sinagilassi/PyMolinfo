@@ -2,7 +2,7 @@
 from pprint import pprint as pp
 import pprint
 import os
-import molinfo as mi
+import pyMolinfo as mi
 
 # check version
 # print(mi.__version__)

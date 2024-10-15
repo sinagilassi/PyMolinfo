@@ -7,10 +7,10 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-APP_NAME = 'Molinfo'
-VERSION = '1.5.4'
-DESCRIPTION = 'Molinfo provides comprehensive molecular information and analysis.'
-LONG_DESCRIPTION = 'Molinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
+APP_NAME = 'PyMolinfo'
+VERSION = '1.6.0'
+DESCRIPTION = 'PyMolinfo provides comprehensive molecular information and analysis.'
+LONG_DESCRIPTION = 'PyMolinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
 
 # Setting up
 setup(
@@ -26,7 +26,7 @@ setup(
     install_requires=['pandas', 'pillow', 'requests',
                       'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly', 'networkx'],
     keywords=['python', 'chemistry', 'chemistry-visualization',
-              'Molinfo', 'molecular-graph'],
+              'PyMolinfo', 'molecular-graph'],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Education",

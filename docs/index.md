@@ -1,8 +1,8 @@
-# Welcome to Molinfo
+# Welcome to PyMolinfo
 
 ![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo)
 
-**MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
+**PyMolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
 **Features**
 
@@ -19,7 +19,7 @@ To use Molinfo, simply install the package and import it into your Python script
 
 ## Google Colab
 
-You can use the following code to run `Molinfo` in Google Colab:
+You can use the following code to run `PyMolinfo` in Google Colab:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
@@ -29,7 +29,7 @@ You can use the following code to run `Molinfo` in Google Colab:
 Install molinfo with pip
 
 ```python
-  pip install molinfo
+  pip install pyMolinfo
 ```
 
 ## Documentation
@@ -37,7 +37,7 @@ Install molinfo with pip
 Import package as:
 
 ```python
-import molinfo as mi
+import pyMolinfo as mi
 # check version
 print(mi.__version__)
 ```

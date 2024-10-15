@@ -2,32 +2,32 @@
 
 ## compound
 
-::: molinfo.docs.compound
+::: pyMolinfo.docs.compound
 
 ## compute
 
-::: molinfo.docs.compute
+::: pyMolinfo.docs.compute
 
 ## element
 
-::: molinfo.docs.element
+::: pyMolinfo.docs.element
 
 ## molparser
 
-::: molinfo.docs.molparser
+::: pyMolinfo.docs.molparser
 
 ## observer
 
-::: molinfo.docs.observer
+::: pyMolinfo.docs.observer
 
 ## structure
 
-::: molinfo.docs.structure
+::: pyMolinfo.docs.structure
 
 ## utility
 
-::: molinfo.docs.utility
+::: pyMolinfo.docs.utility
 
 ## graph3d
 
-::: molinfo.docs.graph3d
+::: pyMolinfo.docs.graph3d

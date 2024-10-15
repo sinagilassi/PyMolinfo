@@ -1,8 +1,8 @@
-# Molinfo
+# PyMolinfo
 
-![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo) 
+![Downloads](https://img.shields.io/pypi/dm/PyMolinfo) ![PyPI](https://img.shields.io/pypi/v/PyMolinfo) ![Python Version](https://img.shields.io/pypi/pyversions/PyMolinfo.svg) ![License](https://img.shields.io/pypi/l/PyMolinfo)
 
-**MolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
+**PyMolInfo** (previously molinfo) is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
 [Watch the demo](https://molinfopy.streamlit.app/)
 
@@ -16,7 +16,7 @@
 
 **Getting Started:**
 
-To use Molinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
+To use PyMolinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
 
 ## Binder
 
@@ -29,10 +29,9 @@ Test this package by launching our example notebooks on Binder:
 | Check and count functional groups | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-3.ipynb)|
 | Create custom functional groups | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-4.ipynb)|
 
-
 ## Google Colab
 
-You can use the following code to run `Molinfo` in Google Colab:
+You can use the following code to run `PyMolinfo` in Google Colab:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
@@ -41,7 +40,7 @@ You can use the following code to run `Molinfo` in Google Colab:
 Install molinfo with pip
 
 ```python
-  pip install molinfo
+  pip install PyMolinfo
 ```
 
 ## Documentation
@@ -49,7 +48,7 @@ Install molinfo with pip
 Import package as:
 
 ```python
-import molinfo as mi
+import pyMolinfo as mi
 # check version
 print(mi.__version__)
 ```

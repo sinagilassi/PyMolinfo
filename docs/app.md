@@ -1,3 +1,3 @@
 # App
 
-::: molinfo.app
+::: pyMolinfo.app
