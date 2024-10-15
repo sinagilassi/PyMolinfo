@@ -488,18 +488,32 @@ class Utility():
             if os.path.exists(file_location):
                 # check yml file format
                 with open(file_location, 'r') as f:
-                    cfg_ref = yaml.load(
+                    _ref = yaml.load(
                         f, Loader=yaml.FullLoader)
+                # check not empty
+                if _ref:
+                    # custom functional group
                     custom_functional_groups = []
-                    for key, value in cfg_ref.items():
-                        custom_functional_groups.append(
-                            {
-                                key: value
-                            }
-                        )
+                    for key, value in _ref.items():
+                        # check value
+                        if not value:
+                            raise Exception(
+                                "value is not found.")
+
+                        if isinstance(value, list):
+                            custom_functional_groups.append(
+                                {
+                                    key: value
+                                }
+                            )
+                        else:
+                            raise Exception(
+                                "value format is not valid.")
+
+                    return custom_functional_groups
+                else:
+                    raise Exception("ref file is empty.")
             else:
                 raise Exception("file path is not valid.")
-
-            return custom_functional_groups
         except Exception as e:
             raise Exception(e)

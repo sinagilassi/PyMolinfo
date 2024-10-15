@@ -8,9 +8,7 @@ from .config import packageName
 from .config import packageShortName
 from .config import __version__
 from .config import __description__
-from .docs import MolParser
-from .docs import Compound
-from .docs import CustomChemGraph
+from .docs import MolParser, Compound, CustomChemGraph, Utility
 
 
 def main():
@@ -269,7 +267,7 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
 
 def count_functional_group(file, functional_groups=[], res_format='raw'):
     '''
-    Count the occurrences of functional groups within the structure of a compound.
+    Counts the occurrences of functional groups within the structure of a compound.
 
     Parameters
     ----------
@@ -345,7 +343,8 @@ def create_custom_functional_groups(functional_groups):
             custom_functional_groups = functional_groups
         elif isinstance(functional_groups, str):
             # check is a file yml
-
+            custom_functional_groups = Utility.load_custom_functional_group(
+                functional_groups)
         else:
             raise Exception("functional_groups is not valid.")
 
