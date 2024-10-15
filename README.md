@@ -33,7 +33,10 @@ Test this package by launching our example notebooks on Binder:
 
 You can use the following code to run `PyMolinfo` in Google Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
+| Version | Google Colab |
+| --- | --- |
+| 1.6.0 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1-mkVbXbznEJGeKWdQKtJT8xkWb2Bcvw_?usp=sharing)  |
+| < 1.6.0 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing) |
 
 ## Installation
 
