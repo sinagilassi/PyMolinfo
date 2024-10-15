@@ -303,8 +303,7 @@ custom_functional_group_file = os.path.join(
 
 # create custom graph from file
 custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
-# custom_g.d("CYANIDE")
-
+custom_g.d("benzene-full")
 
 # ==============================================
 # ! FIND CUSTOM FUNCTIONAL GROUP
@@ -315,9 +314,9 @@ custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
 # pp(res)
 
 # * return dataframe
-res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
-                                       custom_g], res_format='dataframe')
-print(res)
+# res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
+#                                        custom_g], res_format='dataframe')
+# print(res)
 
 # * display the selected functional group
 # comp1.g3d_functional_group('HOC=C')
@@ -325,6 +324,14 @@ print(res)
 # comp1.g3d_functional_group('benzene')
 
 # * count the custom functional groups
+# res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
+#     custom_g], res_format='dataframe')
+# print(res)
+
 res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
-    custom_g], res_format='dataframe')
-print(res)
+    custom_g])
+pp(res)
+
+# display the selected functional group
+# benzene
+comp1.g3d_functional_group('benzene-full')

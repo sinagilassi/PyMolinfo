@@ -242,7 +242,7 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
     -------
     res : dict
         a list of all count
-    compound : object
+    compound : Compound
         compound object (sdf file)
     '''
     # check file exists
@@ -282,7 +282,7 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
     -------
     res : dict
         a list of all count
-    compound : object
+    compound : Compound
         compound object (sdf file)
     '''
     # check file exists
@@ -329,8 +329,8 @@ def create_custom_functional_groups(functional_groups):
     # fg1: CH2-O
     # fg2: CH2CHO
     custom_functional_group = [
-    {'fg1': ["C1-H1","C1-H2","C1-O1"]},
-    {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
+        {'fg1': ["C1-H1","C1-H2","C1-O1"]},
+        {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
     ]
     ```
     '''
