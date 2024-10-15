@@ -1,6 +1,6 @@
 # Welcome to PyMolinfo
 
-![Downloads](https://img.shields.io/pypi/dm/Molinfo) ![PyPI](https://img.shields.io/pypi/v/Molinfo) ![Python Version](https://img.shields.io/pypi/pyversions/Molinfo.svg) ![License](https://img.shields.io/pypi/l/Molinfo)
+![Downloads](https://img.shields.io/pypi/dm/PyMolinfo) ![PyPI](https://img.shields.io/pypi/v/PyMolinfo) ![Python Version](https://img.shields.io/pypi/pyversions/PyMolinfo.svg) ![License](https://img.shields.io/pypi/l/PyMolinfo)
 
 **PyMolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
@@ -26,10 +26,10 @@ You can use the following code to run `PyMolinfo` in Google Colab:
 
 ## Installation
 
-Install molinfo with pip
+Install PyMolinfo with pip
 
 ```python
-  pip install pyMolinfo
+  pip install PyMolinfo
 ```
 
 ## Documentation

@@ -1,4 +1,4 @@
-site_name: Molinfo
+site_name: PyMolinfo
 theme:
   name: material
   features:
