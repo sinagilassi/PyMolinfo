@@ -158,7 +158,7 @@ class CustomChemGraph():
 
     def d(self, functional_group_name):
         '''
-        plot a functional group
+        plots a functional group
 
         Parameters
         ----------

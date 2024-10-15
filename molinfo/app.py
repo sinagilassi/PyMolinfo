@@ -2,6 +2,7 @@
 import os
 import pubchemquery as pcq
 import pandas as pd
+import yaml
 # internal
 from .config import packageName
 from .config import packageShortName
@@ -120,7 +121,7 @@ def compound_by_inchi(inchi):
 
 def create_graph(file):
     '''
-    Convert a sdf compound file to a graph 
+    Converts a sdf compound file to a graph
 
     Parameters
     ----------
@@ -311,12 +312,8 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
 
 def create_custom_functional_groups(functional_groups):
     '''
-    create custom functional groups based on the following format:
-    # CH2-O
-    custom_functional_group = [
-    {'fg1': ["C1-H1","C1-H2","C1-O1"]},
-    {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
-    ]
+    Creates custom functional groups based on the following format:
+
 
     Parameters
     ----------
@@ -327,6 +324,17 @@ def create_custom_functional_groups(functional_groups):
     -------
     custom_functional_groups : list[dict]
         a list of all custom functional group
+
+    Examples
+    --------
+    ```python
+    # fg1: CH2-O
+    # fg2: CH2CHO
+    custom_functional_group = [
+    {'fg1': ["C1-H1","C1-H2","C1-O1"]},
+    {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
+    ]
+    ```
     '''
     try:
         # check format
@@ -335,6 +343,9 @@ def create_custom_functional_groups(functional_groups):
             custom_functional_groups = [functional_groups]
         elif isinstance(functional_groups, list):
             custom_functional_groups = functional_groups
+        elif isinstance(functional_groups, str):
+            # check is a file yml
+
         else:
             raise Exception("functional_groups is not valid.")
 

@@ -11,6 +11,7 @@ import random
 import numpy as np
 from datetime import date
 from random import randint
+import yaml
 
 
 class Utility():
@@ -464,5 +465,41 @@ class Utility():
                 np.save(f, arr)
 
             print(f"save operation is done.")
+        except Exception as e:
+            raise Exception(e)
+
+    @staticmethod
+    def load_custom_functional_group(file_location):
+        '''
+        load custom functional group
+
+        Parameters
+        ----------
+        file_location : str
+            file location
+
+        Returns
+        -------
+        custom_functional_group : dict
+            custom functional group
+
+        '''
+        try:
+            if os.path.exists(file_location):
+                # check yml file format
+                with open(file_location, 'r') as f:
+                    cfg_ref = yaml.load(
+                        f, Loader=yaml.FullLoader)
+                    custom_functional_groups = []
+                    for key, value in cfg_ref.items():
+                        custom_functional_groups.append(
+                            {
+                                key: value
+                            }
+                        )
+            else:
+                raise Exception("file path is not valid.")
+
+            return custom_functional_groups
         except Exception as e:
             raise Exception(e)
