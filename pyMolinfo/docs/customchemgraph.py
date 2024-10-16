@@ -63,7 +63,7 @@ class CustomChemGraph():
 
     def create_custom_graph(self, custom_functional_group):
         '''
-        create custom graph
+        Creates a custom graph
 
         Parameters
         ----------
@@ -79,7 +79,8 @@ class CustomChemGraph():
         --------
         >>> custom_functional_group = [
         >>> {'fg1': ["C1-H1","C1-H2","C1-O1"]},
-        >>> {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
+        >>> {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]},
+        >>> {'fg3': ["-C1","C1-H2"]}
         >>>    ]
         '''
         G_list = []
