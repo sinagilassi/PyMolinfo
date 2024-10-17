@@ -102,6 +102,11 @@ class CustomChemGraph():
                         atoms = bond.split('#')
                     else:
                         raise Exception('bond type error')
+
+                    # check atoms
+                    # Substitute empty parts with 'X'
+                    # atoms = ["X0" if atom == "" else atom for atom in atoms]
+
                     # get letters
                     atoms_result = [{"letters": ''.join([c for c in s if c.isalpha(
                     )]), "numbers": ''.join([c for c in s if c.isdigit()])} for s in atoms]

@@ -162,6 +162,13 @@ class Network(ChemGraphs):
             '''
             Define a custom node_match function to ensure element matching
             '''
+            # Define dummy node pattern
+            dummy_node_pattern = "XX"
+
+            # Ignore dummy nodes
+            if n1['symbol'].startswith(dummy_node_pattern) or n2['symbol'].startswith(dummy_node_pattern):
+                return True
+
             return n1['symbol'] == n2['symbol']
 
         def edge_match(e1, e2):
@@ -269,6 +276,13 @@ class Network(ChemGraphs):
             '''
             Define a custom node_match function to ensure element matching
             '''
+            # Define dummy node pattern
+            dummy_node_pattern = "XX"
+
+            # Ignore dummy nodes
+            if n1['symbol'].startswith(dummy_node_pattern) or n2['symbol'].startswith(dummy_node_pattern):
+                return True
+
             return n1['symbol'] == n2['symbol']
 
         def edge_match(e1, e2):
@@ -333,7 +347,7 @@ class Network(ChemGraphs):
                             'count': 0
                         })
 
-            elif isinstance(item, CustomChemGraph):
+            elif isinstance(item, CustomChemGraph):  # ! custom functional groups
                 # get a list of graphs
                 for custom_functional_group in item.custom_functional_groups:
                     # check dict
@@ -468,6 +482,13 @@ class Network(ChemGraphs):
         '''
         Define a custom node_match function to ensure element matching
         '''
+        # Define dummy node pattern
+        dummy_node_pattern = "XX"
+
+        # Ignore dummy nodes
+        if n1['symbol'].startswith(dummy_node_pattern) or n2['symbol'].startswith(dummy_node_pattern):
+            return True
+
         return n1['symbol'] == n2['symbol']
 
     def edge_match(self, e1, e2):
