@@ -257,7 +257,8 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
         # check
         if res_format == 'dataframe':
             # dataframe
-            return pd.DataFrame(res), compound
+            df = pd.DataFrame(res)
+            return df, compound
         else:
             # raw
             return res, compound
@@ -300,7 +301,8 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
         # check
         if res_format == 'dataframe':
             # dataframe
-            return pd.DataFrame(res), compound
+            df = pd.DataFrame(res)
+            return df, compound
         else:
             # raw
             return res, compound

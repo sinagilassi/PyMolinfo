@@ -37,6 +37,14 @@ class Network(ChemGraphs):
             'hydroxyl': [self.graph_hydroxyl()],
             'carbonyl': [self.graph_carbonyl()],
             'carboxyl': [self.graph_carboxyl()],
+            'N-H': [self.graph_N_H()],
+            'C-N': [self.graph_C_N_single_bond()],
+            'N-O': [self.graph_N_O_single_bond()],
+            'C-O': [self.graph_C_O_single_bond()],
+            'C#N': [self.graph_C_N_triple_bond()],
+            'methyl-group': [self.graph_methyl()],
+            'methylene-group': [self.graph_methylene()],
+            'methine-group': [self.graph_methine()],
             'ether': [self.graph_ether()],
             'pst-alcohols': [self.graph_primary_alcohol(), self.graph_secondary_alcohol(),
                              self.graph_tertiary_alcohol(), self.graph_secondary_alcohol_double_bond(),
@@ -49,6 +57,7 @@ class Network(ChemGraphs):
             'alkene': [self.graph_alkene()],
             'alkene CH bond (sp2)': [self.graph_alkene_CH_bond()],
             'aromatic CH bond (sp2)': [self.graph_aromatic_CH_bond()],
+            'aldehyde CH bond (sp2)': [self.graph_aldehyde_CH_bond()],
             'alkyne': [self.graph_alkyne()],
             'alkyne CH bond (sp)': [self.graph_alkyne_CH_bond()],
             'arene': [self.graph_arene()],
@@ -70,7 +79,8 @@ class Network(ChemGraphs):
                              self.graph_alkyl_halide('I'),
                              self.graph_primary_alkyl_halide(
                                  'F'), self.graph_primary_alkyl_halide('Cl'),
-                             self.graph_primary_alkyl_halide('Br'), self.graph_primary_alkyl_halide('I')]
+                             self.graph_primary_alkyl_halide('Br'), self.graph_primary_alkyl_halide('I')],
+            'epoxide': [self.graph_epoxide()]
         }
 
         # update functional groups

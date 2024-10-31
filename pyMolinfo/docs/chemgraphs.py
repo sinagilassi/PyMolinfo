@@ -66,6 +66,170 @@ class ChemGraphs():
         # res
         return CO
 
+    def graph_N_H(self):
+        '''
+        Create a graph for N-H (amines)
+        '''
+        # N-H graph
+        NH = nx.Graph()
+        # N
+        NH.add_node(1, symbol='N')
+        # H
+        NH.add_node(2, symbol='H')
+        # bond
+        NH.add_edge(1, 2, symbol='NH', type=1)
+
+        # res
+        return NH
+
+    def graph_C_N_single_bond(self):
+        '''
+        Create a graph for C-N (amine)
+        '''
+        # C-N graph
+        CN = nx.Graph()
+        # C
+        CN.add_node(1, symbol='C')
+        # N
+        CN.add_node(2, symbol='N')
+        # bond
+        CN.add_edge(1, 2, symbol='CN', type=1)
+
+        # res
+        return CN
+
+    def graph_N_O_single_bond(self):
+        '''
+        Create a graph for N-O (nitro group)
+        '''
+        # N-O graph
+        NO = nx.Graph()
+        # N
+        NO.add_node(1, symbol='N')
+        # O
+        NO.add_node(2, symbol='O')
+        # bond
+        NO.add_edge(1, 2, symbol='NO', type=1)
+
+        # res
+        return NO
+
+    def graph_C_O_single_bond(self):
+        '''
+        Create a graph for C-O (ether, ester, alcohols, carboxylic acid)
+        '''
+        # C-O graph
+        CO = nx.Graph()
+        # C
+        CO.add_node(1, symbol='C')
+        # O
+        CO.add_node(2, symbol='O')
+        # bond
+        CO.add_edge(1, 2, symbol='CO', type=1)
+
+        # res
+        return CO
+
+    def graph_C_N_triple_bond(self):
+        '''
+        Create a graph for CN (nitrile)
+        '''
+        # CN graph
+        CN_nitrile = nx.Graph()
+        # C
+        CN_nitrile.add_node(1, symbol='C')
+        # N
+        CN_nitrile.add_node(2, symbol='N')
+        # bond
+        CN_nitrile.add_edge(1, 2, symbol='CN', type=3)
+
+        # res
+        return CN_nitrile
+
+    def graph_methyl(self):
+        '''
+        Create a graph for methyl (-CH3)
+        '''
+        # C-H graph
+        CH_methyl = nx.Graph()
+        # C
+        CH_methyl.add_node(1, symbol='C')
+        # H
+        CH_methyl.add_node(2, symbol='H')
+        # H
+        CH_methyl.add_node(3, symbol='H')
+        # H
+        CH_methyl.add_node(4, symbol='H')
+        # XX
+        CH_methyl.add_node(5, symbol='XX')
+        # bond
+        CH_methyl.add_edge(1, 2, symbol='CH', type=1)
+        # bond
+        CH_methyl.add_edge(1, 3, symbol='CH', type=1)
+        # bond
+        CH_methyl.add_edge(1, 4, symbol='CH', type=1)
+        # bond
+        CH_methyl.add_edge(1, 5, symbol='CXX', type=1)
+
+        # res
+        return CH_methyl
+
+    def graph_methylene(self):
+        '''
+        Create a graph for methylene (-C-CH2-C-)
+        '''
+        # C-H graph
+        CH2_methylene = nx.Graph()
+        # C
+        CH2_methylene.add_node(1, symbol='C')
+        # H
+        CH2_methylene.add_node(2, symbol='H')
+        # H
+        CH2_methylene.add_node(3, symbol='H')
+        # XX
+        CH2_methylene.add_node(4, symbol='C')
+        # XX
+        CH2_methylene.add_node(5, symbol='C')
+        # bond
+        CH2_methylene.add_edge(1, 2, symbol='CH', type=1)
+        # bond
+        CH2_methylene.add_edge(1, 3, symbol='CH', type=1)
+        # bond
+        CH2_methylene.add_edge(1, 4, symbol='CC', type=1)
+        # bond
+        CH2_methylene.add_edge(1, 5, symbol='CC', type=1)
+
+        # res
+        return CH2_methylene
+
+    def graph_methine(self):
+        '''
+        Create a graph for methine (-CH)
+        '''
+        # CH methine graph
+        CH_methine = nx.Graph()
+        # C
+        CH_methine.add_node(1, symbol='C')
+        # H
+        CH_methine.add_node(2, symbol='H')
+        # XX
+        CH_methine.add_node(3, symbol='XX')
+        # XX
+        CH_methine.add_node(4, symbol='XX')
+        # XX
+        CH_methine.add_node(5, symbol='XX')
+        # bond
+        CH_methine.add_edge(1, 2, symbol='CH', type=1)
+        # bond
+        CH_methine.add_edge(1, 3, symbol='CXX', type=1)
+        # bond
+        CH_methine.add_edge(1, 4, symbol='CXX', type=1)
+        # bond
+        CH_methine.add_edge(1, 5, symbol='CXX', type=1)
+
+        # res
+        return CH_methine
+
     def graph_ether(self):
         '''
         Create a graph for ether
@@ -231,7 +395,7 @@ class ChemGraphs():
         # H
         COOH.add_node(4, symbol='H')
         # C
-        COOH.add_node(5, symbol='C')
+        COOH.add_node(5, symbol='XX')
         # bond
         COOH.add_edge(1, 2, symbol='CO', type=2)
         # bond
@@ -239,7 +403,7 @@ class ChemGraphs():
         # bond
         COOH.add_edge(3, 4, symbol='OH', type=1)
         # bond
-        COOH.add_edge(1, 5, symbol='CC', type=1)
+        COOH.add_edge(1, 5, symbol='CXX', type=1)
 
         # res
         return COOH
@@ -290,7 +454,7 @@ class ChemGraphs():
         # H
         CONH2.add_node(5, symbol='H')
         # C
-        CONH2.add_node(6, symbol='C')
+        CONH2.add_node(6, symbol='XX')
         # bond
         CONH2.add_edge(1, 2, symbol='CO', type=2)
         # bond
@@ -300,7 +464,7 @@ class ChemGraphs():
         # bond
         CONH2.add_edge(3, 5, symbol='NH', type=1)
         # bond
-        CONH2.add_edge(1, 6, symbol='CC', type=1)
+        CONH2.add_edge(1, 6, symbol='CXX', type=1)
 
         # res
         return CONH2
@@ -322,7 +486,7 @@ class ChemGraphs():
         # H
         CONH2.add_node(5, symbol='H')
         # C
-        CONH2.add_node(6, symbol='C')
+        CONH2.add_node(6, symbol='XX')
         # bond
         CONH2.add_edge(1, 2, symbol='CO', type=2)
         # bond
@@ -332,7 +496,7 @@ class ChemGraphs():
         # bond
         CONH2.add_edge(3, 5, symbol='NH', type=1)
         # bond
-        CONH2.add_edge(1, 6, symbol='CC', type=1)
+        CONH2.add_edge(1, 6, symbol='CXX', type=1)
 
         # res
         return CONH2
@@ -354,7 +518,7 @@ class ChemGraphs():
         # H
         CONH2.add_node(5, symbol='C')
         # C
-        CONH2.add_node(6, symbol='C')
+        CONH2.add_node(6, symbol='XX')
         # bond
         CONH2.add_edge(1, 2, symbol='CO', type=2)
         # bond
@@ -364,7 +528,7 @@ class ChemGraphs():
         # bond
         CONH2.add_edge(3, 5, symbol='NC', type=1)
         # bond
-        CONH2.add_edge(1, 6, symbol='CC', type=1)
+        CONH2.add_edge(1, 6, symbol='CXX', type=1)
 
         # res
         return CONH2
@@ -386,7 +550,7 @@ class ChemGraphs():
         # H
         CONH2.add_node(5, symbol='C')
         # C
-        CONH2.add_node(6, symbol='C')
+        CONH2.add_node(6, symbol='XX')
         # bond
         CONH2.add_edge(1, 2, symbol='CO', type=2)
         # bond
@@ -396,7 +560,7 @@ class ChemGraphs():
         # bond
         CONH2.add_edge(3, 5, symbol='NC', type=1)
         # bond
-        CONH2.add_edge(1, 6, symbol='CC', type=1)
+        CONH2.add_edge(1, 6, symbol='CXX', type=1)
 
         # res
         return CONH2
@@ -504,11 +668,11 @@ class ChemGraphs():
         # H
         SH.add_node(2, symbol='H')
         # C
-        SH.add_node(3, symbol='C')
+        SH.add_node(3, symbol='XX')
         # bond
         SH.add_edge(1, 2, symbol='SH', type=1)
         # bond
-        SH.add_edge(1, 3, symbol='SC', type=1)
+        SH.add_edge(1, 3, symbol='SXX', type=1)
 
         # res
         return SH
@@ -864,3 +1028,49 @@ class ChemGraphs():
 
         # res
         return CC
+
+    def graph_aldehyde_CH_bond(self):
+        '''
+        Create a graph for aldehyde -R-(C=O)-C-H
+        '''
+        # CH bond aldehyde
+        CH_aldehyde = nx.Graph()
+        # C
+        CH_aldehyde.add_node(1, symbol='C')
+        # H
+        CH_aldehyde.add_node(2, symbol='H')
+        # O
+        CH_aldehyde.add_node(3, symbol='O')
+        # XX
+        CH_aldehyde.add_node(4, symbol='XX')
+        # bond
+        CH_aldehyde.add_edge(1, 2, symbol='CH', type=1)
+        # bond
+        CH_aldehyde.add_edge(1, 3, symbol='CO', type=2)
+        # bond
+        CH_aldehyde.add_edge(1, 4, symbol='CXX', type=1)
+
+        # res
+        return CH_aldehyde
+
+    def graph_epoxide(self):
+        '''
+        Create a graph for epoxide -C-O-C-
+        '''
+        # epoxide graph
+        epoxide = nx.Graph()
+        # C
+        epoxide.add_node(1, symbol='C')
+        # O
+        epoxide.add_node(2, symbol='O')
+        # C
+        epoxide.add_node(3, symbol='C')
+        # bond
+        epoxide.add_edge(1, 2, symbol='CO', type=1)
+        # bond
+        epoxide.add_edge(2, 3, symbol='CO', type=1)
+        # bond
+        epoxide.add_edge(1, 3, symbol='CC', type=1)
+
+        # res
+        return epoxide

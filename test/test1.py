@@ -39,7 +39,13 @@ import pyMolinfo as mi
 # Structure2D_COMPOUND_CID_261
 # Ethinyl Estradiol
 # Conformer3D_COMPOUND_CID_5991.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_5991.sdf'
+#  Acetic Acid
+# Conformer3D_COMPOUND_CID_176.sdf
+# Aniline
+# Conformer3D_COMPOUND_CID_6115.sdf
+# Styrene Oxide
+# Conformer3D_COMPOUND_CID_7276.sdf
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_7276.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -244,7 +250,7 @@ $$$$
 # mi.g3d(sdf_file, display_bond_length=True)
 
 # visualize compound by sdf string
-mi.g3d(sdf_string)
+# mi.g3d(sdf_string)
 
 # visualize compound by inchi
 # mi.g3d_by_inchi(
@@ -274,11 +280,11 @@ mi.g3d(sdf_string)
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
 #                                        'tertiary-alcohol'], res_format='dataframe')
 
-# res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
+res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
-# print(res)
+print(res)
 # print(comp1.functional_groups)
-# comp1.g3d_functional_group('hydroxyl')
+# comp1.g3d_functional_group('carboxylic-acid')
 
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP
