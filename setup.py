@@ -8,7 +8,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 APP_NAME = 'PyMolinfo'
-VERSION = '1.6.0'
+VERSION = '1.7.0'
 DESCRIPTION = 'PyMolinfo provides comprehensive molecular information and analysis.'
 LONG_DESCRIPTION = 'PyMolinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
 
