@@ -45,7 +45,11 @@ import pyMolinfo as mi
 # Conformer3D_COMPOUND_CID_6115.sdf
 # Styrene Oxide
 # Conformer3D_COMPOUND_CID_7276.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_7276.sdf'
+# Diethyl Ether
+# Conformer3D_COMPOUND_CID_3283
+# Benzoic Acid
+# Conformer3D_COMPOUND_CID_243.sdf
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_243.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -284,7 +288,7 @@ res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
 print(res)
 # print(comp1.functional_groups)
-# comp1.g3d_functional_group('carboxylic-acid')
+comp1.g3d_functional_group('C-O')
 
 # ===============================
 # CREATE CUSTOM FUNCTIONAL GROUP
