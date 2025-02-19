@@ -4,9 +4,7 @@
 
 **PyMolInfo** (previously molinfo) is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
-[Watch the demo](https://molinfopy.streamlit.app/)
-
-**Features**
+## Features
 
 * `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON (soon).
 * `Graph Conversion`: Transform molecular structures into graph representations for detailed analysis.
@@ -22,7 +20,7 @@ To use PyMolinfo, simply install the package and import it into your Python scri
 
 Test this package by launching our example notebooks on Binder:
 
-| Description | Launch Binder | 
+| Description | Launch Binder |
 | --- | --- |
 | Load a sdf file | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-1.ipynb) |
 | Visualize a compound | [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-2.ipynb) |
@@ -109,11 +107,11 @@ print(dihedral)
 
 [`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
 
-|  Bond Types | Format  | 
+|  Bond Types | Format  |
 |:----------|:----------|
-| single bond CC   | C1-C2   | 
-| double bond CC   | C1=C2   | 
-| triple bond CC   | C1#C2   | 
+| single bond CC   | C1-C2   |
+| double bond CC   | C1=C2   |
+| triple bond CC   | C1#C2   |
 
 **How to create a custom functional group?**
 
@@ -155,9 +153,8 @@ print(res)
 
 ## FAQ
 
-For any question, contact me on [LinkedIn](https://www.linkedin.com/in/sina-gilassi/) 
-
+For any question, contact me on [LinkedIn](https://www.linkedin.com/in/sina-gilassi/)
 
 ## Authors
 
-- [@sinagilassi](https://www.github.com/sinagilassi)
+[@sinagilassi](https://www.github.com/sinagilassi)
