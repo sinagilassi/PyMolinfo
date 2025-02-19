@@ -189,9 +189,9 @@ $$$$
 # CREATE COMPOUND
 # ===============================
 # compound
-# comp1 = mi.compound(sdf_file)
+comp1 = mi.compound(sdf_file)
 # sdf string
-# comp1 = mi.compound(sdf_string)
+comp1 = mi.compound(sdf_string)
 # compound by cid
 # comp1 = mi.compound_by_cid(241)
 # compound by inchi

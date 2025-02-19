@@ -1,13 +1,18 @@
 # import packages/modules
 import os
+from pathlib import Path
+from networkx import Graph
 import pubchemquery as pcq
 import pandas as pd
 import yaml
+from typing import List, Dict, Union, Literal
+
 # internal
 from .config import packageName
 from .config import packageShortName
 from .config import __version__
 from .config import __description__
+from .config import __author__
 from .docs import MolParser, Compound, CustomChemGraph, Utility
 
 
@@ -17,7 +22,7 @@ def main():
     print(_des)
 
 
-def compound(f):
+def compound(f: Union[str, Path]) -> Compound:
     '''
     Create a compound by parsing sdf file
 
@@ -55,18 +60,17 @@ def compound(f):
                 # res
                 return compound
             else:
-                raise ValueError("Invalid input file or string")
+                raise ValueError("Invalid input file path or string")
     except Exception as e:
-        print(e)
+        raise Exception(f"creating compound is failed! {e}")
 
-
-def compound_by_cid(cid):
+def compound_by_cid(cid: Union[str, int]) -> Compound:
     '''
     Create a compound by cid
 
     Parameters
     ----------
-    cid : str
+    cid : str | int
         compound id
 
     Returns
@@ -76,18 +80,18 @@ def compound_by_cid(cid):
     '''
     try:
         # get sdf by cid
-        sdf = pcq.get_structure_by_cid(cid)
+        sdf = pcq.get_structure_by_cid(str(cid))
         # check
         if sdf is None or len(sdf) == 0:
-            print("sdf file not found!")
-            return None
+            # err
+            raise Exception("sdf is not found!")
         # compound
         return compound(sdf)
     except Exception as e:
-        print(e)
+        raise Exception(f"creating compound is failed! {e}")
 
 
-def compound_by_inchi(inchi):
+def compound_by_inchi(inchi: str) -> Compound:
     '''
     Create a compound by inchi
 
@@ -111,13 +115,13 @@ def compound_by_inchi(inchi):
             # compound
             return compound(sdf)
         else:
-            print('the inchi not found!')
-            return None
+            # err
+            raise Exception("inchi is not valid.")
     except Exception as e:
-        print(e)
+        raise Exception(f"creating compound is failed! {e}")
 
 
-def create_graph(file):
+def create_graph(file: Path) -> Graph:
     '''
     Converts a sdf compound file to a graph
 
@@ -145,10 +149,10 @@ def create_graph(file):
         else:
             raise Exception("file path is not valid.")
     except Exception as e:
-        print(e)
+        raise Exception(f"creating graph is failed! {e}")
 
 
-def g3d(f, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
+def g3d(f: Union[str, Path], fig_size: List=[], bg_color: str='#ffffff', display_legend: bool=True, display_atom_id: bool=True, display_bond_length: bool=False):
     '''
     3d graph of a compound
 
@@ -156,6 +160,10 @@ def g3d(f, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id
     ----------
     f : str
         molecule file format (sdf) or a sdf string variable
+    fig_size : list
+        figure size (default [])
+    bg_color : str
+        background color (default '#ffffff')
     display_legend : bool
         display legend (default True)
     display_atom_id : bool
@@ -178,7 +186,7 @@ def g3d(f, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id
         raise Exception(f"file path/variable is not valid! {e}")
 
 
-def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, display_atom_id=True, display_bond_length=False):
+def g3d_by_inchi(inchi: str, fig_size: List=[], bg_color:str='#ffffff', display_legend:bool=True, display_atom_id:bool=True, display_bond_length:bool=False):
     '''
     3d graph of a compound using its InChI identifier
 
@@ -186,8 +194,16 @@ def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, di
     ----------
     inchi : str
         inchi code
+    fig_size : list
+        figure size (default [])
+    bg_color : str
+        background color (default '#ffffff')
     display_legend : bool
         display legend (default True)
+    display_atom_id : bool
+        display atom id (default True)
+    display_bond_length : bool
+        display bond length (default True)
 
     Returns
     -------
@@ -225,7 +241,7 @@ def g3d_by_inchi(inchi, fig_size=[], bg_color='#ffffff', display_legend=True, di
         raise Exception("inchi is not valid.")
 
 
-def check_functional_group(file, functional_groups=[], res_format='raw'):
+def check_functional_group(file: Path, functional_groups:List[str]=[], res_format: Literal['original', 'dataframe']='original'):
     '''
     Check a functional group exists in a compound
 
@@ -236,7 +252,7 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
     functional_groups : list[str] or CustomChemGraph object
         functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
-        result format (default 'raw')
+        result format (default 'original')
 
     Returns
     -------
@@ -245,28 +261,32 @@ def check_functional_group(file, functional_groups=[], res_format='raw'):
     compound : Compound
         compound object (sdf file)
     '''
-    # check file exists
-    if os.path.exists(file):
-        # parse file
-        MolParserC = MolParser(file)
-        compound_info = MolParserC.read_file()
-        # compound
-        compound = Compound(compound_info)
-        # check functional group
-        res = compound.check_functional_groups(functional_groups)
-        # check
-        if res_format == 'dataframe':
-            # dataframe
-            df = pd.DataFrame(res)
-            return df, compound
+    try:
+        # check file exists
+        if os.path.exists(file):
+            # parse file
+            MolParserC = MolParser(file)
+            compound_info = MolParserC.read_file()
+            # compound
+            compound = Compound(compound_info)
+            # check functional group
+            res = compound.check_functional_groups(functional_groups)
+            # check
+            if res_format == 'dataframe':
+                # dataframe
+                df = pd.DataFrame(res)
+                return df, compound
+            elif res_format == 'original':
+                # raw
+                return res, compound
+            else:
+                raise Exception("res_format is not valid.")
         else:
-            # raw
-            return res, compound
-    else:
-        raise Exception("file path is not valid.")
+            raise Exception("file path is not valid.")
+    except Exception as e:
+        raise Exception(f"checking functional group is failed! {e}")
 
-
-def count_functional_group(file, functional_groups=[], res_format='raw'):
+def count_functional_group(file: Path, functional_groups:List[str]=[], res_format: Literal['original', 'dataframe']='original'):
     '''
     Counts the occurrences of functional groups within the structure of a compound.
 
@@ -277,7 +297,7 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
     functional_groups : list[str] or CustomChemGraph object
         functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
-        result format (default 'raw')
+        result format (default 'original')
 
     Returns
     -------
@@ -286,34 +306,38 @@ def count_functional_group(file, functional_groups=[], res_format='raw'):
     compound : Compound
         compound object (sdf file)
     '''
-    # check file exists
-    if os.path.exists(file):
-        # parse file
-        MolParserC = MolParser(file)
-        compound_info = MolParserC.read_file()
-        # compound
-        compound = Compound(compound_info)
-        # create graph
-        compound.create_graph()
-        # check functional group
-        res = compound.check_functional_groups(
-            functional_groups, count_functional_group=True)
-        # check
-        if res_format == 'dataframe':
-            # dataframe
-            df = pd.DataFrame(res)
-            return df, compound
+    try:
+        # check file exists
+        if os.path.exists(file):
+            # parse file
+            MolParserC = MolParser(file)
+            compound_info = MolParserC.read_file()
+            # compound
+            compound = Compound(compound_info)
+            # create graph
+            compound.create_graph()
+            # check functional group
+            res = compound.check_functional_groups(
+                functional_groups, count_functional_group=True)
+            # check
+            if res_format == 'dataframe':
+                # dataframe
+                df = pd.DataFrame(res)
+                return df, compound
+            elif res_format == 'original':
+                # raw
+                return res, compound
+            else:
+                raise Exception("res_format is not valid.")
         else:
-            # raw
-            return res, compound
-    else:
-        raise Exception("file path is not valid.")
+            raise Exception("file path is not valid.")
+    except Exception as e:
+        raise Exception(f"counting functional group is failed! {e}")
 
 
-def create_custom_functional_groups(functional_groups):
+def create_custom_functional_groups(functional_groups:Union[Dict[str, List[str]], List[Dict[str, List[str]]], Path]) -> CustomChemGraph:
     '''
-    Creates custom functional groups based on the following format:
-
+    Creates custom functional groups based on the following example.
 
     Parameters
     ----------
@@ -330,33 +354,46 @@ def create_custom_functional_groups(functional_groups):
     ```python
     # fg1: CH2-O
     # fg2: CH2CHO
+    # List of custom functional groups
     custom_functional_group = [
         {'fg1': ["C1-H1","C1-H2","C1-O1"]},
         {'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
     ]
+
+    # Dict of custom functional groups
+    custom_functional_group = {
+        'fg1': ["C1-H1","C1-H2","C1-O1"],
+        'fg2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]
+    }
     ```
     '''
     try:
         # check format
         if isinstance(functional_groups, dict):
             # set a list
-            custom_functional_groups = [functional_groups]
+            if len(functional_groups) == 1:
+                custom_functional_groups = [functional_groups]
+            else:
+                custom_functional_groups = [
+                    {k: v} for k, v in functional_groups.items()
+                ]
         elif isinstance(functional_groups, list):
-            custom_functional_groups = functional_groups
+            # check is a list of dict
+            if all(isinstance(item, dict) for item in functional_groups):
+                # set
+                custom_functional_groups = functional_groups
         elif isinstance(functional_groups, str):
             # check is a file yml
             custom_functional_groups = Utility.load_custom_functional_group(
                 functional_groups)
         else:
-            raise Exception("functional_groups is not valid.")
+            raise Exception("functional_groups format is not valid.")
 
         # custom chem graph
         CustomChemGraphC = CustomChemGraph(custom_functional_groups)
         # res
         return CustomChemGraphC
     except Exception as e:
-        raise Exception(e)
+        raise Exception(f'creating custom functional group is failed! {e}')
 
 
-if __name__ == "__main__":
-    main()

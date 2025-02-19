@@ -1,11 +1,11 @@
 # import packages/modules
 from pprint import pprint as pp
-import pprint
+from rich import print
 import os
 import pyMolinfo as mi
 
 # check version
-# print(mi.__version__)
+print(mi.__version__)
 
 # ==========================
 # ! SDF FILES
@@ -39,7 +39,7 @@ import pyMolinfo as mi
 # Structure2D_COMPOUND_CID_261
 # Ethinyl Estradiol
 # Conformer3D_COMPOUND_CID_5991.sdf
-sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_261.sdf'
+sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_2333.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -284,6 +284,7 @@ $$$$
 # ! CREATE CUSTOM FUNCTIONAL GROUP
 # =================================
 # # custom
+# NOTE: list of custom functional group
 custom_functional_group = [
     {'cyanide': ["C1-C2", "C2#N3"]},
     {'N#C': ["N1#C2"]},
@@ -292,39 +293,56 @@ custom_functional_group = [
     {'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]}
 ]
 
-# * custom functional group from file
+# create custom graph
+# custom_g = mi.create_custom_functional_groups(custom_functional_group)
+# display custom functional group
+# custom_g.d("cyanide")
+# print(custom_g.custom_functional_groups)
+
+# NOTE: dict of custom functional group
+custom_functional_group = {
+    'cyanide': ["C1-C2", "C2#N3"],
+    'N#C': ["N1#C2"],
+    'fg1': ["N1-C2", "C2-H3"],
+    'NC=O': ["N1-C2", "C2=O3"],
+    'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]
+}
+
+# custom_g = mi.create_custom_functional_groups(custom_functional_group)
+# custom_g.d("fg1")
+# print(custom_g.custom_functional_groups)
+
+# NOTE: custom functional group from file
 # current
 custom_functional_group_file = os.path.join(
     os.getcwd(), 'test', 'custom-functional-group.yml')
-
-# create custom graph
-# custom_g = mi.create_custom_functional_groups(custom_functional_group)
-# custom_g.d("cyanide")
 
 # create custom graph from file
 custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
 # custom_g.d("METHOXY")
 # custom_g.d("benzene-full")
+# custom_g.d('benzene')
+# custom_g.d('benzene2')
 
 # ==============================================
 # ! FIND CUSTOM FUNCTIONAL GROUP
 # ==============================================
-# * check
+# original
 # res = mi.check_functional_group(
 #     sdf_file, functional_groups=[custom_g])
 # pp(res)
 
-# * return dataframe
+# dataframe format
 res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
                                        custom_g], res_format='dataframe')
 print(res)
 
-# * display the selected functional group
+# NOTE: display the selected functional group
 # comp1.g3d_functional_group('HOC=C')
 # benzene
 # comp1.g3d_functional_group('benzene')
 
-# * count the custom functional groups
+# NOTE: count the custom functional groups
 res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
     custom_g], res_format='dataframe')
 print(res)
@@ -336,5 +354,5 @@ print(res)
 # display the selected functional group
 # benzene
 # comp1.g3d_functional_group('benzene-full')
-comp1.g3d_functional_group('METHYLEN')
-comp1.g3d_functional_group("METHOXY")
+# comp1.g3d_functional_group('METHYLEN')
+# comp1.g3d_functional_group("METHOXY")
