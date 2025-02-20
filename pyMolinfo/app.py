@@ -36,6 +36,11 @@ def compound(f: Union[str, Path]) -> Compound:
         compound object
     '''
     try:
+        # check str, path
+        if not isinstance(f, (str, Path)):
+            raise ValueError("Invalid input file path or string")
+
+        # check file exists
         if os.path.exists(f):
             # parse file
             MolParserC = MolParser(f)
@@ -112,6 +117,10 @@ def compound_by_inchi(inchi: str) -> Compound:
         if cid:
             # get sdf by cid
             sdf = pcq.get_structure_by_cid(cid)
+            # check
+            if sdf is None or len(sdf) == 0:
+                # err
+                raise Exception("sdf is not found or has no content!")
             # compound
             return compound(sdf)
         else:
@@ -121,7 +130,7 @@ def compound_by_inchi(inchi: str) -> Compound:
         raise Exception(f"creating compound is failed! {e}")
 
 
-def create_graph(file: Union[str, Path]) -> Graph:
+def create_graph(file: Path) -> Graph:
     '''
     Converts a sdf compound file to a graph
 
@@ -243,14 +252,14 @@ def g3d_by_inchi(inchi: str, fig_size: List = [], bg_color: str = '#ffffff', dis
         raise Exception("inchi is not valid.")
 
 
-def check_functional_group(file: Path | str, functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
+def check_functional_group(file: Union[str, Path], functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
     '''
     Check a functional group exists in a compound
 
     Parameters
     ----------
-    file : str
-        molecule file format (sdf)
+    file : Path | str
+        molecule file format (sdf) or string (sdf)
     functional_groups : list[str] or CustomChemGraph object
         functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
@@ -264,39 +273,35 @@ def check_functional_group(file: Path | str, functional_groups: List[Union[str, 
         compound object (sdf file)
     '''
     try:
-        # check file exists
-        if os.path.exists(file):
-            # parse file
-            MolParserC = MolParser(file)
-            compound_info = MolParserC.read_file()
-            # compound
-            compound = Compound(compound_info)
-            # check functional group
-            res = compound.check_functional_groups(functional_groups)
-            # check
-            if res_format == 'dataframe':
-                # dataframe
-                df = pd.DataFrame(res)
-                return df, compound
-            elif res_format == 'original':
-                # raw
-                return res, compound
-            else:
-                raise Exception("res_format is not valid.")
+        # create compound
+        comp = compound(file)
+
+        # check functional group
+        res = comp.check_functional_groups(functional_groups)
+
+        # check
+        if res_format == 'dataframe':
+            # dataframe
+            df = pd.DataFrame(res)
+            return df, comp
+        elif res_format == 'original':
+            # raw
+            return res, comp
         else:
-            raise Exception("file path is not valid.")
+            raise Exception("res_format is not valid.")
+
     except Exception as e:
         raise Exception(f"checking functional group is failed! {e}")
 
 
-def count_functional_group(file: Path | str, functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
+def count_functional_group(file: Union[str, Path], functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
     '''
     Counts the occurrences of functional groups within the structure of a compound.
 
     Parameters
     ----------
-    file : str
-        molecule file format (sdf)
+    file : Path | str
+        molecule file format (sdf) or string (sdf)
     functional_groups : list[str] or CustomChemGraph object
         functional group (default ['hydroxyl']) or CustomChemGraph object
     res_format : str
@@ -310,30 +315,25 @@ def count_functional_group(file: Path | str, functional_groups: List[Union[str, 
         compound object (sdf file)
     '''
     try:
-        # check file exists
-        if os.path.exists(file):
-            # parse file
-            MolParserC = MolParser(file)
-            compound_info = MolParserC.read_file()
-            # compound
-            compound = Compound(compound_info)
-            # create graph
-            compound.create_graph()
-            # check functional group
-            res = compound.check_functional_groups(
-                functional_groups, count_functional_group=True)
-            # check
-            if res_format == 'dataframe':
-                # dataframe
-                df = pd.DataFrame(res)
-                return df, compound
-            elif res_format == 'original':
-                # raw
-                return res, compound
-            else:
-                raise Exception("res_format is not valid.")
+        # create compound
+        comp = compound(file)
+
+        # create graph
+        comp.create_graph()
+        # check functional group
+        res = comp.check_functional_groups(
+            functional_groups, count_functional_group=True)
+        # check
+        if res_format == 'dataframe':
+            # dataframe
+            df = pd.DataFrame(res)
+            return df, comp
+        elif res_format == 'original':
+            # raw
+            return res, comp
         else:
-            raise Exception("file path is not valid.")
+            raise Exception("res_format is not valid.")
+
     except Exception as e:
         raise Exception(f"counting functional group is failed! {e}")
 

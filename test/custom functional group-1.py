@@ -38,7 +38,7 @@ print(mi.__version__)
 # Structure2D_COMPOUND_CID_261
 # Ethinyl Estradiol
 # Conformer3D_COMPOUND_CID_5991.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_241.sdf'
+sdf_file_name_1 = 'test\Structure2D_COMPOUND_CID_2333.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # =============
@@ -274,10 +274,10 @@ comp1 = mi.compound(sdf_file)
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
 #                                        'tertiary-alcohol'], res_format='dataframe')
 
-# res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
+res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
-# print(res)
-# print(comp1.functional_groups)
+print(res)
+print(comp1.functional_groups)
 # comp1.g3d_functional_group('hydroxyl')
 
 # =================================
@@ -321,7 +321,7 @@ custom_functional_group_file = os.path.join(
     os.getcwd(), 'test', 'custom-functional-group.yml')
 
 # create custom graph from file
-custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
+# custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
 # custom_g.d("METHOXY")
 # custom_g.d("benzene-full")
 # custom_g.d('benzene')
