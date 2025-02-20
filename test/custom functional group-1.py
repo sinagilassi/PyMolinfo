@@ -1,5 +1,4 @@
 # import packages/modules
-from pprint import pprint as pp
 from rich import print
 import os
 import pyMolinfo as mi
@@ -179,7 +178,7 @@ $$$$
 # ! CREATE COMPOUND
 # ===============================
 # compound
-# comp1 = mi.compound(sdf_file)
+comp1 = mi.compound(sdf_file)
 # sdf string
 # comp1 = mi.compound(sdf_string)
 # compound by cid
@@ -194,9 +193,12 @@ $$$$
 # print("-"*100)
 # pp(comp1.atom_xyz)
 
-# functional groups
+# NOTE: functional groups
 # print(comp1.functional_groups)
 
+# ===============================
+# ! GEOMETRY
+# ===============================
 # distance
 # res_distance = comp1.distance_matrix(dataframe=True)
 # pp(res_distance)
@@ -213,7 +215,6 @@ $$$$
 # print(_distance)
 # _distance = comp1.distance_atoms(['C2', 'H3'])
 # print(_distance)
-
 
 # angle
 # res_angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
@@ -269,7 +270,6 @@ $$$$
 # ================================
 # ! COUNT FUNCTIONAL GROUP
 # ================================
-
 # raw format
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
 #                                        'tertiary-alcohol'], res_format='dataframe')
@@ -298,6 +298,9 @@ custom_functional_group = [
 # display custom functional group
 # custom_g.d("cyanide")
 # print(custom_g.custom_functional_groups)
+
+# REVIEW: create labels
+# Benzene (C6H6) -> XCB
 
 # NOTE: dict of custom functional group
 custom_functional_group = {
