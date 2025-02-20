@@ -207,7 +207,8 @@ class Network(ChemGraphs):
                     for _fn in function_group_graphs:
                         # Create a GraphMatcher object for a functional group
                         fg_matcher = isomorphism.GraphMatcher(
-                            G, _fn, node_match=node_match, edge_match=edge_match)
+                            G, _fn, node_match=node_match,
+                            edge_match=edge_match)
 
                         # Check if a functional group is in the main graph
                         fg_found = fg_matcher.subgraph_is_isomorphic()

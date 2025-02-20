@@ -152,7 +152,9 @@ def create_graph(file: Union[str, Path]) -> Graph:
         raise Exception(f"creating graph is failed! {e}")
 
 
-def g3d(f: Union[str, Path], fig_size: List = [], bg_color: str = '#ffffff', display_legend: bool = True, display_atom_id: bool = True, display_bond_length: bool = False):
+def g3d(f: Union[str, Path], fig_size: List = [], bg_color: str = '#ffffff',
+        display_legend: bool = True, display_atom_id: bool = True,
+        display_bond_length: bool = False):
     '''
     3d graph of a compound
 
@@ -241,7 +243,7 @@ def g3d_by_inchi(inchi: str, fig_size: List = [], bg_color: str = '#ffffff', dis
         raise Exception("inchi is not valid.")
 
 
-def check_functional_group(file: Path: str, functional_groups: List[str] = [], res_format: Literal['original', 'dataframe'] = 'original'):
+def check_functional_group(file: Path | str, functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
     '''
     Check a functional group exists in a compound
 
@@ -287,7 +289,7 @@ def check_functional_group(file: Path: str, functional_groups: List[str] = [], r
         raise Exception(f"checking functional group is failed! {e}")
 
 
-def count_functional_group(file: Path | str, functional_groups: List[str] = [], res_format: Literal['original', 'dataframe'] = 'original'):
+def count_functional_group(file: Path | str, functional_groups: List[Union[str, CustomChemGraph]] = [], res_format: Literal['original', 'dataframe'] = 'original'):
     '''
     Counts the occurrences of functional groups within the structure of a compound.
 
