@@ -143,6 +143,7 @@ class Network(ChemGraphs):
 
         # create graph
         G = self.create_graph()
+
         # check
         if count_functional_group:
             res = self.count_functional_group(G, functional_groups)
@@ -582,3 +583,7 @@ class Network(ChemGraphs):
             self.custom_functional_groups.append(key)
             # dict (key: graph)
             self.custom_functional_group_list[key] = [value]
+
+    # NOTE: search deeper within the main graph
+    def search_deeper_within_main_graph(self):
+        pass
