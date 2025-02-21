@@ -1,5 +1,6 @@
 METHYLEN : ["XX1-C2","C2-H3","C2=XX4"]
 METHOXY: ["XX1-C2","C2-H3","C2-H4","C2-XX5"]
+CB-H : ["XX1-C2","C2-H3","C2=C4","C4-XX5","C4-H5"]
 # CYANIDE: ["C1-C2", "C2#N3"]
 # N#C: ["N1#C2"]
 # FG1: ["N1-C2", "C2-H3"]
