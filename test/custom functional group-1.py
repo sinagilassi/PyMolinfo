@@ -321,12 +321,21 @@ custom_functional_group_file = os.path.join(
     os.getcwd(), 'test', 'custom-functional-group.yml')
 
 # create custom graph from file
-custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
+# custom_g = mi.create_custom_functional_groups(custom_functional_group_file)
 # custom_g.d("METHOXY")
 # custom_g.d("benzene-full")
 # custom_g.d('benzene')
 # custom_g.d('benzene2')
 # custom_g.d('CB')
+
+# NOTE: custom functional group from file (search a subgroup within group)
+custom_functional_group_subgroup_file = os.path.join(
+    os.getcwd(), 'test', 'custom-functional-group-2.yml')
+
+# create custom graph from file
+custom_g = mi.create_custom_functional_groups(
+    custom_functional_group_subgroup_file)
+print(custom_g)
 
 # ==============================================
 # ! FIND CUSTOM FUNCTIONAL GROUP

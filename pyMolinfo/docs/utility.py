@@ -464,7 +464,7 @@ class Utility():
             with open(fileLoc, 'wb') as f:
                 np.save(f, arr)
 
-            print(f"save operation is done.")
+            print("save operation is done.")
         except Exception as e:
             raise Exception(e)
 
@@ -492,6 +492,9 @@ class Utility():
                         f, Loader=yaml.FullLoader)
                 # check not empty
                 if _ref:
+                    # ref keys
+                    # _ref_keys = list(_ref.keys())
+
                     # custom functional group
                     custom_functional_groups = []
                     for key, value in _ref.items():
@@ -500,7 +503,9 @@ class Utility():
                             raise Exception(
                                 "value is not found.")
 
+                        # NOTE: check value format
                         if isinstance(value, list):
+                            # save
                             custom_functional_groups.append(
                                 {
                                     key: value

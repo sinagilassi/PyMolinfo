@@ -385,7 +385,7 @@ def create_custom_functional_groups(functional_groups: Union[Dict[str, List[str]
             if all(isinstance(item, dict) for item in functional_groups):
                 # set
                 custom_functional_groups = functional_groups
-        elif isinstance(functional_groups, str):
+        elif isinstance(functional_groups, (str, Path)):
             # check is a file yml
             custom_functional_groups = Utility.load_custom_functional_group(
                 functional_groups)

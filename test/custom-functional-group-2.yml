@@ -1,3 +1,7 @@
 Chain : ["XX1-C2","C2-H3","C2=C4","C4-XX5","C4-H5"]
 Benzene: ["C1=C2","C2-C3","C3=C4","C4-C5","C5=C6","C6-C1","C1-H7","C2-H8","C3-H9","C4-H10","C5-H11","C6-H12"]
 Chain-in-Benzene: ["Chain","Benzene"]
+Chain2 : ["XX1-C2","C2-H3","C2=C4","C4-XX5","C4-H5"]
+Benzene2: ["C1=C2","C2-C3","C3=C4","C4-C5","C5=C6","C6-C1","C1-H7","C2-H8","C3-H9","C4-H10","C5-H11","C6-H12"]
+Chain-in-Benzene2: ["Chain2","Benzene"]
+Chain3 : ["XX1-C2","C2-H3","C2=C4","C4-XX5","C4-H5"]
