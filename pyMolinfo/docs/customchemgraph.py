@@ -171,11 +171,29 @@ class CustomChemGraph():
                             else:
                                 G.add_edge(atoms[0], atoms[1],
                                            symbol=bond_id, type=1)
+
+                    # add a name to the graph
+                    G.graph['name'] = key
+
                     # save
                     G_list.append((key, G))
-                else:
-                    # save
-                    G_list.append((key, g_sub_collection[key]))
+
+        # looping through g_sub_collection
+        for k, v in g_sub_collection.items():
+            # check
+            if len(v) > 0:
+                # graphs
+                graphs_ = []
+
+                # looping through v
+                for v_ in v:
+                    # get graph
+                    G_ = [item[1] for item in G_list if item[0] == v_][0]
+                    # append
+                    graphs_.append(G_)
+
+                # save graph
+                G_list.append((k, graphs_))
 
         # res
         return G_list

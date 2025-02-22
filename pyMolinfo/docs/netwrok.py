@@ -191,7 +191,7 @@ class Network(ChemGraphs):
         # res
         res_match = []
 
-        # for each functional group
+        # NOTE: for each functional group
         for item in function_groups:
             # * Check instance
             if isinstance(item, str):
@@ -241,24 +241,35 @@ class Network(ChemGraphs):
                         key = list(custom_functional_group.keys())[0]
                         # get value (graph)
                         value = custom_functional_group[key]
+                        print(type(value))
 
-                        # update custom functional group
-                        self.update_custom_functional_group(key, value)
+                        # ANCHOR: check value type
+                        if isinstance(value, nx.Graph):
 
-                        # Create a GraphMatcher object for a functional group
-                        fg_matcher = isomorphism.GraphMatcher(
-                            G, value, node_match=node_match, edge_match=edge_match)
+                            # update custom functional group
+                            self.update_custom_functional_group(key, value)
 
-                        # Check if a functional group is in the main graph
-                        fg_found = fg_matcher.subgraph_is_isomorphic()
-                        # print(f"{key} found in the molecule!")
+                            # Create a GraphMatcher object for a functional group
+                            fg_matcher = isomorphism.GraphMatcher(
+                                G, value, node_match=node_match, edge_match=edge_match)
 
-                        # res
-                        res_match.append({
-                            'function_group': key,
-                            'result': fg_found
-                        })
+                            # Check if a functional group is in the main graph (bool)
+                            fg_found = fg_matcher.subgraph_is_isomorphic()
+                            # print(f"{key} found in the molecule!")
 
+                            # res
+                            res_match.append({
+                                'function_group': key,
+                                'result': fg_found
+                            })
+
+                        elif isinstance(value, list):
+                            # SECTION: list of graphs {already created}
+
+                            # graphs set
+                            graphs_set_ = self.__look_for_group_subgroup(value)
+
+                            # NOTE: start matching
         # REVIEW
         # get a list of functional group names
         function_group_names = [x['function_group'] for x in res_match]
@@ -585,5 +596,68 @@ class Network(ChemGraphs):
             self.custom_functional_group_list[key] = [value]
 
     # NOTE: search deeper within the main graph
-    def search_deeper_within_main_graph(self):
-        pass
+    def __look_for_group_subgroup(self, value):
+        """
+        Look for a group and subgroup within the custom functional groups.
+
+        Parameters
+        ----------
+        value : list
+            list of graphs in a custom functional group (group and subgroup)
+
+        Returns
+        -------
+        graphs_set_ : dict
+            a dictionary of group and subgroup graphs
+        """
+        # check list (2 elements)
+        if len(value) != 2:
+            raise Exception(
+                'custom functional group must have 2 elements')
+
+        # elements
+        graphs_ = {}
+
+        # looping through value
+        for v in value:
+            # graph nodes number
+            nodes_num = len(v.nodes)
+            # graph edges number
+            edges_num = len(v.edges)
+            # graph name
+            name = v.name
+            # save
+            graphs_[name] = {
+                'nodes_num': nodes_num,
+                'edges_num': edges_num,
+                'graph': v
+            }
+
+        # set group and subgroup
+        graphs_set_ = {
+            'group': None,
+            'subgroup': None
+        }
+
+        # reference
+        ref_ = max([v['nodes_num']
+                    for k, v in graphs_.items()])
+
+        # looping through graphs_
+        for k, v in graphs_.items():
+            # check group
+            if v['nodes_num'] >= ref_:
+                graphs_set_['group'] = v['graph']
+            else:
+                graphs_set_['subgroup'] = v['graph']
+
+        # check
+        if graphs_set_['group'] is None:
+            raise Exception('group not found!')
+
+        # check
+        if graphs_set_['subgroup'] is None:
+            raise Exception('subgroup not found!')
+
+        # return
+        return graphs_set_
