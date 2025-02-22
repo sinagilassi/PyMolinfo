@@ -241,7 +241,7 @@ class Network(ChemGraphs):
                         key = list(custom_functional_group.keys())[0]
                         # get value (graph)
                         value = custom_functional_group[key]
-                        print(type(value))
+                        # print(type(value))
 
                         # ANCHOR: check value type
                         if isinstance(value, nx.Graph):
@@ -270,6 +270,67 @@ class Network(ChemGraphs):
                             graphs_set_ = self.__look_for_group_subgroup(value)
 
                             # NOTE: start matching
+                            if graphs_set_['group'] is not None and graphs_set_['subgroup'] is not None:
+                                # Create a GraphMatcher object for a functional group
+                                fg_matcher = isomorphism.GraphMatcher(
+                                    G, graphs_set_['group'], node_match=node_match, edge_match=edge_match)
+
+                                # Check if a functional group is in the main graph (bool)
+                                fg_found = fg_matcher.subgraph_is_isomorphic()
+
+                                # SECTION: group found
+                                if fg_found:
+                                    # group sections
+                                    group_sections = list(
+                                        fg_matcher.subgraph_isomorphisms_iter())
+
+                                    # remove duplicated group sections
+                                    group_sections_filtered = self.remove_duplicated_subgraphs(
+                                        group_sections)
+
+                                    if len(group_sections_filtered) == 0:
+                                        raise Exception('group not found!')
+
+                                    # counter
+                                    fg_subgroups_num = 0
+                                    # looping through group sections
+                                    for gs_filtered in group_sections_filtered:
+
+                                        # create group pattern within the main graph
+                                        group_pattern = G.subgraph(
+                                            gs_filtered.keys())
+
+                                        # Create a GraphMatcher object for a functional group
+                                        fg_matcher_subgroup = isomorphism.GraphMatcher(
+                                            group_pattern, graphs_set_['subgroup'], node_match=node_match, edge_match=edge_match)
+
+                                        # Check if a functional group is in the main graph (bool)
+                                        fg_found_subgroup = fg_matcher_subgroup.subgraph_is_isomorphic()
+
+                                        # check
+                                        if fg_found_subgroup:
+                                            fg_subgroups_num += 1
+
+                                    # check
+                                    if fg_subgroups_num > 0:
+                                        # res
+                                        res_match.append({
+                                            'function_group': key,
+                                            'result': fg_found_subgroup
+                                        })
+                                    else:
+                                        # res
+                                        res_match.append({
+                                            'function_group': key,
+                                            'result': False
+                                        })
+                                else:
+                                    # res
+                                    res_match.append({
+                                        'function_group': key,
+                                        'result': False
+                                    })
+
         # REVIEW
         # get a list of functional group names
         function_group_names = [x['function_group'] for x in res_match]
@@ -387,44 +448,118 @@ class Network(ChemGraphs):
                         # get value (graph)
                         value = custom_functional_group[key]
 
-                        # update custom functional group
-                        self.update_custom_functional_group(key, value)
+                        # ANCHOR: check value type
+                        # SECTION: single graph
+                        if isinstance(value, nx.Graph):
 
-                        # Create a GraphMatcher object for a functional group
-                        fg_matcher = isomorphism.GraphMatcher(
-                            G, value, node_match=node_match, edge_match=edge_match)
+                            # update custom functional group
+                            self.update_custom_functional_group(key, value)
 
-                        # Check if a functional group is in the main graph
-                        # fg_found = fg_matcher.subgraph_is_isomorphic()
-                        # print(f"{key} found in the molecule!")
+                            # Create a GraphMatcher object for a functional group
+                            fg_matcher = isomorphism.GraphMatcher(
+                                G, value, node_match=node_match, edge_match=edge_match)
 
-                        # ! Check if a functional group is in the main graph
-                        for subgraph in fg_matcher.subgraph_isomorphisms_iter():
-                            # Convert the subgraph to a canonical form
-                            canonical_subgraph = tuple(
-                                sorted(subgraph.keys()))
+                            # Check if a functional group is in the main graph
+                            # fg_found = fg_matcher.subgraph_is_isomorphic()
+                            # print(f"{key} found in the molecule!")
 
-                            # Check if the subgraph has been seen before
-                            if canonical_subgraph not in seen_subgraphs:
-                                seen_subgraphs.add(canonical_subgraph)
-                                fg_found_any = True
-                                fg_count += 1
+                            # ! Check if a functional group is in the main graph
+                            for subgraph in fg_matcher.subgraph_isomorphisms_iter():
+                                # Convert the subgraph to a canonical form
+                                canonical_subgraph = tuple(
+                                    sorted(subgraph.keys()))
 
-                        # check
-                        if fg_found_any:
-                            # print(f"{item} found in the molecule!")
-                            res_match.append({
-                                'function_group': key,
-                                'result': True,
-                                'count': fg_count
-                            })
-                        else:
-                            # print(f"{item} not found in the molecule.")
-                            res_match.append({
-                                'function_group': key,
-                                'result': False,
-                                'count': 0
-                            })
+                                # Check if the subgraph has been seen before
+                                if canonical_subgraph not in seen_subgraphs:
+                                    seen_subgraphs.add(canonical_subgraph)
+                                    fg_found_any = True
+                                    fg_count += 1
+
+                            # check
+                            if fg_found_any:
+                                # print(f"{item} found in the molecule!")
+                                res_match.append({
+                                    'function_group': key,
+                                    'result': True,
+                                    'count': fg_count
+                                })
+                            else:
+                                # print(f"{item} not found in the molecule.")
+                                res_match.append({
+                                    'function_group': key,
+                                    'result': False,
+                                    'count': 0
+                                })
+                        # SECTION: list of graphs {already created}
+                        elif isinstance(value, list):
+                            # graphs set
+                            graphs_set_ = self.__look_for_group_subgroup(value)
+
+                            # NOTE: start matching
+                            if graphs_set_['group'] is not None and graphs_set_['subgroup'] is not None:
+                                # Create a GraphMatcher object for a functional group
+                                fg_matcher = isomorphism.GraphMatcher(
+                                    G, graphs_set_['group'], node_match=node_match, edge_match=edge_match)
+
+                                # Check if a functional group is in the main graph (bool)
+                                fg_found = fg_matcher.subgraph_is_isomorphic()
+
+                                # SECTION: group found
+                                if fg_found:
+                                    # group sections
+                                    group_sections = list(
+                                        fg_matcher.subgraph_isomorphisms_iter())
+
+                                    # remove duplicated group sections
+                                    group_sections_filtered = self.remove_duplicated_subgraphs(
+                                        group_sections)
+
+                                    if len(group_sections_filtered) == 0:
+                                        raise Exception('group not found!')
+
+                                    # counter
+                                    fg_subgroups_num = 0
+                                    # looping through group sections
+                                    for gs_filtered in group_sections_filtered:
+
+                                        # create group pattern within the main graph
+                                        group_pattern = G.subgraph(
+                                            gs_filtered.keys())
+
+                                        # Create a GraphMatcher object for a functional group
+                                        fg_matcher_subgroup = isomorphism.GraphMatcher(
+                                            group_pattern, graphs_set_['subgroup'], node_match=node_match, edge_match=edge_match)
+
+                                        # Check if a functional group is in the main graph (bool)
+                                        fg_found_subgroup = fg_matcher_subgroup.subgraph_is_isomorphic()
+
+                                        # check
+                                        if fg_found_subgroup:
+                                            fg_subgroups_num += 1
+
+                                    # check
+                                    if fg_subgroups_num > 0:
+                                        # res
+                                        res_match.append({
+                                            'function_group': key,
+                                            'result': fg_found_subgroup,
+                                            'count': fg_subgroups_num
+                                        })
+                                    else:
+                                        # res
+                                        res_match.append({
+                                            'function_group': key,
+                                            'result': False,
+                                            'count': 0
+
+                                        })
+                                else:
+                                    # res
+                                    res_match.append({
+                                        'function_group': key,
+                                        'result': False,
+                                        'count': 0
+                                    })
 
         # get a list of functional group names
         function_group_names = [x['function_group'] for x in res_match]
@@ -596,7 +731,7 @@ class Network(ChemGraphs):
             self.custom_functional_group_list[key] = [value]
 
     # NOTE: search deeper within the main graph
-    def __look_for_group_subgroup(self, value):
+    def __look_for_group_subgroup(self, value) -> dict[str, nx.Graph]:
         """
         Look for a group and subgroup within the custom functional groups.
 
@@ -634,10 +769,7 @@ class Network(ChemGraphs):
             }
 
         # set group and subgroup
-        graphs_set_ = {
-            'group': None,
-            'subgroup': None
-        }
+        graphs_set_ = {}
 
         # reference
         ref_ = max([v['nodes_num']
@@ -661,3 +793,39 @@ class Network(ChemGraphs):
 
         # return
         return graphs_set_
+
+    def remove_duplicated_subgraphs(self, subgraphs):
+        """
+        Remove duplicated subgraphs.
+
+        Parameters
+        ----------
+        subgraphs : list
+            list of subgraphs
+        """
+        try:
+            # Create a set to store tuples of dictionaries
+            seen = set()
+
+            # Filter out dictionaries with equal keys in different orders
+            filtered_data = []
+            for i, d in enumerate(subgraphs):
+                # print(f"d{i+1}: {d}")
+                # print(f"d keys: {d.keys()}")
+                # print(f"d sorted keys: {sorted(d.keys())}")
+                # print(f"d values: {d.values()}")
+                # print("-"*5)
+
+                # Convert dictionary to tuple of items (key, value pairs), sorted by keys
+                sorted_tuple = tuple(sorted(d.keys()))
+
+                # Check if the tuple has been seen before
+                if sorted_tuple not in seen:
+                    filtered_data.append(d)
+                    seen.add(sorted_tuple)
+
+            # return
+            return filtered_data
+
+        except Exception as e:
+            raise Exception(f"Remove duplicated subgraphs error: {e}")

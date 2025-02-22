@@ -274,10 +274,10 @@ comp1 = mi.compound(sdf_file)
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
 #                                        'tertiary-alcohol'], res_format='dataframe')
 
-res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
+# res, comp1 = mi.count_functional_group(sdf_file, res_format='dataframe')
 
-print(res)
-print(comp1.functional_groups)
+# print(res)
+# print(comp1.functional_groups)
 # comp1.g3d_functional_group('hydroxyl')
 
 # =================================
