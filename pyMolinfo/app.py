@@ -398,3 +398,47 @@ def create_custom_functional_groups(functional_groups: Union[Dict[str, List[str]
         return CustomChemGraphC
     except Exception as e:
         raise Exception(f'creating custom functional group is failed! {e}')
+
+
+def combine_custom_functional_groups(functional_groups: Union[Dict[str, List[str]], List[Dict[str, List[str]]], Path, str]) -> CustomChemGraph:
+    '''
+    Combines custom functional groups based on the following example.
+
+    Parameters
+    ----------
+    functional_groups : list[dict] or dict
+        functional group
+
+    Returns
+    -------
+    custom_functional_groups : list[dict]
+        a list of all custom functional group
+
+    Examples
+    --------
+    ```python
+    # fg1: CH2-O
+    # fg2: CH2CHO
+    # List of custom functional groups
+    custom_functional_group = [
+        {'fg1': ["C1-H1","C1-H2","C1-O1"]},
+        {'fg2': ["fg1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
+    ]
+
+    # Dict of custom functional groups
+    custom_functional_group = {
+        'fg1': ["C1-H1","C1-H2","C1-O1"],
+        'fg2': ["fg1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]
+    }
+    ```
+    '''
+    try:
+        # create custom functional group
+        CustomChemGraphC = create_custom_functional_groups(functional_groups)
+
+        # combine custom functional groups
+        CustomChemGraphC.combine_custom_graph()
+        # res
+        return CustomChemGraphC
+    except Exception as e:
+        raise Exception(f'creating custom functional group is failed! {e}')
