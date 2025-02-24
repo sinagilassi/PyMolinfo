@@ -255,17 +255,23 @@ comp1 = mi.compound(sdf_file)
 # ! CREATE MOLECULE GRAPH
 # ================================
 # molecule source
-molecule_src = {
-    'MainChain': ["C1-C2", "C2-C3", "C3*{Chain1}", "C3-C4", "C4*{Chain2}", "C4-C5", "C5-C6"],
-    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
-    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
-}
+# molecule_src = {
+#     'MainChain': ["C1-C2", "C2-C3", "C3*{Chain1}", "C3-C4", "C4*{Chain2}", "C4-C5", "C5-C6"],
+#     'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+#     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+# }
 
 # molecule_src = {
 #     'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5-C6", "C6=C1", "C6*{Chain2}"],
 #     'Chain1': ["C1=C2", "C2-C3", "C3=*"],
 #     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
 # }
+
+molecule_src = {
+    'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5*{Chain1}", "C5-C6", "C6=C1", "C6*{Chain2}"],
+    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+}
 
 # * create molecule graph
 mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
