@@ -261,11 +261,11 @@ molecule_src = {
     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
 }
 
-molecule_src = {
-    'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5-C6", "C6=C1", "C6*{Chain2}"],
-    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
-    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
-}
+# molecule_src = {
+#     'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5-C6", "C6=C1", "C6*{Chain2}"],
+#     'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+#     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+# }
 
 # * create molecule graph
 mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
@@ -273,6 +273,7 @@ print(mol_graph)
 # display molecule graph
 mol_graph.d("my_molecule")
 
+stop = 1
 # ================================
 # ! CHECK FUNCTIONAL GROUP
 # ================================
