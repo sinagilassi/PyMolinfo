@@ -252,6 +252,28 @@ comp1 = mi.compound(sdf_file)
 #     'InChI=1S/C14H22O6/c1-11(2)13(15)19-9-7-17-5-6-18-8-10-20-14(16)12(3)4/h1,3,5-10H2,2,4H3')
 
 # ================================
+# ! CREATE MOLECULE GRAPH
+# ================================
+# molecule source
+molecule_src = {
+    'MainChain': ["C1-C2", "C2-C3", "C3*{Chain1}", "C3-C4", "C4*{Chain2}", "C4-C5", "C5-C6"],
+    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+}
+
+molecule_src = {
+    'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5-C6", "C6=C1", "C6*{Chain2}"],
+    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+}
+
+# * create molecule graph
+mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
+print(mol_graph)
+# display molecule graph
+mol_graph.d("my_molecule")
+
+# ================================
 # ! CHECK FUNCTIONAL GROUP
 # ================================
 # network

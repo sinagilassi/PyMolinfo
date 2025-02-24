@@ -12,6 +12,7 @@ import numpy as np
 from datetime import date
 from random import randint
 import yaml
+from typing import List, Dict
 
 
 class Utility():
@@ -469,7 +470,7 @@ class Utility():
             raise Exception(e)
 
     @staticmethod
-    def load_custom_functional_group(file_location):
+    def load_custom_functional_group(file_location) -> List[Dict[str, List[str]]]:
         '''
         load custom functional group
 
@@ -496,7 +497,7 @@ class Utility():
                     # _ref_keys = list(_ref.keys())
 
                     # custom functional group
-                    custom_functional_groups = []
+                    custom_functional_groups: List[Dict[str, List[str]]] = []
                     for key, value in _ref.items():
                         # check value
                         if not value:

@@ -12,7 +12,7 @@ from .config import packageShortName
 from .config import __version__
 from .config import __description__
 from .config import __author__
-from .docs import MolParser, Compound, CustomChemGraph, Utility
+from .docs import MolParser, Compound, CustomChemGraph, Utility, Molecule
 
 
 def main():
@@ -400,44 +400,57 @@ def create_custom_functional_groups(functional_groups: Union[Dict[str, List[str]
         raise Exception(f'creating custom functional group is failed! {e}')
 
 
-def combine_custom_functional_groups(functional_groups: Union[Dict[str, List[str]], List[Dict[str, List[str]]], Path, str]) -> CustomChemGraph:
+def create_molecule_graph(molecule_src: Union[Dict[str, List[str]], Path], molecule_name: str = 'MainChain') -> CustomChemGraph:
     '''
-    Combines custom functional groups based on the following example.
+    Make a molecule graph from custom functional groups based on the following example.
 
     Parameters
     ----------
-    functional_groups : list[dict] or dict
-        functional group
+    molecule_src : Dict[str, List[str]] | str
+        molecule source
+    molecule_name : str
+        molecule name (default 'MainChain')
 
     Returns
     -------
-    custom_functional_groups : list[dict]
-        a list of all custom functional group
+    molecule : Molecule
+        molecule object
 
     Examples
     --------
     ```python
-    # fg1: CH2-O
-    # fg2: CH2CHO
-    # List of custom functional groups
-    custom_functional_group = [
-        {'fg1': ["C1-H1","C1-H2","C1-O1"]},
-        {'fg2': ["fg1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]}
-    ]
-
-    # Dict of custom functional groups
-    custom_functional_group = {
-        'fg1': ["C1-H1","C1-H2","C1-O1"],
-        'fg2': ["fg1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]
+    # molecule source
+    molecule_src = {
+        'MainChain': ["C1-C2","C2-C3","C3*{Chain1}","C3-C4","C4*{Chain2}","C4-C5","C5-C6"],
+        'Chain1': ["C1=C2","C2-C3","C3=*"],
+        'Chain2' : ["*-C1","C1=C2","C2-XX3"]
     }
     ```
+
+    Notes
+    -----
+    - `*` is a connection point
+    - `{}` is a reference to another chain
+    - C3*{Chain1} means C3 is connected to Chain1 from C3=*
+    - Bond index starts from 1 in all chains
+    - Bond type: single bond (-), double bond (=), triple bond (#)
     '''
     try:
-        # create custom functional group
-        CustomChemGraphC = create_custom_functional_groups(functional_groups)
+        # check format
+        if isinstance(molecule_src, (str, Path)):
+            # check is a file yml
+            _mol_src = Utility.load_custom_functional_group(
+                molecule_src)
 
-        # combine custom functional groups
-        CustomChemGraphC.combine_custom_graph()
+        # init molecule
+        MoleculeC = Molecule(molecule_src, molecule_name)
+
+        # build molecule
+        _, _, _, molecule = MoleculeC.build()
+
+        # custom chem graph
+        CustomChemGraphC = CustomChemGraph([molecule])
+
         # res
         return CustomChemGraphC
     except Exception as e:
