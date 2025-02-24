@@ -81,11 +81,16 @@ class Element():
         '''
         find desired atom properties
 
-        args:
-            atom_symbol: atom symbol
-            atom_properties: a list of desired properties
+        Parameters
+        ----------
+        atom_symbol : str
+            atom symbol
+        atom_properties : list
+            a list of desired properties
 
-        return:
+        Returns
+        -------
+        dict
             a dict of property
         '''
         try:
@@ -123,12 +128,17 @@ class Element():
         '''
         find desired atom properties
 
-        args:
-            atom_property_name: atom property such as atomic number
-            atom_property_value: carbon = 6
+        Parameters
+        ----------
+        atom_property_name : str
+            atom property such as atomic number
+        atom_property_value : list
+            a list of desired properties such as carbon = 6
 
-        return:
-            string
+        Returns
+        -------
+        dict
+            a dict of property
         '''
         try:
             # size

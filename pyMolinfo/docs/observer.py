@@ -185,15 +185,51 @@ class Observer():
         '''
         generate a circle path containing xyz points in the cartesian coordinate
 
-        args:
-            r: distance between observer points and element points
-            tetaNo: number of circle paths
-            phiNo: number of observer points in a circle path
-            tetaLimits=[]: angles define the limit of observer, default: [0, pi]
-            phiLimit=[]: angles define the limit of observer, default: [0, 2pi]
+        Parameters
+        ----------
+        r : float
+            distance between observer points and element points
+        tetaNo : int
+            number of circle paths
+        phiNo : int
+            number of observer points in a circle path
+        tetaLimits : list
+            angles define the limit of observer, default: [0, pi]
+        phiLimit : list
+            angles define the limit of observer, default: [0, 2pi]
 
-        hints:
-            the last obs point is the mirror of angle 0, thus it is ignored.
+        Returns
+        -------
+        xyzPoints : numpy.ndarray
+            [number of circles, number of points in a circle, [x,y,z] points]
+        teta : numpy.ndarray
+            teta angles
+        phi : numpy.ndarray
+            phi angles
+        tetaStep : float
+            teta step
+        phiStep : float
+            phi step
+        angFreq : numpy.ndarray
+            angular frequency
+        freq : float
+            frequency
+        period : float
+            period
+        sampleNo : int
+            sampling no [1 second]
+        samplingRate : int
+            sampling rate [number of samples in a second]
+        samplingInterval : float
+            sampling interval
+        timeSpan : numpy.ndarray
+            time span [for one loop]
+        timeSpanTotal : numpy.ndarray
+            total time span
+
+        Notes
+        -----
+        - The last obs point is the mirror of angle 0, thus it is ignored.
         '''
         # rad [rad]
         if len(tetaLimits) > 0:

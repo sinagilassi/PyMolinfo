@@ -17,7 +17,17 @@ class Structure():
     @staticmethod
     def CenterPoints(xyzList):
         '''
-        find the center coordination of an object
+        Find the center coordination of an object
+
+        Parameters
+        ----------
+        xyzList : list
+            list of xyz points
+
+        Returns
+        -------
+        objectBaseCoordinate : list
+            center coordination of an object
         '''
         # set
         xyzList = np.array(xyzList)
@@ -64,6 +74,20 @@ class Structure():
     def CenterObject(xyzList, centerPoint):
         '''
         move an object to the center of the origin [0,0,0]
+
+        Parameters
+        ----------
+        xyzList : list
+            list of xyz points
+        centerPoint : list
+            center point of the object
+
+        Returns
+        -------
+        newCenterPoints : list
+            new center points of the object
+        movingCoordinate : list
+            moving coordinate of the object
         '''
         originPoint = np.array([0, 0, 0])
         movingCoordinate = originPoint - centerPoint
@@ -100,9 +124,19 @@ class Structure():
         '''
         circle coordination with teta and r
 
-        args:
-        teta: angle with x-axis
-        r: circle radius
+        Parameters
+        ----------
+        teta : float
+            angle with x-axis
+        r : float
+            circle radius
+
+        Returns
+        -------
+        x : float
+            x coordinate
+        y : float
+            y coordinate
         '''
         x = r*np.cos(teta)
         y = r*np.sin(teta)
@@ -124,8 +158,22 @@ class Structure():
     def PeriodLimitGenerator(n=100, w=1, limits=[0, 0]):
         '''
         set array of 2pi period
-        args:
-            limits: list of min, max to be removed from the period
+
+        Parameters
+        ----------
+        n : int
+            number of records
+        w : int
+            number of periods
+        limits : list
+            list of min, max to be removed from the period
+
+        Returns
+        -------
+        obsAngles : list
+            list of angles
+        obsAnglesStep : float
+            step of angles
         '''
         # print(f"limits: {limits}")
         point1 = limits[0]
@@ -142,8 +190,15 @@ class Structure():
         '''
         convert spherical to cartesian points
 
-        args:
-            rtpPoint: r, teta, phi of spherical coordinate
+        Parameters
+        ----------
+        rtPoint : list
+            r, teta, phi of spherical coordinate
+
+        Returns
+        -------
+        xyzPoint : list
+            x, y, z of cartesian coordinate
         '''
         # spherical
         r = rtpPoint[0]
@@ -170,8 +225,15 @@ class Structure():
         '''
         convert cartesian to spherical coordinate
 
-        args:
-            xyzPoint: x, y, z of cartesian coordinate
+        Parameters
+        ----------
+        xyzPoint : list
+            x, y, z of cartesian coordinate
+
+        Returns
+        -------
+        rtpPoint : list
+            r, teta, phi of spherical coordinate
         '''
         # cartesian
         x = xyzPoint[0]
@@ -210,4 +272,4 @@ class Structure():
 
             return elList
         except Exception as e:
-            raise
+            raise Exception(f"fail to create formula: {e}")

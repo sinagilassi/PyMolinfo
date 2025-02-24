@@ -47,11 +47,19 @@ class Utility():
         '''
         check file format
 
-        args:
-            filePath: file name dir
+        Parameters
+        ----------
+        filePath : str
+            file path
 
-        return:
-            file directory, file name, file format
+        Returns
+        -------
+        fileDir : str
+            file directory
+        fileName : str
+            file name
+        fileFormat : str
+            file format
         '''
         # check file exist
         if os.path.isfile(filePath):
@@ -274,6 +282,7 @@ class Utility():
         except Exception as e:
             raise Exception(e)
 
+    @staticmethod
     def SelectFile(list_file_names, file_name_ids, file_name_prefix='cid'):
         '''
         select files from a file list based on a query
@@ -389,8 +398,9 @@ class Utility():
             # res
             return _save_location, csvFileName
         except Exception as e:
-            raise
+            raise Exception(f"Error: {e}")
 
+    @staticmethod
     def ConvertCSVContentToList(csv_content):
         '''
         convert csv content (string) to list
@@ -405,9 +415,10 @@ class Utility():
         list
             list of csv content
 
-        hint:
-            list[0]: column head
-            list[1]: records
+        Notes
+        -----
+        - list[0]: column head
+        - list[1]: records
 
         '''
         try:

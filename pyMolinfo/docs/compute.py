@@ -27,9 +27,19 @@ class Compute():
         '''
         build a matrix containing a matrix of distance between two different atoms
 
-        args:
-            xyzList: xyz list of atoms
-            atomName: atom name list such as ['C','H','H','H','H']
+        Parameters
+        ----------
+        xyzList : list
+            xyz list of atoms
+        atomName : list
+            atom name list such as ['C','H','H','H','H']
+
+        Returns
+        -------
+        atomLength : list
+            distance matrix
+        distance_res : list
+            distance result
         '''
         # dict for atom index
         distance_res = []
@@ -201,9 +211,17 @@ def CalculateMolecularMass(atom_elements, element_source):
     '''
     calculate molecular mass [g/mol]
 
-    args:
-        atom_elements: such as C, H
-        element_source: periodic element table
+    Parameters
+    ----------
+    atom_elements : list
+        atom elements such as ['C', 'H']
+    element_source : object
+        periodic element table
+
+    Returns
+    -------
+    res : float
+        molecular mass
     '''
     try:
         # # check
