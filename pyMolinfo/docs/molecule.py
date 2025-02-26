@@ -33,7 +33,7 @@ class Molecule():
             molecule_src_checked = self.check_molecule(self.molecule_src)
 
             # SECTION: construct molecule
-            chain_info, molecule, constructed_molecule = self.construct_molecule(
+            chain_info, molecule, constructed_molecule = self.construct_molecule_v2(
                 molecule_src_checked)
 
             # create molecule
@@ -309,6 +309,251 @@ class Molecule():
                         molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][0]}"
                     else:
                         molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][0]}{atom1}{index1}"
+
+            # combine the main chain and other chains
+            for key, chain in molecule.items():
+                if key == main_chain:
+                    constructed_molecule.extend(chain)
+
+            # chain info
+            for key, chain in chain_info.items():
+                constructed_molecule.extend(chain['bonds'])
+
+            return chain_info, molecule, constructed_molecule
+        except Exception as e:
+            raise Exception(
+                f"An error occurred while constructing the molecule: {e}")
+
+    def construct_molecule_v2(self, molecule_src: Dict[str, List[str]]):
+        """
+        Constructs the molecule from the given molecule source.
+
+        Parameters
+        ----------
+        molecule_src : dict
+            A dictionary containing lists of strings representing bonds between atoms in a molecule.
+
+        Returns
+        -------
+        dict
+            A dictionary containing lists of strings representing bonds between atoms in a molecule.
+        """
+        try:
+            # create a copy of the molecule source
+            molecule = {
+                key: chain.copy() for key, chain in molecule_src.items()}
+            # print(f'molecule: {molecule}')
+
+            # search for the main chain
+            main_chain = self.search_for_main_chain(molecule)
+            # print(f'main_chain: {main_chain}')
+
+            chain_info: Dict[str, Dict[str, List[str]]] = {}
+
+            # reset
+            highest_index = 0
+
+            # check if the main chain is found
+            if main_chain:
+                # get the highest index from the main chain
+                highest_index = self.extract_highest_index(
+                    molecule[main_chain])
+                # print(f'highest_index: {highest_index}')
+
+                # update index of other chains
+                for key, chain in molecule.items():
+                    if key != main_chain:
+                        # create chain info
+                        chain_info[key] = {
+                            'bonds': [],
+                            'gate': []
+                        }
+
+                        # update the index of the chain
+                        for i, bond in enumerate(chain):
+
+                            # SECTION: define pattern to match bonds
+                            pattern = r"([A-Za-z]+)(\d+)([-=#])([A-Za-z]+)(\d+)"
+                            # match the pattern
+                            match_bond = re.match(pattern, bond)
+                            # augment the index
+                            if match_bond:
+                                # extract atoms and indices
+                                atom1, index1, bond_order, atom2, index2 = match_bond.groups()
+                                # update the index
+                                index1 = str(int(index1) + highest_index)
+                                index2 = str(int(index2) + highest_index)
+                                # update the bond
+                                molecule[key][i] = f"{atom1}{index1}{bond_order}{atom2}{index2}"
+                                # update the chain info
+                                chain_info[key]['bonds'].append(
+                                    molecule[key][i])
+
+                                # last index
+                                # check the larger index
+                                last_index = int(index1) if int(
+                                    index1) > int(index2) else int(index2)
+
+                            # SECTION: gate pattern
+                            pattern_gate = r"([A-Za-z]+)(\d+)([-=#])\*"
+                            # match the pattern
+                            match_gate = re.match(pattern_gate, bond)
+                            # augment the index
+                            if match_gate:
+                                # extract atoms and indices
+                                atom1, index1, bond_order = match_gate.groups()
+                                # update the index
+                                index1 = str(int(index1) + highest_index)
+                                # update the bond
+                                molecule[key][i] = f"{bond_order}{atom1}{index1}"
+                                # update the chain info
+                                chain_info[key]['gate'].append(
+                                    molecule[key][i])
+
+                                # last index
+                                last_index = int(index1)
+
+                            # SECTION: gate pattern
+                            pattern_gate = r"\*([-=#])([A-Za-z]+)(\d+)"
+                            # match the pattern
+                            match_gate = re.match(pattern_gate, bond)
+                            # augment the index
+                            if match_gate:
+                                # extract atoms and indices
+                                bond_order, atom1, index1 = match_gate.groups()
+                                # update the index
+                                index1 = str(int(index1) + highest_index)
+                                # update the bond
+                                molecule[key][i] = f"{atom1}{index1}{bond_order}"
+                                # update the chain info
+                                chain_info[key]['gate'].append(
+                                    molecule[key][i])
+
+                                # last index
+                                last_index = int(index1)
+
+                        # update highest index
+                        highest_index = last_index
+                        # print(f"highest_index: {highest_index}")
+
+            # gat index
+            gate_index = 0
+
+            # combine the main chain and other chains
+            constructed_molecule: List[str] = []
+            # find the gate atoms
+            for items in molecule[main_chain]:
+                # SECTION: define pattern
+                pattern_gate = r"([A-Za-z]+)(\d+)\*\{([A-Za-z0-9]+)\}"
+                # match the pattern
+                match_gate = re.match(pattern_gate, items)
+                # extract the gate atoms
+                if match_gate:
+                    # extract atoms and indices
+                    atom1, index1, gate = match_gate.groups()
+                    # find element index in molecule['main_chain']
+                    element_index = molecule[main_chain].index(items)
+
+                    # gate index num
+                    gate_num = len(chain_info[gate]['gate'])
+
+                    # update
+                    # check start with letter or number
+                    # for m in range(len(chain_info[gate]['gate'])):
+                    #     # TODO: check gate-index
+                    #     if gate_index > 0:
+                    #         # check
+                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                    #             molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                    #         else:
+                    #             molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+                    #         # update gate index
+                    #         gate_index += 1
+                    #     else:
+                    #         # check
+                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                    #             _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                    #         else:
+                    #             _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+
+                    #         # append
+                    #         molecule[main_chain].append(_connection)
+                    #         # update gate index
+                    #         gate_index += 1
+
+                    # update
+                    # check start with letter or number
+                    # TODO: check gate-index
+                    if gate_num == 1:
+                        if chain_info[gate]['gate'][0].startswith(('-', '=', '#')):
+                            molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][0]}"
+                        else:
+                            molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][0]}{atom1}{index1}"
+                    else:
+                        for m in range(gate_num):
+                            if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                                _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                            else:
+                                _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+
+                            # append
+                            if m == 0:
+                                molecule[main_chain][element_index] = _connection
+                            else:
+                                molecule[main_chain].append(_connection)
+
+                pattern_gate = r"\{([A-Za-z0-9]+)\}\*([A-Za-z]+)(\d+)"
+                # match the pattern
+                match_gate = re.match(pattern_gate, items)
+                # extract the gate atoms
+                if match_gate:
+                    # extract atoms and indices
+                    gate, atom1, index1 = match_gate.groups()
+                    # find element index in molecule['main_chain']
+                    element_index = molecule[main_chain].index(items)
+
+                    # gate index num
+                    gate_num = len(chain_info[gate]['gate'])
+
+                    # check start with letter or number
+                    # for m in range(len(chain_info[gate]['gate'])):
+                    #     # TODO: check gate-index
+                    #     if gate_index > 0:
+                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                    #             molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                    #         else:
+                    #             molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+                    #         # update gate index
+                    #         gate_index += 1
+                    #     else:
+                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                    #             _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                    #         else:
+                    #             _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+                    #         # append
+                    #         molecule[main_chain].append(_connection)
+                    #         # update gate index
+                    #         gate_index += 1
+
+                    # update
+                    # check start with letter or number
+                    # TODO: check gate-index
+                    if gate_num == 1:
+                        if chain_info[gate]['gate'][0].startswith(('-', '=', '#')):
+                            molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][0]}"
+                        else:
+                            molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][0]}{atom1}{index1}"
+                    else:
+                        for m in range(len(chain_info[gate]['gate'])):
+                            if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
+                                _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
+                            else:
+                                _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
+                            # append
+                            if m == 0:
+                                molecule[main_chain][element_index] = _connection
+                            else:
+                                molecule[main_chain].append(_connection)
 
             # combine the main chain and other chains
             for key, chain in molecule.items():

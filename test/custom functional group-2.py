@@ -196,43 +196,6 @@ comp1 = mi.compound(sdf_file)
 # NOTE: functional groups
 # print(comp1.functional_groups)
 
-# ===============================
-# ! GEOMETRY
-# ===============================
-# distance
-# res_distance = comp1.distance_matrix(dataframe=True)
-# pp(res_distance)
-
-# _distance = comp1.distance_atoms(['O1', 'C2'])
-# print(_distance)
-# _distance = comp1.distance_atoms(['O1', 'H3'])
-# print(_distance)
-# _distance = comp1.distance_atoms(['O1', 'H4'])
-# print(_distance)
-# _distance = comp1.distance_atoms(['O1', 'H5'])
-# print(_distance)
-# _distance = comp1.distance_atoms(['O1', 'H6'])
-# print(_distance)
-# _distance = comp1.distance_atoms(['C2', 'H3'])
-# print(_distance)
-
-# angle
-# res_angle = comp1.angle_atoms(['O1', 'C2', 'H3'])
-# print(res_angle)
-
-# res_angle = comp1.angle_atoms(['O1', 'C2', 'H4'])
-# print(res_angle)
-# res_angle = comp1.angle_atoms(['O1', 'C2', 'H5'])
-# print(res_angle)
-# res_angle = comp1.angle_atoms(['O1', 'C2', 'H6'])
-# print(res_angle)
-# res_angle = comp1.angle_atoms(['C2', 'H5', 'H3'])
-# print(res_angle)
-
-# dihedral angle
-# res_dihedral = comp1.d_angle_atoms(['H18', 'C10', 'C7', 'H15'])
-# print(res_dihedral)
-
 # ================================
 # ! CREATE GRAPH
 # ================================
@@ -267,20 +230,40 @@ comp1 = mi.compound(sdf_file)
 #     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
 # }
 
-molecule_src = {
-    'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5*{Chain1}", "C5-C6", "C6=C1", "C6*{Chain2}"],
-    'Chain1': ["C1=C2", "C2-C3", "C3=*"],
-    'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+# molecule_src_1 = {
+#     'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C3*{Chain1}", "C4=C5", "C5*{Chain1}", "C5-C6", "C6=C1", "C6*{Chain2}"],
+#     'Chain1': ["C1=C2", "C2-C3", "C3=*"],
+#     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
+# }
+
+molecule_src_1 = {
+    'MainChain': ["C1*{Chain1}", "C1-C2", "C2*{Chain2}"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=XX4"],
+    'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=XX4"],
 }
 
-molecule_src = {
+molecule_src_2 = {
     'MainChain': ["C1*{Chain1}", "C1-C2", "C2*{Chain2}"],
-    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-C5", "C5=*"],
-    'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-C5", "C5=*"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=*"],
+}
+
+molecule_src_3 = {
+    'MainChain': ["C1*{Chain1}", "C1-C2", "C2*{Chain2}"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=XX4"],
+    'Chain2': ["XX1-C2", "C2=C3", "C3-C4", "C4=*"],
+}
+
+molecule_src_4 = {
+    'MainChain': ["C1*{Chain1}", "C1-C2", "C2*{Chain2}", "C2-C3", "C3*{Chain3}"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=*"],
+    'Chain3': ["*-C1", "C1=C2", "C2-C3"],
 }
 
 # * create molecule graph
-mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
+mol_graph = mi.create_molecule_graph(
+    molecule_src_4, molecule_name='my_molecule')
 print(mol_graph)
 # display molecule graph
 mol_graph.d("my_molecule")
