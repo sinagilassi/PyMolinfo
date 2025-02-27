@@ -261,9 +261,14 @@ molecule_src_4 = {
     'Chain3': ["*-C1", "C1=C2", "C2-C3"],
 }
 
+molecule_src_5 = {
+    'MainChain': ["C1-C2", "C2=O3", "C2-N4", "N4-C5", "C5-C6", "C6*{Chain1}"],
+    'Chain1': ['*-C1', 'C1=C2', 'C2-N3', 'N3-C4', 'C4=C5', 'C5-C1', 'C5-C6', 'C6=C7', 'C7-C8', 'C8=C9', 'C9-C4', 'C8-O10', 'O10-C11']
+}
+
 # * create molecule graph
 mol_graph = mi.create_molecule_graph(
-    molecule_src_4, molecule_name='my_molecule')
+    molecule_src_5, molecule_name='my_molecule')
 print(mol_graph)
 # display molecule graph
 mol_graph.d("my_molecule")

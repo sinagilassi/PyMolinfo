@@ -279,6 +279,10 @@ molecule_src = {
     'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-C5", "C5=*"],
 }
 
+molecule_src = {
+    'MainChain': ["C1*{Chain1}", "C1-H2"],
+    'Chain1': ["*=C1", "C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-*"],
+}
 # * create molecule graph
 mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
 print(mol_graph)
@@ -380,9 +384,14 @@ print(custom_g)
 #     sdf_file, functional_groups=[custom_g])
 # pp(res)
 
+# # dataframe format
+# res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
+#                                        custom_g], res_format='dataframe')
+# print(res)
+
 # dataframe format
 res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
-                                       custom_g], res_format='dataframe')
+                                       mol_graph], res_format='dataframe')
 print(res)
 
 # NOTE: display the selected functional group
@@ -392,7 +401,7 @@ print(res)
 
 # NOTE: count the custom functional groups
 res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
-    custom_g], res_format='dataframe')
+    mol_graph], res_format='dataframe')
 print(res)
 
 # res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
