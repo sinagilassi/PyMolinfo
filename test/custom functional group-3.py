@@ -106,7 +106,7 @@ molecule_src = {
 # naphthalene
 molecule_src = {
     'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-C6", "C6=C1", "C1*{Chain1}", "C6*{Chain1}"],
-    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-*"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-**"],
 }
 
 
