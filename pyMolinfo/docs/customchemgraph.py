@@ -4,7 +4,7 @@
 # import packages/modules
 import networkx as nx
 import matplotlib.pyplot as plt
-from typing import List, Union, Tuple
+from typing import List, Union, Tuple, Dict
 
 
 class CustomChemGraph():
@@ -126,6 +126,139 @@ class CustomChemGraph():
             G = nx.Graph()
 
             # looping through the custom functional group
+            for key, bonds in fg.items():
+
+                # check whether sub-group exists
+                if len(g_sub_collection[key]) == 0:
+
+                    for bond in bonds:
+                        # check bond type
+                        if '-' in bond:
+                            atoms = bond.split('-')
+                        elif '=' in bond:
+                            atoms = bond.split('=')
+                        elif '#' in bond:
+                            atoms = bond.split('#')
+                        else:
+                            raise Exception('bond type error')
+
+                        # check atoms
+                        # Substitute empty parts with 'X'
+                        # atoms = ["X0" if atom == "" else atom for atom in atoms]
+
+                        # get letters
+                        atoms_result = [{"letters": ''.join([c for c in s if c.isalpha(
+                        )]), "numbers": ''.join([c for c in s if c.isdigit()])} for s in atoms]
+                        # update atoms
+                        atoms_name = [str(i['letters']) for i in atoms_result]
+                        # atom id
+                        atoms = [str(i['numbers']) for i in atoms_result]
+
+                        # check
+                        if len(atoms) == 2:
+                            G.add_node(atoms[0], symbol=atoms_name[0])
+                            G.add_node(atoms[1], symbol=atoms_name[1])
+                            # define symbol
+                            bond_id = str(atoms_name[0]).strip(
+                            )+str(atoms_name[1]).strip()
+                            # check bond type
+                            if '=' in bond:
+                                G.add_edge(atoms[0], atoms[1],
+                                           symbol=bond_id, type=2)
+                            elif '#' in bond:
+                                G.add_edge(atoms[0], atoms[1],
+                                           symbol=bond_id, type=3)
+                            else:
+                                G.add_edge(atoms[0], atoms[1],
+                                           symbol=bond_id, type=1)
+
+                    # add a name to the graph
+                    G.graph['name'] = key
+
+                    # save
+                    G_list.append((key, G))
+
+        # looping through g_sub_collection
+        for k, v in g_sub_collection.items():
+            # check
+            if len(v) > 0:
+                # graphs
+                graphs_ = []
+
+                # looping through v
+                for v_ in v:
+                    # get graph
+                    G_ = [item[1] for item in G_list if item[0] == v_][0]
+                    # append
+                    graphs_.append(G_)
+
+                # save graph
+                G_list.append((k, graphs_))
+
+        # res
+        return G_list
+
+    @staticmethod
+    def create_graph(custom_molecules: List[Dict[str, List[str]]]) -> List[Tuple[str, Union[nx.Graph, Dict[str, str]]]]:
+        '''
+        Create a graph for a list of molecules and fragments
+
+        Parameters
+        ----------
+        custom_molecules : list[dict]
+            list of custom molecules
+
+        Returns
+        -------
+        G_list : list
+            list of graphs
+
+        Examples
+        --------
+        >>> custom_molecules = [
+        >>> {'molecule1': ["C1-H1","C1-H2","C1-O1"]},
+        >>> {'molecule2': ["C1-H1","C1-H2","C1-C2","C2-H3","C2-O2"]},
+        >>> {'molecule3': ["-C1","C1-H2"]}
+        >>>    ]
+        '''
+        # group name and number of elements in the group
+        custom_group_details = {list(fg.keys())[0]: len(
+            list(fg.values())[0]) for fg in custom_molecules}
+
+        # group and subgroup collection
+        g_sub_collection = {str(k).strip(): []
+                            for k in custom_group_details.keys()}
+
+        # looping through the custom functional group
+        for k, v in custom_group_details.items():
+            # group name
+            group_name_ = str(k).strip()
+
+            # looping through the custom functional group
+            for fg in custom_molecules:
+                # group name
+                group_name__ = str(list(fg.keys())[0]).strip()
+
+                # group values
+                group_values__ = list(fg.values())[0]
+
+                # looping through the group values
+                for group_value___ in group_values__:
+                    # check group_name_ in group_value_
+                    if group_name_.lower() == group_value___.lower():
+                        g_sub_collection[group_name__].append(group_name_)
+
+        # graph list
+        G_list = []
+        # loop for each custom group
+        for fg in custom_molecules:
+            # custom fg -> values
+            # key: fg name
+            # value: list of bonds
+            # define graph
+            G = nx.Graph()
+
+            # looping through the custom  group
             for key, bonds in fg.items():
 
                 # check whether sub-group exists

@@ -101,8 +101,23 @@ molecule_src = {
     'Chain3': ["*=C1", "C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-*"],
 }
 
-# * create molecule graph
-mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
+#
+
+# NOTE: create a molecule
+mol_ = mi.generate_molecule(molecule_src, molecule_name='my_molecule')
+# construct molecule
+constructed_molecule = mol_.constructed_molecules
+print(constructed_molecule)
+# main chain
+chain_info = mol_.chain_info
+print(chain_info)
+# molecule info
+molecule = mol_.molecule
+print(molecule)
+
+# NOTE: create a molecule graph
+mol_graph = mol_.create_graph()
+
 print(mol_graph)
 # display molecule graph
 mol_graph.d("my_molecule")
@@ -110,26 +125,26 @@ mol_graph.d("my_molecule")
 # =================================
 # ! CREATE CUSTOM FUNCTIONAL GROUP
 # =================================
-# NOTE: custom functional group from file
-# # current
-# custom_functional_group_file = os.path.join(
-#     os.getcwd(), 'test', 'custom-functional-group.yml')
+# NOTE: dict of custom functional group
+custom_functional_group = {
+    'cyanide': ["C1-C2", "C2#N3"],
+    'N#C': ["N1#C2"],
+    'fg1': ["N1-C2", "C2-H3"],
+    'NC=O': ["N1-C2", "C2=O3"],
+    'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]
+}
 
-# # NOTE: custom functional group from file (search a subgroup within group)
-# custom_functional_group_subgroup_file = os.path.join(
-#     os.getcwd(), 'test', 'custom-functional-group-2.yml')
+custom_g = mi.create_custom_functional_groups(custom_functional_group)
+custom_g.d("fg1")
+print(custom_g.custom_functional_groups)
 
-# # create custom graph from file
-# custom_g = mi.create_custom_functional_groups(
-#     custom_functional_group_subgroup_file)
-# print(custom_g)
 
 # ==============================================
 # ! FIND CUSTOM FUNCTIONAL GROUP
 # ==============================================
 # dataframe format
 res, comp1 = mi.check_functional_group(sdf_file, functional_groups=[
-                                       mol_graph], res_format='dataframe')
+                                       custom_g], res_format='dataframe')
 print(res)
 
 # NOTE: display the selected functional group
@@ -139,11 +154,9 @@ print(res)
 
 # NOTE: count the custom functional groups
 res, comp1 = mi.count_functional_group(sdf_file, functional_groups=[
-    mol_graph], res_format='dataframe')
+    custom_g], res_format='dataframe')
 print(res)
 
 # display the selected functional group
 # benzene
 # comp1.g3d_functional_group('benzene-full')
-# comp1.g3d_functional_group('METHYLEN')
-# comp1.g3d_functional_group("METHOXY")

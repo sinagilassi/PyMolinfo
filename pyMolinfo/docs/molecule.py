@@ -3,12 +3,21 @@
 # import libs
 import re
 from typing import List, Dict, Union, Tuple, Optional
+# local
+from .customchemgraph import CustomChemGraph
 
 
 class Molecule():
     '''
     Build a molecule from a source
     '''
+    # constructed molecule
+    __constructed_molecule: List[str] = []
+    __constructed_molecules: Dict[str, List[str]] = {}
+    # molecule
+    __molecule: Dict[str, List[str]] = {}
+    # chain info
+    __chain_info: Dict[str, Dict[str, List[str]]] = {}
 
     def __init__(self, molecule_src, molecule_name):
         '''
@@ -24,29 +33,81 @@ class Molecule():
         self.molecule_src = molecule_src
         self.molecule_name = molecule_name
 
+        # build
+        self.build()
+
+    @property
+    def constructed_molecule(self):
+        """Get the constructed molecule"""
+        return self.__constructed_molecule
+
+    @property
+    def chain_info(self):
+        """Get the chain information"""
+        return self.__chain_info
+
+    @property
+    def constructed_molecules(self):
+        """Get the constructed molecules"""
+        return self.__constructed_molecules
+
+    @property
+    def molecule(self):
+        """Get the molecule"""
+        return self.__molecule
+
     def build(self):
         '''
         Build a molecule from a source
         '''
         try:
             # SECTION: check molecule
-            molecule_src_checked = self.check_molecule(self.molecule_src)
+            molecule_src_checked = self.__check_molecule(self.molecule_src)
 
             # SECTION: construct molecule
-            chain_info, molecule, constructed_molecule = self.construct_molecule_v2(
+            chain_info, molecule, constructed_molecule = self.__construct_molecule_v2(
                 molecule_src_checked)
 
-            # create molecule
-            constructed_molecule_: Dict[str, List[str]] = {}
-            constructed_molecule_[self.molecule_name] = constructed_molecule
+            # TODO: set
+            self.__constructed_molecule = constructed_molecule
+            self.__chain_info = chain_info
+            self.__molecule = molecule
 
-            # SECTION: return
-            return chain_info, molecule, constructed_molecule, constructed_molecule_
+            # create molecule
+            constructed_molecules: Dict[str, List[str]] = {}
+            constructed_molecules[self.molecule_name] = constructed_molecule
+
+            # TODO: set
+            self.__constructed_molecules = constructed_molecules
+
         except Exception as e:
             raise Exception(
                 f"An error occurred while building the molecule: {e}")
 
-    def extract_highest_index(self, chain):
+    def create_graph(self) -> CustomChemGraph:
+        """
+        Create a graph from the constructed molecule
+
+        Returns
+        -------
+        CustomChemGraph
+            The graph of the constructed molecule
+        """
+        try:
+            # check
+            if not self.__constructed_molecules:
+                raise Exception("Constructed molecule not found.")
+
+            # create graph
+            CustomChemGraphC = CustomChemGraph([self.__constructed_molecules])
+
+            # return graph
+            return CustomChemGraphC
+        except Exception as e:
+            raise Exception(
+                f"An error occurred while creating the graph: {e}")
+
+    def __extract_highest_index(self, chain):
         """
         Extracts the highest numerical index from atom labels in the given chain.
 
@@ -69,7 +130,7 @@ class Molecule():
             indices.extend(map(int, atoms))
         return max(indices) if indices else 0
 
-    def search_for_main_chain(self, molecule_src: Dict[str, List[str]]) -> str:
+    def __search_for_main_chain(self, molecule_src: Dict[str, List[str]]) -> str:
         """
         Searches for the main chain in the molecule source.
 
@@ -104,7 +165,7 @@ class Molecule():
             raise Exception(
                 f"An error occurred while searching for the main chain: {e}")
 
-    def check_molecule(self, molecule_src: Dict[str, List[str]]) -> Union[Dict[str, List[str]], bool]:
+    def __check_molecule(self, molecule_src: Dict[str, List[str]]) -> Dict[str, List[str]]:
         """
         Checks if the molecule source is valid.
 
@@ -115,8 +176,8 @@ class Molecule():
 
         Returns
         -------
-        bool
-            True if the molecule source is valid, False otherwise.
+        molecule_src_checked : dict
+            A dictionary containing lists of strings representing bonds between atoms in a molecule.
         """
         try:
             # create a copy of the molecule source
@@ -127,7 +188,7 @@ class Molecule():
             molecule_src_checked = {}
 
             # check if the main chain is found
-            main_chain = self.search_for_main_chain(molecule)
+            main_chain = self.__search_for_main_chain(molecule)
             if not main_chain:
                 raise Exception("Main chain not found in the molecule source.")
 
@@ -172,7 +233,7 @@ class Molecule():
             raise Exception(
                 f"An error occurred while checking the molecule: {e}")
 
-    def construct_molecule(self, molecule_src: Dict[str, List[str]]):
+    def __construct_molecule(self, molecule_src: Dict[str, List[str]]):
         """
         Constructs the molecule from the given molecule source.
 
@@ -193,7 +254,7 @@ class Molecule():
             # print(f'molecule: {molecule}')
 
             # search for the main chain
-            main_chain = self.search_for_main_chain(molecule)
+            main_chain = self.__search_for_main_chain(molecule)
             # print(f'main_chain: {main_chain}')
 
             chain_info: Dict[str, Dict[str, List[str]]] = {}
@@ -324,7 +385,7 @@ class Molecule():
             raise Exception(
                 f"An error occurred while constructing the molecule: {e}")
 
-    def construct_molecule_v2(self, molecule_src: Dict[str, List[str]]):
+    def __construct_molecule_v2(self, molecule_src: Dict[str, List[str]]):
         """
         Constructs the molecule from the given molecule source.
 
@@ -345,7 +406,7 @@ class Molecule():
             # print(f'molecule: {molecule}')
 
             # search for the main chain
-            main_chain = self.search_for_main_chain(molecule)
+            main_chain = self.__search_for_main_chain(molecule)
             # print(f'main_chain: {main_chain}')
 
             chain_info: Dict[str, Dict[str, List[str]]] = {}
@@ -356,7 +417,7 @@ class Molecule():
             # check if the main chain is found
             if main_chain:
                 # get the highest index from the main chain
-                highest_index = self.extract_highest_index(
+                highest_index = self.__extract_highest_index(
                     molecule[main_chain])
                 # print(f'highest_index: {highest_index}')
 
@@ -459,30 +520,6 @@ class Molecule():
 
                     # update
                     # check start with letter or number
-                    # for m in range(len(chain_info[gate]['gate'])):
-                    #     # TODO: check gate-index
-                    #     if gate_index > 0:
-                    #         # check
-                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
-                    #             molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
-                    #         else:
-                    #             molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
-                    #         # update gate index
-                    #         gate_index += 1
-                    #     else:
-                    #         # check
-                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
-                    #             _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
-                    #         else:
-                    #             _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
-
-                    #         # append
-                    #         molecule[main_chain].append(_connection)
-                    #         # update gate index
-                    #         gate_index += 1
-
-                    # update
-                    # check start with letter or number
                     # TODO: check gate-index
                     if gate_num == 1:
                         if chain_info[gate]['gate'][0].startswith(('-', '=', '#')):
@@ -514,26 +551,6 @@ class Molecule():
 
                     # gate index num
                     gate_num = len(chain_info[gate]['gate'])
-
-                    # check start with letter or number
-                    # for m in range(len(chain_info[gate]['gate'])):
-                    #     # TODO: check gate-index
-                    #     if gate_index > 0:
-                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
-                    #             molecule[main_chain][element_index] = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
-                    #         else:
-                    #             molecule[main_chain][element_index] = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
-                    #         # update gate index
-                    #         gate_index += 1
-                    #     else:
-                    #         if chain_info[gate]['gate'][m].startswith(('-', '=', '#')):
-                    #             _connection = f"{atom1}{index1}{chain_info[gate]['gate'][m]}"
-                    #         else:
-                    #             _connection = f"{chain_info[gate]['gate'][m]}{atom1}{index1}"
-                    #         # append
-                    #         molecule[main_chain].append(_connection)
-                    #         # update gate index
-                    #         gate_index += 1
 
                     # update
                     # check start with letter or number

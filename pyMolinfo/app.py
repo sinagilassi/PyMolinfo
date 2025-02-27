@@ -4,7 +4,7 @@ from pathlib import Path
 from networkx import Graph
 import pubchemquery as pcq
 import pandas as pd
-from typing import List, Dict, Union, Literal
+from typing import List, Dict, Union, Literal, Optional
 
 # internal
 from .config import packageName
@@ -400,9 +400,9 @@ def create_custom_functional_groups(functional_groups: Union[Dict[str, List[str]
         raise Exception(f'creating custom functional group is failed! {e}')
 
 
-def create_molecule_graph(molecule_src: Union[Dict[str, List[str]], Path], molecule_name: str = 'MainChain') -> CustomChemGraph:
+def generate_molecule(molecule_src: Union[Dict[str, List[str]], Path], molecule_name: Optional[str] = 'MainChain') -> Molecule:
     '''
-    Make a molecule graph from custom functional groups based on the following example.
+    Generates a `molecule object` from custom functional groups.
 
     Parameters
     ----------
@@ -445,13 +445,7 @@ def create_molecule_graph(molecule_src: Union[Dict[str, List[str]], Path], molec
         # init molecule
         MoleculeC = Molecule(molecule_src, molecule_name)
 
-        # build molecule
-        _, _, _, molecule = MoleculeC.build()
-
-        # custom chem graph
-        CustomChemGraphC = CustomChemGraph([molecule])
-
         # res
-        return CustomChemGraphC
+        return MoleculeC
     except Exception as e:
         raise Exception(f'creating custom functional group is failed! {e}')
