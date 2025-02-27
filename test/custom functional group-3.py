@@ -48,7 +48,9 @@ print(mi.__version__)
 # Conformer3D_COMPOUND_CID_7580.sdf
 # Triphenylmethane
 # Conformer3D_COMPOUND_CID_10614.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_10614.sdf'
+# Naphthalene
+# Conformer3D_COMPOUND_CID_931.sdf
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_931.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # ================================
@@ -101,7 +103,12 @@ molecule_src = {
     'Chain3': ["*=C1", "C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-*"],
 }
 
-#
+# naphthalene
+molecule_src = {
+    'MainChain': ["C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-C6", "C6=C1", "C1*{Chain1}", "C6*{Chain1}"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-*"],
+}
+
 
 # NOTE: create a molecule
 mol_ = mi.generate_molecule(molecule_src, molecule_name='my_molecule')
@@ -122,20 +129,49 @@ print(mol_graph)
 # display molecule graph
 mol_graph.d("my_molecule")
 
+
+# SECTION: create parent & child
+# CB-(CB)
+molecule_src_child = {
+    'MainChain': ["C1-C2", "C1*{Chain1}"],
+    'Chain1': ["*=C1", "C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-*"]
+}
+
+# biphenyl
+molecule_src_parent = {
+    'MainChain': ["C1*{Chain1}", "C1-C2", "C2*{Chain2}"],
+    'Chain1': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-C5", "C5=*"],
+    'Chain2': ["*-C1", "C1=C2", "C2-C3", "C3=C4", "C4-C5", "C5=*"],
+}
+
+# create molecule
+mol_child = mi.generate_molecule(
+    molecule_src_child, molecule_name='my_molecule_child')
+mol_parent = mi.generate_molecule(
+    molecule_src_parent, molecule_name='my_molecule_parent')
+# create graph
+mol_graph_child = mol_child.create_graph()
+mol_graph_parent = mol_parent.create_graph()
+# display molecule graph
+mol_graph_child.d("my_molecule_child")
+mol_graph_parent.d("my_molecule_parent")
+
 # =================================
 # ! CREATE CUSTOM FUNCTIONAL GROUP
 # =================================
 # NOTE: dict of custom functional group
 custom_functional_group = {
-    'cyanide': ["C1-C2", "C2#N3"],
-    'N#C': ["N1#C2"],
-    'fg1': ["N1-C2", "C2-H3"],
-    'NC=O': ["N1-C2", "C2=O3"],
-    'HOC=C': ["H1-O2", "O2-C3", "C3=C4"]
+    'fg_parent': mol_parent.constructed_molecule,
+    'fg_child': mol_child.constructed_molecule,
+    'fg_target': ['fg_parent', 'fg_child']
 }
 
+# log
+print(custom_functional_group)
+
 custom_g = mi.create_custom_functional_groups(custom_functional_group)
-custom_g.d("fg1")
+custom_g.d("fg_parent")
+custom_g.d("fg_child")
 print(custom_g.custom_functional_groups)
 
 
