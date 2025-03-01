@@ -16,7 +16,7 @@
 
 ## 🚀 Getting Started
 
-To use PyMolinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
+To use PyMolinfo, simply install the package and import it into your Python script. Refer to the example code snippets for a quick start.
 
 ## 📚 Binder
 
