@@ -1,4 +1,4 @@
-# Graph 🧬
+# 🧬 Graph
 
 In this section, we will describe how to create a molecule graph using a predefined molecule source. The molecule source defines the main chain and any additional chains that are part of the molecule.
 
