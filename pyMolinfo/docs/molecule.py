@@ -5,6 +5,7 @@ import re
 from typing import List, Dict, Union, Tuple, Optional
 # local
 from .customchemgraph import CustomChemGraph
+from .molconstructor import MoleculeConstructor
 
 
 class Molecule():
@@ -62,16 +63,20 @@ class Molecule():
         '''
         try:
             # SECTION: check molecule
-            molecule_src_checked = self.__check_molecule(self.molecule_src)
+            # molecule_src_checked = self.__check_molecule(self.molecule_src)
+            molecule_src_checked = self.__check_molecule_v2(self.molecule_src)
 
             # SECTION: construct molecule
-            chain_info, molecule, constructed_molecule = self.__construct_molecule_v2(
-                molecule_src_checked)
+            # chain_info, molecule, constructed_molecule = self.__construct_molecule_v2(
+            #     molecule_src_checked)
+            # from class
+            chain_info, molecule, constructed_molecule = \
+                MoleculeConstructor.from_source(molecule_src_checked)
 
             # TODO: set
-            self.__constructed_molecule = constructed_molecule
             self.__chain_info = chain_info
             self.__molecule = molecule
+            self.__constructed_molecule = constructed_molecule
 
             # create molecule
             constructed_molecules: Dict[str, List[str]] = {}
@@ -232,6 +237,111 @@ class Molecule():
         except Exception as e:
             raise Exception(
                 f"An error occurred while checking the molecule: {e}")
+
+    def __check_molecule_v2(self, molecule_src: Dict[str, List[str]]) -> Dict[str, List[str]]:
+        """
+        Checks if the molecule source is valid.
+
+        Parameters
+        ----------
+        molecule_src : dict
+            A dictionary containing lists of strings representing bonds between atoms in a molecule.
+
+        Returns
+        -------
+        bool
+            True if the molecule source is valid, False otherwise.
+        """
+        # create a copy of the molecule source
+        molecule = {key: chain.copy() for key, chain in molecule_src.items()}
+
+        # checked molecule source
+        molecule_src_checked = {}
+
+        # check if the main chain is found
+        main_chain = self.__search_for_main_chain(molecule)
+        if not main_chain:
+            raise ValueError("Main chain not found in the molecule source.")
+
+        # add the main chain to the checked molecule source
+        molecule_src_checked[main_chain] = molecule[main_chain]
+
+        # main chain bonds
+        main_chain_bonds = molecule[main_chain]
+
+        # chain counter
+        chain_counter = 0
+
+        # chain type
+        chain_types = {
+            "1": 'branch',
+            "2": 'ring',
+            "3": 'bridge',
+        }
+
+        # chain analysis
+        chain_analysis = {}
+
+        # looping through the molecule source
+        for key, chain in molecule.items():
+            if key != main_chain:
+
+                # TODO: check chain types
+                # print(f"Chain: {chain}")
+                chain_gate_num = sum(item.count('*') for item in chain)
+                # print(f"Chain gate num: {chain_gate_num}")
+                # print(f"Chain types: {chain_types[str(chain_gate_num)]}")
+
+                # save
+                chain_analysis[key] = chain_types[str(chain_gate_num)]
+
+        # log
+        # print(f"Chain analysis: {chain_analysis}")
+
+        # looping through the molecule source
+        for key, chain in molecule.items():
+            if key != main_chain:
+                # check if the chain is connected to the main chain
+                # SECTION: create pattern to match the main chain
+                pattern_gate = rf"([A-Za-z]+)(\d+)\*\{{({re.escape(key)})\}}"
+
+                # looping through the main chain bonds
+                for i, bond in enumerate(main_chain_bonds):
+                    # print(f"i: {i}")
+                    # print(f"Bond: {bond}")
+                    match = re.match(pattern_gate, bond)
+                    # check
+                    if match:
+                        # print(f"chain_analysis: {chain_analysis[key]}")
+                        # TODO: check chain types
+                        if chain_analysis[key] == 'branch' or chain_analysis[key] == 'ring':
+                            # update chain counter
+                            chain_counter += 1
+                        elif chain_analysis[key] == 'bridge':
+                            # reset chain counter
+                            chain_counter = 1
+
+                        # extract the matched chain
+                        atom, index, key_chain = match.groups()
+                        # print(f"Atom: {atom}")
+                        # print(f"Index: {index}")
+                        # print(f"Key chain: {key_chain}")
+                        # rename key
+                        key_ = key_chain + str(chain_counter)
+                        # print(f"Key: {key_}")
+
+                        # add the chain to the checked molecule source
+                        molecule_src_checked[key_] = chain
+                        # print(f"Molecule source checked: {molecule_src_checked}")
+                        # update the element in the main chain
+                        main_chain_bonds[i] = atom+index+"*{"+key_+"}"
+                        # print(f"Main chain bonds: {main_chain_bonds}")
+
+                # reset chain counter
+                chain_counter = 0
+
+        # res
+        return molecule_src_checked
 
     def __construct_molecule(self, molecule_src: Dict[str, List[str]]):
         """
