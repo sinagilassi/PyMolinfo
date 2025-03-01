@@ -1,3 +1,3 @@
-# Methods
+# ⚙️ Methods
 
 ::: pyMolinfo.app

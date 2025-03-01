@@ -9,7 +9,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 APP_NAME = 'PyMolinfo'
 AUTHOR = 'Sina Gilassi'
-VERSION = '1.8.4'
+VERSION = '1.8.5'
 LICENSE = 'MIT'
 DESCRIPTION = 'PyMolinfo provides comprehensive molecular information and analysis.'
 LONG_DESCRIPTION = 'PyMolinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
@@ -26,7 +26,7 @@ setup(
     packages=find_packages(exclude=['tests', '*.tests', '*.tests.*']),
     license=LICENSE,
     install_requires=['pandas', 'pillow', 'requests',
-                      'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly', 'networkx', 'PyYAML'],
+                      'urllib3', 'matplotlib', 'PubChemQuery', 'numpy', 'plotly', 'networkx', 'PyYAML','scipy'],
     keywords=['python', 'chemistry', 'chemistry-visualization',
               'PyMolinfo', 'molecular-graph'],
     classifiers=[

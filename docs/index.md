@@ -1,10 +1,12 @@
-# Welcome to PyMolinfo
+# 🌟 PyMolinfo
+
+![PyMolinfo](./PyMolinfo.jpg)
 
 ![Downloads](https://img.shields.io/pypi/dm/PyMolinfo) ![PyPI](https://img.shields.io/pypi/v/PyMolinfo) ![Python Version](https://img.shields.io/pypi/pyversions/PyMolinfo.svg) ![License](https://img.shields.io/pypi/l/PyMolinfo)
 
-**PyMolInfo** is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
+**PyMolInfo** (previously molinfo) is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
-**Features**
+## ✨ Features
 
 * `File Format Support`: Load molecular data from multiple file formats, including SDF and JSON (soon).
 * `Graph Conversion`: Transform molecular structures into graph representations for detailed analysis.
@@ -12,27 +14,39 @@
 * `Distance Measurement`: Compute distances between atoms and bonds in the molecular graph.
 * `Bond Angle Calculation`: Measure angles between bonds using graph-based methods.
 
-**Getting Started:**
+## 🚀 Getting Started
 
-To use Molinfo, simply install the package and import it into your Python script. Refer to the example code snippets above for a quick start.
+To use PyMolinfo, simply install the package and import it into your Python script. Refer to the example code snippets for a quick start.
 
+## 📚 Binder
 
-## Google Colab
+Test this package by launching our example notebooks on Binder:
+
+- **Load a sdf file**: [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-1.ipynb)
+- **Visualize a compound**: [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-2.ipynb)
+- **Check and count functional groups**: [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-3.ipynb)
+- **Create custom functional groups**: [![Launch Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sinagilassi/Molinfo/cb4f3c4b58501786da3dc5a2413a67720f01d579?urlpath=lab%2Ftree%2Fnotebook%2Fdoc-4.ipynb)
+
+## 🌐 Google Colab
 
 You can use the following code to run `PyMolinfo` in Google Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
+- **Version 1.6.0**: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1-mkVbXbznEJGeKWdQKtJT8xkWb2Bcvw_?usp=sharing)
+- **Version < 1.6.0**: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQXg92p_jxviVfKJFf_-1qQwmOgrMLUD?usp=sharing)
 
+## 🛠️ Installation
 
-## Installation
-
-Install PyMolinfo with pip
+Install molinfo with pip
 
 ```python
   pip install PyMolinfo
 ```
 
-## Documentation
+## 📖 Documentation
+
+For detailed documentation, please visit [molinfo.readthedocs.io/en/latest/](https://molinfo.readthedocs.io/en/latest/).
+
+## 💡 Examples
 
 Import package as:
 
@@ -42,7 +56,6 @@ import pyMolinfo as mi
 print(mi.__version__)
 ```
 
-## Examples
 
 * Create a graph
 
@@ -91,42 +104,49 @@ dihedral = comp1.d_angle_atoms(['H6', 'O1', 'C2', 'H3'])
 print(dihedral)
 ```
 
-* Create custom functional groups:
+## Creating Custom Functional Groups
 
-[`atom1-element`][`atom1-number`][`bond-type`][`atom2-element`][`atom2-number`]
+To create custom functional groups, you need to define the bonds between atoms using the following format:
 
-Bond Types Format:
+`[atom1-element][atom1-number][bond-type][atom2-element][atom2-number]`
 
-* single bond CC -> `C1-C2`   
-* double bond CC -> `C1=C2`   
-* triple bond CC -> `C1#C2` 
+Here are the formats for different bond types:
 
-**How to create a custom functional group?**
+- **Single Bond**: Represented as `C1-C2` where `C1` and `C2` are the atoms connected by a single bond.
+- **Double Bond**: Represented as `C1=C2` where `C1` and `C2` are the atoms connected by a double bond.
+- **Triple Bond**: Represented as `C1#C2` where `C1` and `C2` are the atoms connected by a triple bond.
 
-Name ->  Symbol -> Format 
+### Examples
 
-    cyanide-1: CCN -> ["N1#C2"]
-    custom_fg: NCH ->  ["N1-C2", "C2-H3"]     
-    NC=O: NC=O -> ["N1-C2", "C2=O3"]
-
-And coded as:
+1. **Cyanide Group**: A cyanide group can be represented as `N1#C2`.
 
 ```python
-# C1-C2#N3
 custom_functional_group = [
-    {'cyanide': ["C1-C2", "C2#N3"]},
+    {'cyanide': ["N1#C2"]},
 ]
+```
 
-# define different custom functional groups as:
-# N#C
-# NCH
-# NCO
+2. **Custom Functional Group**: A custom functional group with a single and a double bond can be represented as `N1-C2` and `C2=O3`.
+
+```python
+custom_functional_group = [
+    {'custom_fg': ["N1-C2", "C2=O3"]},
+]
+```
+
+3. **Multiple Functional Groups**: You can define multiple functional groups in a list.
+
+```python
 custom_functional_group = [
     {'N#C': ["N1#C2"]},
     {'custom_fg': ["N1-C2", "C2-H3"]},
     {'NC=O': ["N1-C2", "C2=O3"]},
 ]
+```
 
+Once you have defined your custom functional groups, you can create and visualize them as follows:
+
+```python
 # create custom graph
 custom_g = mi.create_custom_functional_groups(custom_functional_group)
 
@@ -139,11 +159,10 @@ res = mi.check_functional_group(
 print(res)
 ```
 
-## FAQ
+## ❓ FAQ
 
-For any question, contact me on [LinkedIn](https://www.linkedin.com/in/sina-gilassi/) 
+For any question, contact me on [LinkedIn](https://www.linkedin.com/in/sina-gilassi/)
 
+## 👥 Authors
 
-## Authors
-
-- [@sinagilassi](https://www.github.com/sinagilassi)
+[@sinagilassi](https://www.github.com/sinagilassi)
