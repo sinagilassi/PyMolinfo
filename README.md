@@ -44,6 +44,10 @@ Install molinfo with pip
 
 ## 📖 Documentation
 
+For detailed documentation, please visit [molinfo.readthedocs.io/en/latest/](https://molinfo.readthedocs.io/en/latest/).
+
+## 💡 Examples
+
 Import package as:
 
 ```python
@@ -52,7 +56,6 @@ import pyMolinfo as mi
 print(mi.__version__)
 ```
 
-## 💡 Examples
 
 * Create a graph
 
