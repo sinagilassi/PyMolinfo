@@ -3,6 +3,7 @@
 # import libs
 import re
 from typing import List, Dict, Union, Tuple, Optional
+import networkx as nx
 # local
 from .customchemgraph import CustomChemGraph
 from .molconstructor import MoleculeConstructor
@@ -89,7 +90,7 @@ class Molecule():
             raise Exception(
                 f"An error occurred while building the molecule: {e}")
 
-    def create_graph(self) -> CustomChemGraph:
+    def create_graph(self) -> nx.Graph:
         """
         Create a graph from the constructed molecule
 
@@ -104,10 +105,14 @@ class Molecule():
                 raise Exception("Constructed molecule not found.")
 
             # create graph
-            CustomChemGraphC = CustomChemGraph([self.__constructed_molecules])
+            graph_res = CustomChemGraph.generate_graph([self.__constructed_molecules])
+            
+            # check
+            if not graph_res:
+                raise Exception("Graph not created.")
 
             # return graph
-            return CustomChemGraphC
+            return graph_res
         except Exception as e:
             raise Exception(
                 f"An error occurred while creating the graph: {e}")
