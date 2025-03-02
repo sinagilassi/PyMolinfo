@@ -40,6 +40,7 @@ print(mi.__version__)
 # Conformer3D_COMPOUND_CID_5991.sdf
 sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_241.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
+sdf_name = 'Benzene'
 
 # =============
 # sdf string
@@ -236,10 +237,11 @@ comp1 = mi.compound(sdf_file)
 # ================================
 # ! CREATE GRAPH
 # ================================
-# * create graph
-# res = mi.create_graph(sdf_file)
-# print(type(res))
-# print(res)
+# NOTE: create graph
+res = mi.create_graph(sdf_file, graph_name=sdf_name)
+print(type(res))
+print(res)
+stop=1
 
 # * visualize compound by sdf file
 # mi.g3d(sdf_file, display_bond_length=True)
@@ -284,10 +286,14 @@ molecule_src = {
     'Chain1': ["*=C1", "C1-C2", "C2=C3", "C3-C4", "C4=C5", "C5-*"],
 }
 # * create molecule graph
-mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
-print(mol_graph)
+mol_ = mi.generate_molecule(molecule_src, molecule_name='my_molecule')
+print(mol_)
+
+# create graph
+mol_graph = mol_.to_molgraph()
+
 # display molecule graph
-mol_graph.d("my_molecule")
+mol_graph.d()
 
 stop = 1
 # ================================

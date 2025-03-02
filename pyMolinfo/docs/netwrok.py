@@ -5,6 +5,7 @@
 import pandas as pd
 import networkx as nx
 from networkx.algorithms import isomorphism
+from typing import Optional
 # local
 from .chemgraphs import ChemGraphs
 from .customchemgraph import CustomChemGraph
@@ -569,7 +570,7 @@ class Network(ChemGraphs):
         # res
         return res_match
 
-    def create_graph(self):
+    def create_graph(self, graph_name: Optional[str] = None):
         '''
         Check functional groups in a compound
 
@@ -611,10 +612,9 @@ class Network(ChemGraphs):
             # G.add_node(_atomId, symbol=_atomSymbol,
             #            x=_atom1X, y=_atom1Y, z=_atom1Z, xyz=_atom1XYZ)
 
-            G.add_node(_atomId, symbol=_atomSymbol)
+            G.add_node(_atomId, symbol=_atomSymbol, xyz=_atom1XYZ)
 
         # *** using bond block
-
         for i in range(bondNo):
             # atom 1
             _id1 = self.atomBonds1d[i]['id1']
@@ -629,6 +629,10 @@ class Network(ChemGraphs):
 
             # add edge
             G.add_edge(_id1, _id2, symbol=_bondSymbol, type=_bondType)
+            
+        # add a name to the graph
+        if graph_name is not None:
+            G.graph['name'] = graph_name
 
         # update
         self.compound_graph = G

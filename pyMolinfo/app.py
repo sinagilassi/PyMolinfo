@@ -130,7 +130,7 @@ def compound_by_inchi(inchi: str) -> Compound:
         raise Exception(f"creating compound is failed! {e}")
 
 
-def create_graph(file: Path) -> Graph:
+def create_graph(file: Path | str, graph_name: Optional[str] = 'Graph') -> Graph:
     '''
     Converts a sdf compound file to a graph
 
@@ -152,7 +152,7 @@ def create_graph(file: Path) -> Graph:
             # compound
             compound = Compound(compound_info)
             # display 3d
-            graph = compound.create_graph()
+            graph = compound.create_graph(graph_name=graph_name)
             # res
             return graph
         else:
