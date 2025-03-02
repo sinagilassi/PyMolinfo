@@ -238,9 +238,16 @@ comp1 = mi.compound(sdf_file)
 # ! CREATE GRAPH
 # ================================
 # NOTE: create graph
-res = mi.create_graph(sdf_file, graph_name=sdf_name)
-print(type(res))
-print(res)
+graph_1 = mi.create_graph(sdf_file, graph_name=sdf_name)
+print(type(graph_1))
+print(graph_1)
+
+# view graph
+mi.view_graph(graph_1)
+# 3d
+mi.view_graph_3d(graph_1)
+mi.view_graph_3d_plotly(graph_1)
+
 stop=1
 
 # * visualize compound by sdf file
