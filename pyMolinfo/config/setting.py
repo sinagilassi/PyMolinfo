@@ -6,7 +6,7 @@ packageName = 'Molecular Information'
 # package short name
 packageShortName = 'PyMolinfo'
 # package version
-__version__ = '1.8.7'
+__version__ = '1.8.8'
 # package description
 __description__ = 'A Python package for advanced molecular analysis by converting molecular structures into graph representations.'
 # author

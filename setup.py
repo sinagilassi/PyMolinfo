@@ -9,7 +9,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 APP_NAME = 'PyMolinfo'
 AUTHOR = 'Sina Gilassi'
-VERSION = '1.8.7'
+VERSION = '1.8.8'
 EMAIL = '<sina.gilassi@gmail.com>'
 LICENSE = 'MIT'
 DESCRIPTION = 'PyMolinfo provides comprehensive molecular information and analysis.'
