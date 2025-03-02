@@ -50,7 +50,7 @@ print(mi.__version__)
 # Conformer3D_COMPOUND_CID_10614.sdf
 # Naphthalene
 # Conformer3D_COMPOUND_CID_931.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_931.sdf'
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_7095.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 
 # ================================
@@ -122,12 +122,14 @@ print(chain_info)
 molecule = mol_.molecule
 print(molecule)
 
-# NOTE: create a molecule graph
-mol_graph = mol_.create_graph()
+# NOTE: create a molecule graph (nx.Graph)
+graph = mol_.to_graph()
+print(graph)
 
-print(mol_graph)
+# NOTE: create a molgraph (MolGraph)
+mol_graph = mol_.to_molgraph()
 # display molecule graph
-mol_graph.d("my_molecule")
+mol_graph.d()
 
 
 # SECTION: create parent & child
@@ -150,11 +152,11 @@ mol_child = mi.generate_molecule(
 mol_parent = mi.generate_molecule(
     molecule_src_parent, molecule_name='my_molecule_parent')
 # create graph
-mol_graph_child = mol_child.create_graph()
-mol_graph_parent = mol_parent.create_graph()
+mol_graph_child = mol_child.to_molgraph()
+mol_graph_parent = mol_parent.to_molgraph()
 # display molecule graph
-mol_graph_child.d("my_molecule_child")
-mol_graph_parent.d("my_molecule_parent")
+mol_graph_child.d()
+mol_graph_parent.d()
 
 # =================================
 # ! CREATE CUSTOM FUNCTIONAL GROUP

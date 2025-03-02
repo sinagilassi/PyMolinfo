@@ -5,8 +5,9 @@ import re
 from typing import List, Dict, Union, Tuple, Optional
 import networkx as nx
 # local
-from .customchemgraph import CustomChemGraph
 from .molconstructor import MoleculeConstructor
+from .customchemgraph import CustomChemGraph
+from .molgraph import MolGraph
 
 
 class Molecule():
@@ -90,13 +91,13 @@ class Molecule():
             raise Exception(
                 f"An error occurred while building the molecule: {e}")
 
-    def create_graph(self) -> nx.Graph:
+    def to_graph(self) -> nx.Graph:
         """
         Create a graph from the constructed molecule
 
         Returns
         -------
-        CustomChemGraph
+        graph : nx.Graph
             The graph of the constructed molecule
         """
         try:
@@ -105,14 +106,70 @@ class Molecule():
                 raise Exception("Constructed molecule not found.")
 
             # create graph
-            graph_res = CustomChemGraph.generate_graph([self.__constructed_molecules])
+            graph = CustomChemGraph.generate_graph(
+                [self.__constructed_molecules]
+            )
             
             # check
-            if not graph_res:
+            if not graph:
                 raise Exception("Graph not created.")
 
             # return graph
-            return graph_res
+            return graph
+        except Exception as e:
+            raise Exception(
+                f"An error occurred while creating the graph: {e}")
+    
+    def to_chemgraph(self) -> CustomChemGraph:
+        """
+        Create a graph from the constructed molecule
+
+        Returns
+        -------
+        chem_graph : CustomChemGraph
+            The graph of the constructed molecule
+        """
+        try:
+            # check
+            if not self.__constructed_molecules:
+                raise Exception("Constructed molecule not found.")
+
+            # create chem graph
+            chem_graph = CustomChemGraph(self.__constructed_molecules)
+            
+            # check
+            if not chem_graph:
+                raise Exception("Graph not created.")
+
+            # return graph
+            return chem_graph
+        except Exception as e:
+            raise Exception(
+                f"An error occurred while creating the graph: {e}")
+            
+    def to_molgraph(self) -> MolGraph:
+        """
+        Create a graph from the constructed molecule
+
+        Returns
+        -------
+        mol_graph : MolGraph
+            The graph of the constructed molecule
+        """
+        try:
+            # check
+            if not self.__constructed_molecules:
+                raise Exception("Constructed molecule not found.")
+
+            # create mole graph
+            mol_graph = MolGraph(self.__constructed_molecules)
+            
+            # check
+            if not mol_graph:
+                raise Exception("Graph not created.")
+
+            # return graph
+            return mol_graph
         except Exception as e:
             raise Exception(
                 f"An error occurred while creating the graph: {e}")
