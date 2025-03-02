@@ -9,7 +9,8 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 APP_NAME = 'PyMolinfo'
 AUTHOR = 'Sina Gilassi'
-VERSION = '1.8.6'
+VERSION = '1.8.7'
+EMAIL = '<sina.gilassi@gmail.com>'
 LICENSE = 'MIT'
 DESCRIPTION = 'PyMolinfo provides comprehensive molecular information and analysis.'
 LONG_DESCRIPTION = 'PyMolinfo is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations'
@@ -19,7 +20,7 @@ setup(
     name=APP_NAME,
     version=VERSION,
     author=AUTHOR,
-    author_email="<sina.gilassi@gmail.com>",
+    author_email=EMAIL,
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
