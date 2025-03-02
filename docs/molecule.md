@@ -14,11 +14,26 @@ molecule_src = {
     'Chain2': ["*-C1", "C1=C2", "C2-XX3"]
 }
 
-# create molecule graph
-mol_graph = mi.create_molecule_graph(molecule_src, molecule_name='my_molecule')
+# NOTE: create a molecule
+mol_ = mi.generate_molecule(molecule_src, molecule_name='my_molecule')
+# construct molecule
+constructed_molecule = mol_.constructed_molecules
+print(constructed_molecule)
+# main chain
+chain_info = mol_.chain_info
+print(chain_info)
+# molecule info
+molecule = mol_.molecule
+print(molecule)
 
+# NOTE: create a molecule graph (nx.Graph)
+graph = mol_.to_graph()
+print(graph)
+
+# NOTE: create a molgraph (MolGraph)
+mol_graph = mol_.to_molgraph()
 # display molecule graph
-mol_graph.d("my_molecule")
+mol_graph.d()
 ```
 
 ![Molecule Graph](./molecule_graph.png)
