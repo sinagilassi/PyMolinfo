@@ -56,8 +56,44 @@ import pyMolinfo as mi
 print(mi.__version__)
 ```
 
+* Create a compound
+
+```python
+# sdf file
+comp1 = mi.compound(sdf_file)
+
+# sdf string
+comp1 = mi.compound(sdf_string)
+
+# compound by cid
+comp1 = mi.compound_by_cid(241)
+
+# compound by inchi
+comp1 = mi.compound_by_inchi('InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H')
+
+# log
+# print(comp1)
+# pp(comp1.atom_bond_block)
+# print("-"*100)
+# pp(comp1.atom_bond_block_1d)
+# print("-"*100)
+# pp(comp1.atom_xyz)
+
+# NOTE: functional groups
+print(comp1.functional_groups)
+```
 
 * Create a graph
+
+➡️ Create a graph from a `compound`:
+
+```python
+# NOTE: create graph
+graph_comp1 = comp1.create_graph()
+print(graph_comp1)
+```
+
+➡️ Create a graph from a `sdf file`:
 
 ```python
 # sdf file

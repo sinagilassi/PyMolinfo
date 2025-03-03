@@ -195,7 +195,11 @@ comp1 = mi.compound(sdf_file)
 # pp(comp1.atom_xyz)
 
 # NOTE: functional groups
-# print(comp1.functional_groups)
+print(comp1.functional_groups)
+
+# NOTE: create graph
+graph_comp1 = comp1.create_graph()
+print(graph_comp1)
 
 # ===============================
 # ! GEOMETRY
@@ -244,9 +248,6 @@ print(graph_1)
 
 # view graph
 mi.view_graph(graph_1)
-# 3d
-mi.view_graph_3d(graph_1)
-mi.view_graph_3d_plotly(graph_1)
 
 stop=1
 
