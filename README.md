@@ -71,6 +71,14 @@ print(res)
 
 * Display a graph:
 
+```python 
+# plot_mode: Literal['plotly', 'matplotlib'] = 'plotly
+# view graph
+mi.view_graph(graph_1)
+```
+
+* Display a compound:
+
 ```python
 # visualize compound by sdf file
 mi.g3d(sdf_file)
