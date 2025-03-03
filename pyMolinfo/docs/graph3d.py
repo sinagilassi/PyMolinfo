@@ -658,6 +658,658 @@ class graph3d():
             self.plotScale = [minBondLength, maxBondLength,
                               meanBondLength, medianBondLength]
 
+    @staticmethod
+    def view_graph3d(G, subgraphs=None, **kwargs):
+        '''
+        Draw a compound in 3D from a graph representation
+        
+        Parameters
+        ----------
+        G : networkx.Graph
+            Graph with nodes having 'symbol' and 'xyz' attributes and edges having 'symbol' and 'type' attributes
+        subgraphs : list, optional
+            List of subgraphs to highlight
+        **kwargs : dict
+            Additional parameters for visualization
+            figSize: tuple - figure size
+            bg_color: str - background color
+            display_legend: bool - display legend
+            theme: str - theme for visualization ('light' or 'dark')
+            display_atom_id: bool - display atom IDs
+            display_bond_length: bool - display bond lengths
+            bond_type_color: list - colors for different bond types
+            
+        Returns
+        -------
+        plot_summary : list
+            Summary of plotted elements
+        '''
+        figSize = kwargs.get('figSize', [])
+        bg_color = kwargs.get('bg_color', '#ffffff')
+        display_legend = kwargs.get('display_legend', False)
+        theme = kwargs.get('theme', 'light')
+        display_atom_id = kwargs.get('display_atom_id', True)
+        display_bond_length = kwargs.get('display_bond_length', False)
+        bond_type_color = kwargs.get(
+            'bond_type_color', ['#1B263B', '#EF476F', '#4361EE'])
+        
+        # Plot summary
+        plot_summary = []
+        
+        # Create the figure
+        fig = go.Figure()
+        
+        # Extract node data from the graph
+        nodes = G.nodes(data=True)
+        edges = G.edges(data=True)
+        
+        # Create list of atom positions from nodes
+        xyzList = []
+        atomElements = []
+        node_ids = []
+        
+        for node_id, node_data in nodes:
+            if 'xyz' in node_data:
+                xyzList.append(node_data['xyz'])
+                atomElements.append(node_data['symbol'])
+                node_ids.append(node_id)
+        
+        # Convert to numpy array for easier manipulation
+        xyzList = np.array(xyzList)
+        
+        # Create 3D frame dimensions
+        xyzLenMax = np.max(np.abs(xyzList))
+        
+        # Helper functions
+        def set_color(atom_symbol):
+            '''Set a color for each atom based on element'''
+            colors = {
+                "H": '#ffffff',
+                "C": '#BCBCBC',
+                "N": '#0586f6',
+                "O": '#f6052a',
+                "F": '#2dd930',
+                "Cl": '#2dd930',
+                "Br": '#950e0e',
+                "I": '#360e89',
+                "He": '#3dbaf1',
+                "Ne": '#3dbaf1',
+                "Ar": '#3dbaf1',
+                "Kr": '#3dbaf1',
+                "Xe": '#3dbaf1',
+                "P": '#f1a03d',
+                "S": '#f1ef3d',
+                "B": '#efc867',
+                "Li": '#6b3ccb',
+                "Na": '#6b3ccb',
+                "K": '#6b3ccb',
+                "Rb": '#6b3ccb',
+                "Cs": '#6b3ccb',
+                "Fr": '#6b3ccb',
+                "Be": '#1c881e',
+                "Mg": '#1c881e',
+                "Ca": '#1c881e',
+                "Sr": '#1c881e',
+                "Ba": '#1c881e',
+                "Ra": '#1c881e',
+                "Ti": '#3d3e40',
+                "Fe": '#a48620',
+                "other": '#a729ba'
+            }
+            
+            _color = colors.get(str(atom_symbol))
+            if _color is None:
+                return colors.get(str('other'))
+            else:
+                return _color
+        
+        def calculate_distance(xyz1, xyz2):
+            """Calculate the Euclidean distance between two points."""
+            return math.sqrt((xyz2[0] - xyz1[0])**2 +
+                             (xyz2[1] - xyz1[1])**2 +
+                             (xyz2[2] - xyz1[2])**2)
+        
+        # Node visualization (atoms)
+        for i, node_id in enumerate(node_ids):
+            # Get node data
+            node_data = G.nodes[node_id]
+            atom_xyz = node_data['xyz']
+            atom_symbol = node_data['symbol']
+            
+            # Atom label
+            atomMark = f"{atom_symbol}{node_id}"
+            
+            # Color based on element
+            atom_color = set_color(atom_symbol)
+            
+            # Text display based on setting
+            if display_atom_id:
+                text_to_display = [atomMark]
+            else:
+                text_to_display = ['']
+            
+            # Add atom as a 3D scatter point
+            fig.add_trace(go.Scatter3d(
+                x=[atom_xyz[0]],
+                y=[atom_xyz[1]],
+                z=[atom_xyz[2]],
+                mode='markers+text',
+                marker=dict(
+                    color=atom_color, 
+                    size=10, 
+                    sizemode='area', 
+                    sizeref=1, 
+                    line=dict(width=2, color='black')
+                ),
+                hoverinfo='all',
+                hoverlabel=dict(bgcolor=bg_color),
+                hovertext=[f'Element: {atomMark}'],
+                text=text_to_display
+            ))
+        
+        # Edge visualization (bonds)
+        for edge in edges:
+            # Get nodes connected by this edge
+            node1_id, node2_id = edge[0], edge[1]
+            edge_data = G.edges[node1_id, node2_id]
+            
+            # Get node data
+            node1_data = G.nodes[node1_id]
+            node2_data = G.nodes[node2_id]
+            
+            # Get atom symbols
+            atom1_symbol = node1_data['symbol']
+            atom2_symbol = node2_data['symbol']
+            
+            # Get positions
+            atom1_xyz = node1_data['xyz']
+            atom2_xyz = node2_data['xyz']
+            
+            # Get bond type (default to 1 if missing)
+            bond_type = edge_data.get('type', 1) - 1  # Adjust to 0-based index for the color list
+            bond_type = min(max(0, bond_type), 2)  # Ensure it's between 0-2
+            
+            # Calculate bond length (distance)
+            distance = calculate_distance(atom1_xyz, atom2_xyz)
+            
+            # Add to plot summary
+            plot_summary.append({
+                'atom1Id': node1_id,
+                'atom2Id': node2_id,
+                'atom1Symbol': f"{atom1_symbol}{node1_id}",
+                'atom2Symbol': f"{atom2_symbol}{node2_id}",
+                'distance': distance
+            })
+            
+            # Draw the bond as a line
+            fig.add_trace(go.Scatter3d(
+                x=[atom1_xyz[0], atom2_xyz[0]],
+                y=[atom1_xyz[1], atom2_xyz[1]],
+                z=[atom1_xyz[2], atom2_xyz[2]],
+                mode='lines',
+                line=dict(color=bond_type_color[bond_type], width=3),
+                hoverinfo='none',
+                name=edge_data.get('symbol', f"Bond {node1_id}-{node2_id}"),
+                showlegend=True
+            ))
+            
+            # Calculate midpoint for bond length label
+            midX = [(atom1_xyz[0] + atom2_xyz[0]) / 2]
+            midY = [(atom1_xyz[1] + atom2_xyz[1]) / 2]
+            midZ = [(atom1_xyz[2] + atom2_xyz[2]) / 2]
+            
+            # Bond type text
+            bond_type_names = ['single bond', 'double bond', 'triple bond']
+            bond_type_label = bond_type_names[bond_type]
+            
+            # Display bond length if requested
+            if display_bond_length:
+                text_to_display = [f'{distance:.3f}']
+            else:
+                text_to_display = ['']
+                
+            # Add bond length text
+            fig.add_trace(go.Scatter3d(
+                x=midX,
+                y=midY,
+                z=midZ,
+                mode='text',
+                text=text_to_display,
+                hoverinfo='text',
+                hoverlabel=dict(bgcolor=bg_color, namelength=-1),
+                hovertext=[f'A {bond_type_label} with a length of {distance:.3f}']
+            ))
+        
+        # Visualize subgraphs if provided
+        if subgraphs is not None:
+            for subgraph in subgraphs:
+                # Get nodes from the subgraph
+                subgraph_nodes = list(subgraph.nodes())
+                
+                # Highlight nodes
+                for node_id in subgraph_nodes:
+                    if node_id in G.nodes:
+                        node_data = G.nodes[node_id]
+                        atom_xyz = node_data['xyz']
+                        atom_symbol = node_data['symbol']
+                        atom_color = set_color(atom_symbol)
+                        
+                        # Add highlighted atom
+                        fig.add_trace(go.Scatter3d(
+                            x=[atom_xyz[0]],
+                            y=[atom_xyz[1]],
+                            z=[atom_xyz[2]],
+                            mode='markers',
+                            marker=dict(
+                                color=atom_color,
+                                size=20,
+                                opacity=0.5,
+                                sizemode='area',
+                                sizeref=1,
+                                line=dict(width=2, color='black')
+                            )
+                        ))
+                
+                # Highlight edges
+                for edge in subgraph.edges():
+                    node1_id, node2_id = edge
+                    
+                    # Only highlight edges that exist in the main graph
+                    if G.has_edge(node1_id, node2_id):
+                        node1_data = G.nodes[node1_id]
+                        node2_data = G.nodes[node2_id]
+                        
+                        atom1_xyz = node1_data['xyz']
+                        atom2_xyz = node2_data['xyz']
+                        
+                        # Add highlighted bond
+                        fig.add_trace(go.Scatter3d(
+                            x=[atom1_xyz[0], atom2_xyz[0]],
+                            y=[atom1_xyz[1], atom2_xyz[1]],
+                            z=[atom1_xyz[2], atom2_xyz[2]],
+                            mode='lines',
+                            line=dict(color='blue', width=10, dash='dashdot'),
+                            hoverinfo='none'
+                        ))
+        
+        # Set the limits of the axes
+        xyzLenMax = xyzLenMax + 1.5
+        fig.update_layout(scene=dict(
+            xaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            yaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax]),
+            zaxis=dict(nticks=4, range=[-xyzLenMax, xyzLenMax])
+        ))
+        
+        # Set figure size
+        if len(figSize) != 0:
+            fig.update_layout(width=figSize[0], height=figSize[1])
+        else:
+            fig.update_layout(autosize=True)
+        
+        # Configure legend
+        fig.update_layout(legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ))
+        
+        # Set font color based on theme
+        font_color = 'lightgray' if theme == 'black' else 'black'
+        fig.update_traces(textfont=dict(color=font_color))
+        
+        # Set background color
+        fig.update_layout(
+            paper_bgcolor=bg_color,
+            plot_bgcolor=bg_color,
+            scene=dict(
+                xaxis=dict(showbackground=True, backgroundcolor=bg_color),
+                yaxis=dict(showbackground=True, backgroundcolor=bg_color),
+                zaxis=dict(showbackground=True, backgroundcolor=bg_color)
+            )
+        )
+        
+        # Remove axes and other elements for cleaner visualization
+        fig.update_layout(
+            scene=dict(
+                xaxis=dict(showticklabels=False, showgrid=False, zeroline=False, showspikes=False, title=''),
+                yaxis=dict(showticklabels=False, showgrid=False, zeroline=False, showspikes=False, title=''),
+                zaxis=dict(showticklabels=False, showgrid=False, zeroline=False, showspikes=False, title=''),
+                aspectmode='manual',
+                aspectratio=dict(x=1, y=1, z=1),
+            ),
+            showlegend=display_legend,
+            margin=dict(l=0, r=0, b=0, t=0)
+        )
+        
+        # Show the plot
+        fig.show(config={
+            'scrollZoom': True,
+            'displayModeBar': True,
+            'displaylogo': True,
+            'modeBarButtonsToRemove': ['zoom2d', 'zoomIn2d', 'zoomOut2d', 'pan2d']
+        })
+        
+        return plot_summary
+
+    @staticmethod
+    def view_graph3d_mpl(G, subgraphs=None, **kwargs):
+        '''
+        Draw a compound in 3D from a graph representation using matplotlib
+        
+        Parameters
+        ----------
+        G : networkx.Graph
+            Graph with nodes having 'symbol' and 'xyz' attributes and edges having 'symbol' and 'type' attributes
+        subgraphs : list, optional
+            List of subgraphs to highlight
+        **kwargs : dict
+            Additional parameters for visualization
+            figSize: tuple - figure size (default: (10, 10))
+            elev: float - elevation angle for the 3D view
+            azim: float - azimuth angle for the 3D view
+            display_legend: bool - display legend (default: True)
+            theme: str - theme for visualization ('light' or 'dark')
+            display_atom_id: bool - display atom IDs (default: True)
+            display_bond_length: bool - display bond lengths (default: False)
+            bond_type_color: list - colors for different bond types
+            
+        Returns
+        -------
+        plot_summary : list
+            Summary of plotted elements
+        fig : matplotlib.figure.Figure
+            Matplotlib figure object
+        ax : matplotlib.axes.Axes
+            Matplotlib axes object
+        '''
+        # Extract parameters from kwargs with defaults
+        figSize = kwargs.get('figSize', (10, 10))
+        elev = kwargs.get('elev', 30)
+        azim = kwargs.get('azim', 30)
+        display_legend = kwargs.get('display_legend', True)
+        theme = kwargs.get('theme', 'light')
+        display_atom_id = kwargs.get('display_atom_id', True)
+        display_bond_length = kwargs.get('display_bond_length', False)
+        bond_type_color = kwargs.get('bond_type_color', ['k', 'b', 'r'])  # Black, blue, red
+        
+        # Plot summary list to return
+        plot_summary = []
+        
+        # Create figure and 3D axes
+        fig = plt.figure(figsize=figSize)
+        ax = fig.add_subplot(111, projection='3d')
+        
+        # Extract node data from the graph
+        nodes = G.nodes(data=True)
+        edges = G.edges(data=True)
+        
+        # Create lists for atom positions and elements
+        xyzList = []
+        atomElements = []
+        node_ids = []
+        
+        # Extract node data
+        for node_id, node_data in nodes:
+            if 'xyz' in node_data:
+                xyzList.append(node_data['xyz'])
+                atomElements.append(node_data['symbol'])
+                node_ids.append(node_id)
+        
+        # Convert to numpy array for easier manipulation
+        xyzList = np.array(xyzList)
+        
+        # Helper function to set colors based on atom symbol
+        def set_color(atom_symbol):
+            colors = {
+                "H": '#ffffff',
+                "C": '#BCBCBC',
+                "N": '#0586f6',
+                "O": '#f6052a',
+                "F": '#2dd930',
+                "Cl": '#2dd930',
+                "Br": '#950e0e',
+                "I": '#360e89',
+                "He": '#3dbaf1',
+                "Ne": '#3dbaf1',
+                "Ar": '#3dbaf1',
+                "Kr": '#3dbaf1',
+                "Xe": '#3dbaf1',
+                "P": '#f1a03d',
+                "S": '#f1ef3d',
+                "B": '#efc867',
+                "Li": '#6b3ccb',
+                "Na": '#6b3ccb',
+                "K": '#6b3ccb',
+                "Rb": '#6b3ccb',
+                "Cs": '#6b3ccb',
+                "Fr": '#6b3ccb',
+                "Be": '#1c881e',
+                "Mg": '#1c881e',
+                "Ca": '#1c881e',
+                "Sr": '#1c881e',
+                "Ba": '#1c881e',
+                "Ra": '#1c881e',
+                "Ti": '#3d3e40',
+                "Fe": '#a48620',
+                "other": '#a729ba'
+            }
+            
+            _color = colors.get(str(atom_symbol))
+            if _color is None:
+                return colors.get(str('other'))
+            else:
+                return _color
+        
+        # Helper function to calculate distance between atoms
+        def calculate_distance(xyz1, xyz2):
+            return math.sqrt((xyz2[0] - xyz1[0])**2 +
+                             (xyz2[1] - xyz1[1])**2 +
+                             (xyz2[2] - xyz1[2])**2)
+        
+        # Calculate limits for the plot
+        if len(xyzList) > 0:
+            xyzLenMax = np.max(np.abs(xyzList)) + 1.5
+        else:
+            xyzLenMax = 5.0  # Default if no atoms
+        
+        # Node visualization (atoms)
+        for i, node_id in enumerate(node_ids):
+            # Get node data
+            node_data = G.nodes[node_id]
+            atom_xyz = node_data['xyz']
+            atom_symbol = node_data['symbol']
+            
+            # Atom label
+            atomMark = f"{atom_symbol}{node_id}"
+            
+            # Set color based on atom type
+            atom_color = set_color(atom_symbol)
+            
+            # Plot the atom as a 3D point
+            ax.scatter(atom_xyz[0], atom_xyz[1], atom_xyz[2], 
+                       color=atom_color, s=100, edgecolors='black')
+            
+            # Add atom label if requested
+            if display_atom_id:
+                ax.text(atom_xyz[0], atom_xyz[1], atom_xyz[2], 
+                        atomMark, size=8, zorder=1, ha='center', va='center')
+        
+        # Edge visualization (bonds)
+        for edge in edges:
+            # Get nodes connected by this edge
+            node1_id, node2_id = edge[0], edge[1]
+            edge_data = G.edges[node1_id, node2_id]
+            
+            # Get node data
+            node1_data = G.nodes[node1_id]
+            node2_data = G.nodes[node2_id]
+            
+            # Get atom symbols
+            atom1_symbol = node1_data['symbol']
+            atom2_symbol = node2_data['symbol']
+            
+            # Get positions
+            atom1_xyz = node1_data['xyz']
+            atom2_xyz = node2_data['xyz']
+            
+            # Get bond type (default to 1 if missing)
+            bond_type = edge_data.get('type', 1)
+            bond_type = min(max(1, bond_type), 3)  # Ensure it's between 1-3
+            
+            # Calculate bond length (distance)
+            distance = calculate_distance(atom1_xyz, atom2_xyz)
+            
+            # Add to plot summary
+            plot_summary.append({
+                'atom1Id': node1_id,
+                'atom2Id': node2_id,
+                'atom1Symbol': f"{atom1_symbol}{node1_id}",
+                'atom2Symbol': f"{atom2_symbol}{node2_id}",
+                'distance': distance
+            })
+            
+            # Draw the bond line
+            bond_linewidth = bond_type * 1.5  # Increase line width based on bond type
+            ax.plot([atom1_xyz[0], atom2_xyz[0]],
+                    [atom1_xyz[1], atom2_xyz[1]],
+                    [atom1_xyz[2], atom2_xyz[2]],
+                    color=bond_type_color[bond_type-1], 
+                    linewidth=bond_linewidth,
+                    alpha=0.8)
+            
+            # Display bond length if requested
+            if display_bond_length:
+                # Calculate midpoint for placing text
+                mid_x = (atom1_xyz[0] + atom2_xyz[0]) / 2
+                mid_y = (atom1_xyz[1] + atom2_xyz[1]) / 2
+                mid_z = (atom1_xyz[2] + atom2_xyz[2]) / 2
+                
+                # Add bond length label
+                ax.text(mid_x, mid_y, mid_z, f"{distance:.2f}", 
+                        size=6, ha='center', va='center', 
+                        bbox=dict(facecolor='white', alpha=0.7))
+        
+        # Visualize subgraphs if provided
+        if subgraphs is not None:
+            for subgraph in subgraphs:
+                # Handle different possible formats of subgraphs
+                if hasattr(subgraph, 'nodes'):
+                    # If subgraph is a NetworkX graph
+                    subgraph_nodes = list(subgraph.nodes())
+                    subgraph_edges = list(subgraph.edges())
+                elif isinstance(subgraph, dict) and 'subgraph_pattern' in subgraph:
+                    # If subgraph is a dict with 'subgraph_pattern' key (as in view3d function)
+                    subgraph_pattern = subgraph['subgraph_pattern']
+                    subgraph_nodes = list(subgraph_pattern.nodes())
+                    subgraph_edges = list(subgraph_pattern.edges())
+                else:
+                    continue  # Skip if format not recognized
+                
+                # Highlight nodes
+                for node_id in subgraph_nodes:
+                    if node_id in G.nodes:
+                        node_data = G.nodes[node_id]
+                        if 'xyz' in node_data:
+                            atom_xyz = node_data['xyz']
+                            atom_symbol = node_data['symbol']
+                            atom_color = set_color(atom_symbol)
+                            
+                            # Add highlighted atom (larger, translucent)
+                            ax.scatter(atom_xyz[0], atom_xyz[1], atom_xyz[2],
+                                      color=atom_color, s=200, alpha=0.3,
+                                      edgecolors='blue', linewidths=2)
+                
+                # Highlight edges
+                for edge in subgraph_edges:
+                    node1_id, node2_id = edge
+                    
+                    # Only highlight edges that exist in the main graph
+                    if G.has_edge(node1_id, node2_id):
+                        node1_data = G.nodes[node1_id]
+                        node2_data = G.nodes[node2_id]
+                        
+                        if 'xyz' in node1_data and 'xyz' in node2_data:
+                            atom1_xyz = node1_data['xyz']
+                            atom2_xyz = node2_data['xyz']
+                            
+                            # Add highlighted bond (thicker, blue, dashed)
+                            ax.plot([atom1_xyz[0], atom2_xyz[0]],
+                                    [atom1_xyz[1], atom2_xyz[1]],
+                                    [atom1_xyz[2], atom2_xyz[2]],
+                                    color='blue', linewidth=4, linestyle='--',
+                                    alpha=0.7)
+        
+        # Set axis limits and remove ticks for cleaner visualization
+        ax.set_xlim(-xyzLenMax, xyzLenMax)
+        ax.set_ylim(-xyzLenMax, xyzLenMax)
+        ax.set_zlim(-xyzLenMax, xyzLenMax)
+        
+        # Set equal aspect ratio for all axes
+        ax.set_box_aspect([1, 1, 1])
+        
+        # Remove tick labels for cleaner visualization
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.set_zticklabels([])
+        
+        # Remove tick marks and background grid
+        ax.xaxis.set_ticks([])
+        ax.yaxis.set_ticks([])
+        ax.zaxis.set_ticks([])
+        ax.xaxis._axinfo['grid'].update({'visible': False})
+        ax.yaxis._axinfo['grid'].update({'visible': False})
+        ax.zaxis._axinfo['grid'].update({'visible': False})
+        
+        # Set axis labels
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        
+        # Set background color and styling based on theme
+        if theme == 'dark':
+            fig.patch.set_facecolor('black')
+            ax.set_facecolor('black')
+            ax.xaxis.label.set_color('white')
+            ax.yaxis.label.set_color('white')
+            ax.zaxis.label.set_color('white')
+        else:
+            fig.patch.set_facecolor('white')
+            ax.set_facecolor('white')
+        
+        # Set the view angle
+        ax.view_init(elev=elev, azim=azim)
+        
+        # Add a legend if requested
+        if display_legend and len(atomElements) > 0:
+            # Create a legend for unique atom types
+            unique_elements = set(atomElements)
+            legend_elements = []
+            
+            for element in unique_elements:
+                legend_elements.append(plt.Line2D([0], [0], marker='o', color='w', 
+                                                  label=element,
+                                                  markerfacecolor=set_color(element), 
+                                                  markersize=10))
+            
+            # Add a legend for bond types
+            for i, bond_name in enumerate(['Single', 'Double', 'Triple']):
+                if i < len(bond_type_color):
+                    legend_elements.append(plt.Line2D([0], [0], color=bond_type_color[i], 
+                                                     lw=(i+1)*1.5, label=f'{bond_name} bond'))
+            
+            ax.legend(handles=legend_elements, loc='upper right', frameon=True)
+        
+        # Adjust layout to make room for the legend
+        plt.tight_layout()
+        
+        # Display the plot
+        plt.show()
+        
+        # Return summary and figure objects for further manipulation
+        return plot_summary, fig, ax
+
     def view3d(self, subgraphs=None, **kwargs):
         '''
         Draw a compound in the cartesian coordinate
