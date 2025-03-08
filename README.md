@@ -107,7 +107,7 @@ print(res)
 
 * Display a graph:
 
-```python 
+```python
 # plot_mode: Literal['plotly', 'matplotlib'] = 'plotly
 # view graph
 mi.view_graph(graph_1)
@@ -119,6 +119,19 @@ mi.view_graph(graph_1)
 # visualize compound by sdf file
 mi.g3d(sdf_file)
 ```
+
+🖼️ **1-Naphthaleneacetic acid**
+
+![1-Naphthaleneacetic-acid](/statics/1-Naphthaleneacetic%20acid-1.png)
+
+```python
+# visualize compound by sdf file
+mi.g3d(sdf_file, display_bond_length=True)
+```
+
+🖼️ **1-Naphthaleneacetic acid**
+
+![1-Naphthaleneacetic-acid](/statics/1-Naphthaleneacetic%20acid-2.png)
 
 * Check the availability of functional groups:
 

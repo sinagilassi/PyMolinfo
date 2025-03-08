@@ -38,7 +38,9 @@ print(mi.__version__)
 # Structure2D_COMPOUND_CID_261
 # Ethinyl Estradiol
 # Conformer3D_COMPOUND_CID_5991.sdf
-sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_241.sdf'
+# 1-Naphthaleneacetic acid
+# Conformer3D_COMPOUND_CID_6862.sdf
+sdf_file_name_1 = 'test\Conformer3D_COMPOUND_CID_6862.sdf'
 sdf_file = os.path.join(os.getcwd(), sdf_file_name_1)
 sdf_name = 'Benzene'
 
@@ -247,12 +249,12 @@ print(type(graph_1))
 print(graph_1)
 
 # view graph
-mi.view_graph(graph_1)
-
-stop=1
+# mi.view_graph(graph_1)
 
 # * visualize compound by sdf file
-# mi.g3d(sdf_file, display_bond_length=True)
+# 1-Naphthaleneacetic acid
+mi.g3d(sdf_file)
+mi.g3d(sdf_file, display_bond_length=True)
 
 # visualize compound by sdf string
 # mi.g3d(sdf_string)
