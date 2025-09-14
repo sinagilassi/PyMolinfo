@@ -2,7 +2,10 @@
 
 ![PyMolinfo](https://drive.google.com/uc?export=view&id=1VZz79YQbWXMosfUwGBeTrTdHIiOXt_Ps)
 
-![Downloads](https://img.shields.io/pypi/dm/PyMolinfo) ![PyPI](https://img.shields.io/pypi/v/PyMolinfo) ![Python Version](https://img.shields.io/pypi/pyversions/PyMolinfo.svg) ![License](https://img.shields.io/pypi/l/PyMolinfo)
+[![PyPI Downloads](https://static.pepy.tech/badge/pymolinfo/month)](https://pepy.tech/projects/pymolinfo)
+![PyPI](https://img.shields.io/pypi/v/PyMolinfo) 
+![Python Version](https://img.shields.io/pypi/pyversions/PyMolinfo.svg) 
+![License](https://img.shields.io/pypi/l/PyMolinfo)
 
 **PyMolInfo** (previously molinfo) is a Python package designed for advanced molecular analysis by converting molecular structures into graph representations. This package enables researchers and chemists to load various molecular file formats, transform them into graphs, and extract valuable information through graph-based methods.
 
